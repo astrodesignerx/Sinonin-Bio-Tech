@@ -42,3 +42,6 @@ next-env.d.ts
 
 # tool caches
 .opencode/
+
+# local-only secrets (never commit)
+.github-token
