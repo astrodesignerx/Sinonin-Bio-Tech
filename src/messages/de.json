@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "title": "Sinonin Biotech — Innovationen bei Alternativproteinen & Palatants",
+    "description": "Beratung für alternative Proteine, Palatants, Enzyme und Insektenproteine im Petfood-Bereich — getragen von skalierbarer angewandter Wissenschaft."
+  },
+  "nav": {
+    "expertise": "Expertise",
+    "training": "Schulungen",
+    "reports": "Marktberichte",
+    "about": "Über uns",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "cta": "Termin vereinbaren",
+    "ariaLabel": "Hauptnavigation",
+    "toggleMenu": "Navigationsmenü umschalten",
+    "skip": "Zum Inhalt springen"
+  },
+  "locale": {
+    "label": "Sprache"
+  },
+  "home": {
+    "eyebrow": "Alternative Proteine · Enzyme · Palatants · Schulungen",
+    "title": "Alternative Proteine & Palatants — mit angewandter Wissenschaft.",
+    "subtitle": "Wir unterstützen Petfood-Unternehmen bei der Entwicklung, Prüfung und Validierung nachhaltiger Proteine und Palatants — von der Forschungsfrage bis zum industriellen Maßstab.",
+    "primaryCta": "Termin vereinbaren",
+    "secondaryCta": "Unsere Expertise entdecken",
+    "heroImageAlt": "Verschiedene Hülsenfrüchte — pflanzliche Proteinquellen",
+    "heroCaption": "Pflanzliche Proteinquellen",
+    "supportersTitle": "Unsere Förderer & Mitgliedschaften",
+    "pillarsEyebrow": "Unsere Expertise",
+    "pillarsTitle": "Lösungen für Ihre Protein- und Palatant-Anforderungen",
+    "pillars": {
+      "proteins": {
+        "title": "Proteine",
+        "body": "Von pflanzlichen und zellkultivierten bis hin zu präzisionsfermentierten und Insektenproteinen — wir helfen Ihnen, das richtige Portfolio für Ihre Anwendung zu finden, zu testen und zu validieren.",
+        "sources": ["Pflanzlich", "Zellkultur", "Fermentation", "Insekten"]
+      },
+      "palatants": {
+        "title": "Palatants",
+        "body": "Entscheiden und testen Sie die richtigen Palatants für Katzen- und Hundefutter — oder entwickeln Sie Ihre eigenen, von der Forschungsfrage bis zur Industrialisierungsstrategie.",
+        "imageAlt": "Illustration von Hunde- und Katzenfutternäpfen"
+      },
+      "enzymes": {
+        "title": "Enzyme",
+        "body": "Wir bringen Ihre Anforderungen mit den Portfolios führender Enzymhersteller zusammen — das richtige Enzym, unter sicheren Betriebsbedingungen."
+      },
+      "insects": {
+        "title": "Insekten",
+        "body": "Ein wachsender Katalog an Insektenprodukten auf dem Markt — plus Formulierungs-Know-how für spezifische Petfood-Anwendungen, inklusive Sicherheitsbewertung.",
+        "imageAlt": "Insektenprotein-Mehl"
+      }
+    },
+    "pillarsCta": "Mehr erfahren",
+    "statsTitle": "Von der Ernährungssicherheit zur Proteinsicherheit",
+    "statsIntro": "Eine wachsende Weltbevölkerung und steigender Wohlstand werden die Proteinnachfrage bis 2050 nahezu verdoppeln. Sie zu decken, erfordert eine nachhaltige Ressourcennutzung.",
+    "statsSources": "Quellen: UN World Population Prospects 2024; FAO-Schätzungen zu globalen Lebensmittelabfällen und Reststoffen.",
+    "stats": [
+      { "value": "9 Mrd.", "label": "Menschen auf der Erde bis 2050" },
+      { "value": "~2×", "label": "Proteinkonsum bis 2050" },
+      { "value": "1,3 Mrd. t", "label": "organische Reststoffe pro Jahr — eine Ressource, kein Abfall" }
+    ],
+    "reportsEyebrow": "Markt-Intelligenz",
+    "reportLabel": "Marktbericht",
+    "reportsTitle": "Marktberichte auf Basis echter Forschung",
+    "reportsIntro": "Zentrale Akteure, Produkte und Erkenntnisse — kondensiert in Berichten, die Ihnen Monate an Marktrecherche ersparen.",
+    "reports": {
+      "insect": {
+        "title": "Insektenproteine",
+        "body": "Zentrale gezüchtete Insekten, Akteure und Produkte — und wie Insektenproteine im Vergleich zu Pflanzen- und Tierproteinen abschneiden."
+      },
+      "palatants": {
+        "title": "Vegane Palatants",
+        "body": "Die Landschaft pflanzlicher Schmackhaftmacher für Katzen- und Hundefutter."
+      },
+      "petfood": {
+        "title": "Veganes Petfood",
+        "body": "Produkte, Claims und Marktlücken im veganen Petfood-Markt."
+      },
+      "petcare": {
+        "title": "Petcare-Markt",
+        "body": "Trends und Treiber, die die globale Petcare-Branche prägen."
+      }
+    },
+    "reportsCta": "Bericht anfordern",
+    "trainingTitle": "Experten-Schulungen für Ihr Team",
+    "trainingBody": "Tiefe Expertise in Proteinchemie, Lebensmittel-Enzymologie und Palatant-Entwicklung — verpackt in maßgeschneiderte Schulungen für Ihre Belegschaft. Qualifizieren Sie sich in Produktentwicklung und Troubleshooting mit einem Programm, das auf Ihre Bedürfnisse zugeschnitten ist.",
+    "trainingPoints": [
+      "Proteinchemie & -technologie",
+      "Angewandte Lebensmittel-Enzymologie",
+      "Palatant-Innovation & NPD-Troubleshooting"
+    ],
+    "trainingCta": "Schulungen entdecken",
+    "trainingImageAlt": "ZEST-Projektkonsortium am Teknologisk Institut",
+    "trainingCaption": "ZEST-Konsortialauftakt, Teknologisk Institut — EU-geförderte Bioökonomie-Zusammenarbeit",
+    "founderTitle": "Fundiert auf tiefer Wissenschaft und Industriepraxis",
+    "founderBody": "Sinonin Biotech wurde von Dr. rer. nat. habil. Seronei araap Chelulei Cheison gegründet — Proteinchemiker und ehemaliger Innovationsleiter bei MARS Petcare, der akademische Exaktheit mit Produktentwicklungserfahrung verbindet.",
+    "founderCredentials": ["Jiangnan University", "TU München", "MARS Petcare"],
+    "founderCta": "Mehr über uns",
+    "blogTitle": "Neuestes aus dem Blog",
+    "blogCta": "Alle Beiträge ansehen",
+    "blogFallbackAlt": "Artikel-Titelbild",
+    "closeCtaTitle": "Bauen wir Ihr nächstes Protein-Produkt",
+    "closeCtaBody": "Sagen Sie uns, wo Ihre Herausforderung liegt — wir bringen die Wissenschaft mit.",
+    "closeCta": "Termin vereinbaren",
+    "blogPosts": {
+      "palatability": {
+        "category": "Palatabilität",
+        "title": "Petfood Palatability in the Age of Alternative Proteins"
+      },
+      "fifa": {
+        "category": "Alternative Proteine",
+        "title": "The curtains have fallen on the FIFA World Cup: Lessons for Alt-Prot"
+      },
+      "interzoo": {
+        "category": "Veranstaltungen",
+        "title": "Alternative proteins commercialisation in petfood: Learnings from Interzoo 2026"
+      }
+    }
+  },
+  "pageMeta": {
+    "expertise": {
+      "title": "Expertise — Proteine, Palatants, Enzyme, Insekten | Sinonin Biotech",
+      "description": "Vier verbundene Felder angewandter Wissenschaft: alternative Proteine, Palatants, Enzyme und Insektenproteine für die Petfood-Industrie."
+    },
+    "training": {
+      "title": "Experten-Schulungen | Sinonin Biotech",
+      "description": "Maßgeschneiderte Schulungen in Proteinchemie, Lebensmittel-Enzymologie und Palatant-Entwicklung — für Produktentwicklung und Troubleshooting."
+    },
+    "reports": {
+      "title": "Marktberichte | Sinonin Biotech",
+      "description": "Kostenlose Marktforschungsberichte: Insektenproteine, vegane Palatants, veganes Petfood und der Petcare-Markt."
+    },
+    "about": {
+      "title": "Über uns | Sinonin Biotech",
+      "description": "Sinonin Biotech GmbH — aufgebaut auf Expertise in Proteinwissenschaft und angewandter Lebensmittel-Enzymologie, gegründet von Dr. Seronei araap Chelulei Cheison."
+    },
+    "contact": {
+      "title": "Kontakt | Sinonin Biotech",
+      "description": "Vereinbaren Sie einen Termin oder schreiben Sie uns — wir freuen uns auf Ihre Protein- und Palatant-Fragen."
+    },
+    "blog": {
+      "title": "Blog | Sinonin Biotech",
+      "description": "Anmerkungen zu alternativen Proteinen, Palatabilität und der Petfood-Branche — von unserem Schreibtisch."
+    },
+    "impressum": {
+      "title": "Impressum | Sinonin Biotech",
+      "description": "Rechtliches Impressum der Sinonin Biotech GmbH, Langwedel, Deutschland."
+    },
+    "privacy": {
+      "title": "Datenschutzerklärung | Sinonin Biotech",
+      "description": "Datenschutzerklärung der Sinonin Biotech GmbH."
+    }
+  },
+  "blogPage": {
+    "title": "Blog",
+    "intro": "Anmerkungen zu alternativen Proteinen, Palatabilität und der Petfood-Branche — von unserem Schreibtisch.",
+    "englishNote": "Unsere Fachartikel erscheinen auf Englisch.",
+    "backToBlog": "Zurück zu allen Beiträgen",
+    "coverCreditLabel": "Titelbild:"
+  },
+  "expertisePage": {
+    "title": "Expertise",
+    "intro": "Vier verbundene Felder angewandter Wissenschaft — ein Innovationspartner für Ihre Protein- und Palatant-Anforderungen.",
+    "deliverablesLabel": "Was wir tun",
+    "sections": {
+      "proteins": {
+        "number": "01",
+        "title": "Proteine",
+        "body": "Der gesamte Proteinkonsum wird sich bis 2050 voraussichtlich nahezu verdoppeln. Wir bewegen uns von der Ernährungssicherheit zur Proteinsicherheit — und sie nachhaltig zu sichern, erfordert alternative Quellen. Ob pflanzliche, zellkultivierte, präzisionsfermentierte oder Insektenproteine: Wir helfen Ihnen, die Optionen zu navigieren und das Richtige für Ihr Produkt zu wählen.",
+        "points": [
+          "Portfolio-Scouting über pflanzliche, zellkultivierte, fermentierte und Insektenproteine",
+          "Beschaffungs- und Teststrategie für Ihre Anwendung",
+          "Validierungsunterstützung vom Laborversuch bis zum industriellen Maßstab"
+        ],
+        "imageAlt": "Verschiedene Hülsenfrüchte — pflanzliche Proteinquellen"
+      },
+      "palatants": {
+        "number": "02",
+        "title": "Palatants",
+        "body": "Wir verbinden Palatant-Innovationserfahrung aus der Petfood-Industrie mit akademischer Expertise in angewandter Lebensmittel-Enzymologie. Wir helfen Ihnen, das richtige Portfolio industrieller Palatants für Katzen- und Hundefutter auszuwählen und zu testen — oder begleiten den kompletten Weg zu Ihrem eigenen Palatant.",
+        "points": [
+          "Screening und Eingrenzung industrieller Palatant-Optionen für Ihre Bedürfnisse",
+          "Beschaffungs- und Teststrategie",
+          "Entwicklung eigener Palatants: Forschungsfrage, DOE-Design, Versuche, Industrialisierungsstrategie"
+        ],
+        "imageAlt": "Illustration von Hunde- und Katzenfutternäpfen"
+      },
+      "enzymes": {
+        "number": "03",
+        "title": "Enzyme",
+        "body": "Enzyme helfen, Mehrwertprodukte mit verbessertem Geschmack, Geruch und techno-funktionellen Eigenschaften zu schaffen — aber die Wahl des richtigen Enzyms ist nicht einfach. Wir verstehen Ihre Anforderungen und führen Ihre Tests zu einem optimalen Portfolio.",
+        "points": [
+          "Bedarfsanalyse und Enzym-Auswahl",
+          "Zugang zu Portfolios, Anwendungsspektren und Betriebsfenstern führender Hersteller",
+          "Begleitete Tests unter geeigneten — und sicheren — Betriebsbedingungen"
+        ]
+      },
+      "insects": {
+        "number": "04",
+        "title": "Insekten",
+        "body": "Insekten bieten eine nachhaltige Alternative zur Sicherung der Versorgung mit hochwertigem tierischem Protein. Durch kontinuierliche Marktforschung haben wir die zentralen Akteure und die wichtigsten gezüchteten Insekten identifiziert — und wir wissen, wie Insektenproteine im Vergleich zu Pflanzen- und Tierproteinen abschneiden.",
+        "points": [
+          "Markt- und Akteursanalyse aus unserer laufenden Forschung",
+          "Produktkatalog und Benchmarking gegen Pflanzen- und Tierproteine",
+          "Formulierung für spezifische Petfood-Anwendungen, inklusive Sicherheitsbewertung"
+        ],
+        "imageAlt": "Insektenprotein-Mehl"
+      }
+    },
+    "ctaTitle": "Sprechen Sie noch heute mit unseren Experten",
+    "ctaBody": "Erzählen Sie uns von Ihrer Protein- oder Palatant-Herausforderung — wir finden den richtigen Weg."
+  },
+  "trainingPage": {
+    "title": "Schulungen",
+    "intro": "Qualifizieren Sie Ihre Belegschaft mit maßgeschneiderten Schulungen in Proteinwissenschaft und Lebensmittel-Enzymologie — aufgebaut um Ihre Produkte und Ihre Herausforderungen.",
+    "coverTitle": "Unsere Themen",
+    "cover": [
+      {
+        "title": "Proteinchemie & -technologie",
+        "body": "Fundamentale und angewandte Proteinwissenschaft — von Struktur und Funktionalität bis zum Verarbeitungsverhalten in realen Formulierungen."
+      },
+      {
+        "title": "Angewandte Lebensmittel-Enzymologie",
+        "body": "Wie Enzyme wirken, wie man sie auswählt und wie man sie sicher und effektiv in Ihren Prozessen einsetzt."
+      },
+      {
+        "title": "Palatants & NPD-Troubleshooting",
+        "body": "Palatant-Innovationswissen und strukturierte Problemlösung für die neue Produktentwicklung."
+      }
+    ],
+    "processTitle": "So funktioniert es",
+    "process": [
+      {
+        "step": "1",
+        "title": "Erzählen Sie uns Ihre Bedürfnisse",
+        "body": "Teilen Sie uns Ihre Qualifizierungsziele, den Hintergrund Ihres Teams und die Produkte mit, an denen Sie arbeiten."
+      },
+      {
+        "step": "2",
+        "title": "Wir gestalten Ihr Paket",
+        "body": "Ein maßgeschneidertes Schulungsprogramm für Ihren Zweck — einzigartig für Ihre Bedürfnisse, nicht von der Stange."
+      },
+      {
+        "step": "3",
+        "title": "Durchführung & Nachbetreuung",
+        "body": "Praxisnahe Sessions für Ihr Team, mit Material zum Behalten und Raum für Fragen im Anschluss."
+      }
+    ],
+    "imageAlt": "ZEST-Projektkonsortium am Teknologisk Institut",
+    "caption": "Wir koordinieren Schulungen auch in EU-geförderten Konsortien — ZEST-Konsortialauftakt, Teknologisk Institut",
+    "ctaTitle": "Bauen Sie die Expertise Ihres Teams auf",
+    "ctaBody": "Erzählen Sie uns von Ihren Qualifizierungsbedürfnissen und wir schlagen ein maßgeschneidertes Schulungspaket vor."
+  },
+  "reportsPage": {
+    "title": "Marktberichte",
+    "intro": "Kostenlose Forschungsberichte aus unserer laufenden Marktbeobachtung — fordern Sie einen Bericht an und wir senden ihn in Ihr Postfach.",
+    "insideLabel": "Der Inhalt",
+    "cta": "Bericht ansehen",
+    "items": {
+      "insect": {
+        "title": "Insektenproteine",
+        "body": "Die Insektenprotein-Landschaft für Petfood: Arten, Akteure, Produkte und Benchmarking.",
+        "points": [
+          "Zentrale gezüchtete Insektenarten und die Unternehmen dahinter",
+          "Wie Insektenproteine im Vergleich zu Pflanzen- und Tierproteinen abschneiden",
+          "Katalog der auf dem Markt erhältlichen Insektenprodukte"
+        ]
+      },
+      "palatants": {
+        "title": "Vegane Palatants",
+        "body": "Pflanzliche Schmackhaftmacher für Katzen- und Hundefutter — was existiert und was funktioniert.",
+        "points": [
+          "Die Landschaft pflanzlicher Schmackhaftmacher",
+          "Industrielle Optionen für Katzen- und Hundefutter-Anwendungen",
+          "Überlegungen zu Beschaffung und Tests"
+        ]
+      },
+      "petfood": {
+        "title": "Veganes Petfood",
+        "body": "Das vegane Petfood-Regal: Produkte, Claims und die Lücken, die sich zu füllen lohnen.",
+        "points": [
+          "Aktive Produkte und Marken im veganen Petfood",
+          "Claims, Positionierung und Preispunkte",
+          "Marktlücken und Chancen"
+        ]
+      },
+      "petcare": {
+        "title": "Petcare-Markt",
+        "body": "Die Kräfte, die die globale Petcare-Branche prägen — und was sie für Innovatoren bedeuten.",
+        "points": [
+          "Globale Petcare-Markttrends und -treiber",
+          "Die Verschiebung von Ernährungssicherheit zu Proteinsicherheit",
+          "Implikationen für Zulieferer und Innovatoren"
+        ]
+      }
+    }
+  },
+  "reportPage": {
+    "back": "Alle Berichte",
+    "forLabel": "Für wen",
+    "forBody": "FuE-, Produktentwicklungs- und Strategieteams in Petfood und Ingredients.",
+    "freeLabel": "Kostenlos",
+    "formTitle": "Diesen Bericht anfordern",
+    "formBody": "Füllen Sie das Formular aus und wir senden den Bericht an Ihre E-Mail-Adresse.",
+    "otherTitle": "Weitere Berichte"
+  },
+  "aboutPage": {
+    "title": "Über uns",
+    "intro": "Sinonin Biotech steht auf den Schultern von Expertise und Erfahrung in Proteinwissenschaft und angewandter Lebensmittel-Enzymologie.",
+    "nameTitle": "Der Name",
+    "nameBody": "Das Unternehmen schöpft Inspiration aus dem Nandi-Wort (Kenia) „Sinonin“, das den üppig grünen Lebensraum voller vielfältiger Flora und Fauna im malerischen Nandi County im kenianischen Great Rift Valley beschreibt.",
+    "founderTitle": "Der Gründer",
+    "founderBody": "Sinonin Biotech — Teil der Sinonin-Unternehmensgruppe — wurde von Dr. rer. nat. habil. Seronei araap Chelulei Cheison gegründet. Seronei bringt akademische Tiefe aus der Proteinchemie-Forschung an der Jiangnan University (Wuxi, China) und einer deutschen Habilitation an der Technischen Universität München mit, kombiniert mit Industrieführung bei MARS Petcare, wo er Projekte zu alternativer Protein-Innovation und Palatant-Entwicklung leitete.",
+    "founderBody2": "Dieses Unternehmen verbindet beide Welten: wissenschaftliche Exaktheit und die praktische Realität der Produktentwicklung.",
+    "credentialsLabel": "Referenzen",
+    "credentials": ["Jiangnan University", "TU München (Habilitation)", "MARS Petcare", "Sinonin Group"],
+    "missionTitle": "Unsere Mission",
+    "missionBody": "Wir liefern unseren Kunden Mehrwert durch die Führung disruptiver Innovation bei alternativen Proteinen und Palatabilitätsverstärkern — mit tiefer Expertise in angewandter Wissenschaft und Produktentwicklungserfahrung, um Veränderungen in Rohstoffanwendungen und -validierung voranzutreiben.",
+    "visionTitle": "Unsere Vision",
+    "visionBody": "Wir streben danach, der bevorzugte, kundenzentrierte Innovationspartner für alternative Proteine und Palatants zu sein — kenntnisreich, disruptiv und zuverlässig — und helfen unseren Kunden, nachhaltig zu gewinnen und der Konkurrenz voraus zu bleiben.",
+    "ctaTitle": "Arbeiten Sie mit uns",
+    "ctaBody": "Sagen Sie uns, wo Ihre Protein- oder Palatant-Herausforderung liegt — wir bringen die Wissenschaft mit."
+  },
+  "contactPage": {
+    "title": "Kontakt",
+    "intro": "Wir freuen uns auf Sie. Vereinbaren Sie direkt einen Termin oder schreiben Sie uns — wir bemühen uns, so schnell wie möglich zu antworten.",
+    "bookingTitle": "Termin vereinbaren",
+    "bookingBody": "Wählen Sie in unserem Kalender ein Datum und eine Uhrzeit, die Ihnen passen. Falls Sie keinen passenden Slot finden — etwa wegen Zeitunterschieden — schreiben Sie uns und wir finden gemeinsam einen.",
+    "bookingCta": "Kalender öffnen",
+    "detailsTitle": "Direkter Kontakt",
+    "hoursTitle": "Geschäftszeiten",
+    "hoursDays": "Montag – Freitag",
+    "formTitle": "Schreiben Sie uns",
+    "formBody": "Erzählen Sie uns, was Sie brauchen, und wir melden uns bei Ihnen."
+  },
+  "form": {
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "phone": "Telefon (optional)",
+    "company": "Unternehmen (optional)",
+    "message": "Nachricht",
+    "consent": "Ich willige ein, dass Sinonin Biotech meine übermittelten Daten speichert, um auf meine Anfrage zu antworten.",
+    "submit": "Nachricht senden",
+    "submitting": "Wird gesendet…",
+    "successTitle": "Nachricht gesendet",
+    "successBody": "Vielen Dank — wir melden uns so schnell wie möglich bei Ihnen.",
+    "errorTitle": "Etwas ist schiefgelaufen",
+    "errorBody": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie direkt an contact@sinoninbio.tech.",
+    "reportSubmit": "Bericht anfordern",
+    "reportSuccessTitle": "Bericht angefordert",
+    "reportSuccessBody": "Vielen Dank — wir senden den Bericht in Kürze an Ihre E-Mail-Adresse."
+  },
+  "footer": {
+    "tagline": "Disruptive Innovation bei alternativen Proteinen und Palatabilitätsverstärkern — aus unserer Wissensdatenbank in Ihr nächstes Produkt.",
+    "specialties": "Alternative Proteine · Enzyme · Palatants · Schulungen",
+    "explore": "Entdecken",
+    "contactTitle": "Kontakt",
+    "email": "contact@sinoninbio.tech",
+    "hoursTitle": "Geschäftszeiten",
+    "hoursDays": "Montag – Freitag",
+    "legalTitle": "Rechtliches",
+    "impressum": "Impressum",
+    "privacy": "Datenschutzerklärung",
+    "followUs": "Folgen Sie uns",
+    "copyright": "© {year} Sinonin Biotech GmbH. Alle Rechte vorbehalten."
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden",
+    "body": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "backHome": "Zur Startseite"
+  }
+}

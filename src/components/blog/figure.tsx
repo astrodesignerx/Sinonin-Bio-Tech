@@ -1,0 +1,40 @@
+import Image from "next/image";
+
+export default function Figure({
+  src,
+  alt,
+  caption,
+  width,
+  height,
+}: {
+  src: string;
+  alt: string;
+  caption?: string;
+  // MDX attribute expressions ({653}) are stripped at compile time, so
+  // dimensions arrive as strings and are coerced here.
+  width: number | string;
+  height: number | string;
+}) {
+  const w = Number(width);
+  const h = Number(height);
+
+  return (
+    <figure className="my-10">
+      <div className="overflow-hidden rounded-2xl border border-line bg-white">
+        <Image
+          src={src}
+          alt={alt}
+          width={w}
+          height={h}
+          sizes="(max-width: 768px) 100vw, 720px"
+          className="h-auto w-full"
+        />
+      </div>
+      {caption && (
+        <figcaption className="mt-3 text-xs leading-relaxed text-ink-muted">
+          {caption}
+        </figcaption>
+      )}
+    </figure>
+  );
+}

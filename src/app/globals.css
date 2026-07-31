@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+/*
+  Sinonin Biotech design tokens.
+  Palette is drawn from the brand mark: deep leaf green (accent), navy (ink),
+  warm off-white paper. The multicolor band from the logo appears exactly once
+  per surface as the `brand-gradient` signature detail.
+  Shape rule: buttons are full-pill, cards are rounded-2xl, inputs rounded-lg.
+*/
+
+@theme {
+  --color-paper: #f7faf5;
+  --color-mist: #ecf2e9;
+  --color-ink: #101f38;
+  --color-ink-muted: #45546a;
+  --color-navy: #1d3a6e;
+  --color-forest: #0a2a1a;
+  --color-leaf: #157a3c;
+  --color-leaf-bright: #1f9e4d;
+  --color-line: #dfe7da;
+}
+
+@theme inline {
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+@utility brand-gradient {
+  background-image: linear-gradient(
+    90deg,
+    #f97316 0%,
+    #c9e22a 22%,
+    #22c55e 45%,
+    #2dd4bf 68%,
+    #3b82f6 100%
+  );
+}
+
+@layer base {
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    @apply bg-leaf/20 text-ink;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-leaf;
+  }
+}
+
+/*
+  Scroll-driven reveal — progressive enhancement only.
+  Browsers without `animation-timeline` (and reduced-motion users) see the
+  content fully visible by default; nothing is ever gated on JavaScript.
+*/
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

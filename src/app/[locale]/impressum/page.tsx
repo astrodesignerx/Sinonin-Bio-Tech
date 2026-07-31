@@ -1,0 +1,41 @@
+import type { Metadata } from "next";
+import { useTranslations } from "next-intl";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { seoMetadata } from "@/lib/meta";
+import PageHeader from "@/components/ui/page-header";
+import { getLegalDoc } from "@/lib/legal";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "pageMeta.impressum" });
+  return seoMetadata({ locale, path: "/impressum", title: t("title"), description: t("description") });
+}
+
+export default async function ImpressumPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const content = await getLegalDoc("impressum", locale);
+
+  return <LegalContent content={content} />;
+}
+
+function LegalContent({ content }: { content: React.ReactNode }) {
+  const t = useTranslations("footer");
+
+  return (
+    <>
+      <PageHeader title={t("impressum")} />
+      <div className="mx-auto max-w-3xl px-4 pb-20 sm:px-6 sm:pb-24">
+        {content}
+      </div>
+    </>
+  );
+}
