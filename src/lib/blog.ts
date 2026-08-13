@@ -15,6 +15,8 @@ export type PostMeta = {
   cover?: string;
   coverAlt?: string;
   coverCredit?: string;
+  author?: string;
+  readingMinutes?: number;
 };
 
 export function getPostSlugs(): string[] {

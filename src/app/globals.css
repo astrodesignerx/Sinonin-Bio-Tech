@@ -17,13 +17,61 @@
   --color-forest: #0a2a1a;
   --color-leaf: #157a3c;
   --color-leaf-bright: #1f9e4d;
+  /* Accent for use on forest surfaces — taken from the brand gradient so it
+     stays on-palette while clearing AA contrast against `forest`. */
+  --color-leaf-on-dark: #22c55e;
   --color-line: #dfe7da;
+
+  /*
+    Card depth. A resting shadow is what makes a card read as an object sitting
+    on the page rather than a floating block of text — hover is then a step up
+    from that, not the only moment depth exists. Both are two-layer: a tight
+    contact shadow plus a wide ambient one, tinted with `ink` rather than black
+    so they stay warm against `paper`.
+  */
+  --shadow-card: 0 1px 2px rgba(16, 31, 56, 0.04),
+    0 8px 24px -12px rgba(16, 31, 56, 0.12);
+  --shadow-card-hover: 0 2px 4px rgba(16, 31, 56, 0.06),
+    0 24px 56px -24px rgba(16, 31, 56, 0.24);
+
+  /* Decelerate curve: fast in, gentle out. Default for micro-interactions. */
+  --ease-out-soft: cubic-bezier(0.2, 0, 0, 1);
 }
 
 @theme inline {
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+/*
+  Type scale, top end only. Body copy stays at 16px — it is the *spread* between
+  the largest and smallest type that lets big areas of whitespace read as
+  composition rather than emptiness, so page and section titles grow at `lg`
+  while everything below them holds still. Card headings (h3) deliberately stay
+  small: they are the bottom of the scale and supply the contrast.
+
+  heading-page    36 → 48 → 60px   page + hero titles
+  heading-section 30 → 36 → 48px   section titles
+*/
+@utility heading-page {
+  @apply font-display text-4xl font-semibold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl;
+}
+
+@utility heading-section {
+  @apply font-display text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl lg:text-5xl;
+}
+
+/*
+  heading-sub  24 -> 30px  subordinate headings
+
+  The middle tier: panel and card titles, and headings that sit in a narrow
+  column (the About page's sticky rail) where the section scale would wrap
+  badly. Deliberately not `heading-section` — these are subordinate to the
+  page's real section titles, and flattening the levels would lose that.
+*/
+@utility heading-sub {
+  @apply font-display text-2xl font-semibold leading-tight tracking-tight sm:text-3xl;
 }
 
 @utility brand-gradient {
@@ -38,6 +86,16 @@
 }
 
 @layer base {
+  /*
+    Header height in one place. The sticky bar, the page backdrop that starts
+    below it, the search overlay that covers it, and the hero's `100svh minus
+    header` all have to agree; hard-coding 4rem in four files is how they drift
+    apart the next time the bar changes.
+  */
+  :root {
+    --header-h: 74px;
+  }
+
   body {
     @apply bg-paper font-sans text-ink antialiased;
   }
@@ -68,11 +126,384 @@
 */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .reveal {
+    .reveal,
+    .reveal-stagger > * {
       animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
       animation-timeline: view();
-      animation-range: entry 0% entry 40%;
+      /*
+        Scroll-driven animations have no time-based delay — `animation-delay` is
+        ignored on a view() timeline. A stagger is therefore expressed as a shift
+        in the *scroll* range: each step starts and finishes 7% later, so
+        siblings arrive in sequence instead of all at once.
+      */
+      animation-range: entry calc(var(--reveal-order, 0) * 7%) entry
+        calc(40% + var(--reveal-order, 0) * 7%);
     }
+
+    /* Grid children cascade in DOM order; capped so long lists stay snappy. */
+    .reveal-stagger > *:nth-child(2) {
+      --reveal-order: 1;
+    }
+    .reveal-stagger > *:nth-child(3) {
+      --reveal-order: 2;
+    }
+    .reveal-stagger > *:nth-child(4) {
+      --reveal-order: 3;
+    }
+    .reveal-stagger > *:nth-child(n + 5) {
+      --reveal-order: 4;
+    }
+
+    /* Don't let a nested reveal inherit its parent's place in the cascade. */
+    .reveal-stagger > * > * {
+      --reveal-order: 0;
+    }
+  }
+}
+
+/*
+  Mega-panel choreography. The container "unrolls" from the header edge via
+  clip-path while its backdrop blur ramps up, then the cards follow. Container
+  settles first, contents follow, one focal point: the reveal edge travelling
+  down the panel. Everything animates on composited properties (clip-path,
+  opacity, transform, backdrop-filter), so nothing triggers layout.
+*/
+.mega-panel {
+  transition:
+    clip-path 260ms var(--ease-out-soft),
+    opacity 200ms var(--ease-out-soft),
+    backdrop-filter 260ms var(--ease-out-soft),
+    visibility 0s linear 260ms;
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  backdrop-filter: blur(0px);
+  visibility: hidden;
+}
+
+.mega-panel[data-open="true"] {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  backdrop-filter: blur(12px);
+  visibility: visible;
+  transition-delay: 0s, 0s, 0s, 0s;
+}
+
+/*
+  Page backdrop. Blurs everything below the header while a panel is open, so the
+  panel reads as foreground without a grey wash over the site. Blur only, no
+  tint: this site's character is light, and dimming it fights that.
+
+  It has to be a sibling of <header>, not a child: the header sets
+  `backdrop-filter`, which makes it a containing block for fixed descendants,
+  so a fixed child would be positioned against the header rather than the
+  viewport.
+*/
+.mega-backdrop {
+  /* The two knobs. Tinted with `ink` rather than black so the darkening stays
+     on-palette and reads cool rather than muddy against `paper`. */
+  --mega-blur: 8px;
+  --mega-scrim: rgba(16, 31, 56, 0.18);
+
+  transition:
+    opacity 260ms var(--ease-out-soft),
+    backdrop-filter 260ms var(--ease-out-soft),
+    background-color 260ms var(--ease-out-soft),
+    visibility 0s linear 260ms;
+  opacity: 0;
+  backdrop-filter: blur(0px);
+  background-color: transparent;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.mega-backdrop[data-open="true"] {
+  opacity: 1;
+  backdrop-filter: blur(var(--mega-blur));
+  background-color: var(--mega-scrim);
+  visibility: visible;
+  pointer-events: auto;
+  transition-delay: 0s, 0s, 0s, 0s;
+}
+
+/*
+  Video lightbox. The scrim is near-black so the player reads as the only lit
+  surface in the room, and the panel scales in from 0.96 so it reads as arriving rather
+  than appearing. Both open on the same curve as the mega panel.
+*/
+@keyframes lightbox-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lightbox-panel-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lightbox {
+  animation: lightbox-in 200ms var(--ease-out-soft) both;
+}
+
+.lightbox-scrim {
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(20px);
+}
+
+.lightbox-panel {
+  animation: lightbox-panel-in 260ms var(--ease-out-soft) both;
+}
+
+/*
+  Cards lead in after the container has begun settling, 45ms apart.
+
+  An animation rather than a transition, so that swapping between the Reports
+  and Blog menus replays the stagger: the list is keyed on the open menu, and a
+  freshly mounted element would adopt a transition's end state instantly.
+*/
+@keyframes mega-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.mega-card {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.mega-panel[data-open="true"] .mega-card {
+  animation: mega-card-in 200ms var(--ease-out-soft) both;
+}
+.mega-panel[data-open="true"] li:nth-child(1) .mega-card {
+  animation-delay: 90ms;
+}
+.mega-panel[data-open="true"] li:nth-child(2) .mega-card {
+  animation-delay: 135ms;
+}
+.mega-panel[data-open="true"] li:nth-child(3) .mega-card {
+  animation-delay: 180ms;
+}
+.mega-panel[data-open="true"] li:nth-child(4) .mega-card {
+  animation-delay: 225ms;
+}
+
+/*
+  Cover images settle from a slight overscale as they scroll in. Scroll-driven,
+  so it costs no JavaScript and stays tied to reading pace rather than a timer.
+  Only `transform` moves, so the card's layout never shifts.
+*/
+@keyframes img-settle {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/*
+  Eyebrow labels catch a single pass of the brand gradient as they enter view.
+  Deliberately one-shot rather than looping: a permanent shimmer on every label
+  would read as decoration and burn battery on long pages.
+*/
+@keyframes eyebrow-sweep {
+  from {
+    background-position: 180% 0;
+  }
+  to {
+    background-position: -60% 0;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .img-reveal {
+      animation: img-settle 1s var(--ease-out-soft) both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 65%;
+      will-change: transform;
+    }
+
+    .eyebrow-shimmer {
+      /* Not `currentColor`: the rule sets `color: transparent` to reveal the
+         clipped background, which would make currentColor transparent too.
+         Contexts on `forest` override this via `.eyebrow-shimmer-dark`. */
+      --shimmer-base: var(--color-leaf);
+      background-image: linear-gradient(
+        100deg,
+        var(--shimmer-base) 0%,
+        var(--shimmer-base) 36%,
+        #c9e22a 46%,
+        #2dd4bf 54%,
+        var(--shimmer-base) 64%,
+        var(--shimmer-base) 100%
+      );
+      background-size: 260% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: eyebrow-sweep 1s linear both;
+      animation-timeline: view();
+      animation-range: entry 10% entry 90%;
+    }
+
+    .eyebrow-shimmer-dark {
+      --shimmer-base: var(--color-leaf-on-dark);
+    }
+  }
+}
+
+/*
+  Parallax for large feature images: the image drifts against the scroll inside
+  its clipped frame. Kept separate from `.img-reveal` on purpose, since both
+  animate `transform` and one would silently cancel the other. Feature images
+  get the drift; card covers get the settle.
+*/
+@keyframes img-drift {
+  from {
+    transform: scale(1.12) translateY(-3%);
+  }
+  to {
+    transform: scale(1.12) translateY(3%);
+  }
+}
+
+/* The footer's brand band shifts hue position on a long loop, the one ambient
+   note on the site, placed where nothing else competes with it. */
+@keyframes gradient-breathe {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .img-parallax {
+      animation: img-drift linear both;
+      animation-timeline: view();
+      animation-range: cover 0% cover 100%;
+      will-change: transform;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /*
+    Sized well past the element so a given colour actually travels the band
+    rather than the whole spectrum shimmering in place. At 220%/24s the movement
+    was running correctly but was imperceptible on a 3px strip.
+  */
+  .gradient-breathe {
+    background-size: 320% 100%;
+    animation: gradient-breathe 14s ease-in-out infinite;
+  }
+}
+
+/*
+  ── Hero ────────────────────────────────────────────────────────────────────
+  Entrance choreography. Time-based rather than scroll-driven, because this
+  plays on arrival before any scroll has happened. Order: rule draws, eyebrow,
+  headline, subtitle, buttons, then the image wipes in from the right. Total
+  ~900ms; each element only moves opacity and transform.
+*/
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-rule {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* The image is revealed rather than moved, so the photograph itself stays
+   still while its frame opens. */
+@keyframes hero-wipe {
+  from {
+    clip-path: inset(0 0 0 100%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Slow drift, ~24s. Long enough that it reads as the image being alive rather
+   than as an animation playing. */
+@keyframes hero-breathe {
+  from {
+    transform: scale(1.02) translate3d(-0.6%, -0.4%, 0);
+  }
+  to {
+    transform: scale(1.09) translate3d(0.6%, 0.4%, 0);
+  }
+}
+
+/* Soft leaf-tinted glow behind the headline, drifting on its own cycle so it
+   never syncs up with the image and starts to feel mechanical. */
+@keyframes hero-glow {
+  0%,
+  100% {
+    transform: translate3d(-4%, 0, 0) scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.12);
+    opacity: 0.75;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-step {
+    animation: hero-rise 700ms var(--ease-out-soft) both;
+    animation-delay: calc(var(--hero-step, 0) * 90ms);
+  }
+
+  .hero-rule-in {
+    transform-origin: left;
+    animation: hero-rule 500ms var(--ease-out-soft) both;
+  }
+
+  .hero-media {
+    animation: hero-wipe 800ms var(--ease-out-soft) 320ms both;
+  }
+
+  .hero-breathe {
+    animation: hero-breathe 24s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  .hero-glow {
+    animation: hero-glow 18s ease-in-out infinite;
+    will-change: transform, opacity;
   }
 }
 
@@ -84,5 +515,20 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/*
+  Reduced motion: cut to end states rather than removing the feedback. Hover and
+  focus styles still apply, they just arrive instantly instead of easing in.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

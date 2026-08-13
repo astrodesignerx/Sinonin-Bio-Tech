@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
-import Reveal from "@/components/ui/reveal";
+import SectionHeader from "@/components/ui/section-header";
+import StatFigure from "@/components/home/stat-figure";
 
 type Stat = { value: string; label: string };
 
@@ -8,34 +9,20 @@ export default function ProteinSecurity() {
   const stats = t.raw("stats") as Stat[];
 
   return (
-    <section className="bg-mist">
-      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-        <Reveal>
-          <h2 className="max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-            {t("statsTitle")}
-          </h2>
-          <p className="mt-4 max-w-2xl leading-relaxed text-ink-muted">
-            {t("statsIntro")}
-          </p>
-        </Reveal>
+    <section className="bg-forest">
+      <div className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+        <SectionHeader
+          tone="dark"
+          title={t("statsTitle")}
+          intro={t("statsIntro")}
+        />
 
-        <div className="mt-14 grid gap-10 sm:grid-cols-3 sm:gap-8">
+        <div className="reveal-stagger mt-12 grid gap-10 sm:mt-14 sm:grid-cols-3 sm:gap-8">
           {stats.map((stat) => (
-            <div key={stat.value}>
-              <div className="border-t-2 border-ink/10 pt-5">
-                <p className="font-display text-5xl font-semibold tracking-tight text-ink lg:text-6xl">
-                  {stat.value}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                  {stat.label}
-                </p>
-              </div>
-            </div>
+            <StatFigure key={stat.value} value={stat.value} label={stat.label} />
           ))}
         </div>
-        <p className="mt-10 text-xs text-ink-muted/70">
-          {t("statsSources")}
-        </p>
+        <p className="mt-10 text-xs text-paper/50">{t("statsSources")}</p>
       </div>
     </section>
   );

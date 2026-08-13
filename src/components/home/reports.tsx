@@ -1,50 +1,51 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "@phosphor-icons/react/ssr";
 import { Link } from "@/i18n/navigation";
-import Reveal from "@/components/ui/reveal";
-
-const REPORTS = [
-  { key: "insect", slug: "insect-proteins" },
-  { key: "palatants", slug: "vegan-palatants" },
-  { key: "petfood", slug: "vegan-petfood" },
-  { key: "petcare", slug: "petcare-market" },
-] as const;
+import SectionHeader from "@/components/ui/section-header";
+import { CARD_INTERACTIVE } from "@/components/ui/card";
+import { REPORT_COVERS, REPORT_SLUGS } from "@/lib/reports";
+import { BLUR } from "@/lib/blur-data";
 
 export default function Reports() {
   const t = useTranslations("home");
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-      <Reveal>
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
-          {t("reportsEyebrow")}
-        </p>
-        <h2 className="mt-3 max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          {t("reportsTitle")}
-        </h2>
-        <p className="mt-4 max-w-2xl leading-relaxed text-ink-muted">
-          {t("reportsIntro")}
-        </p>
-      </Reveal>
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+      <SectionHeader
+        eyebrow={t("reportsEyebrow")}
+        title={t("reportsTitle")}
+        intro={t("reportsIntro")}
+      />
 
-      <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {REPORTS.map((report) => (
-          <Link
-            key={report.key}
-            href={`/reports/${report.slug}`}
-            className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-16px_rgba(16,31,56,0.18)]"
-          >
-              <div className="relative flex aspect-[4/3] flex-col justify-between bg-navy p-5">
-                <span className="font-mono text-[10px] uppercase tracking-[0.22em] text-paper/60">
+      <div className="reveal-stagger mt-12 grid gap-5 sm:mt-14 sm:grid-cols-2 lg:grid-cols-4">
+        {REPORT_SLUGS.map((report) => {
+          const cover = REPORT_COVERS[report.slug];
+          return (
+            <Link
+              key={report.key}
+              href={`/reports/${report.slug}`}
+              className={`${CARD_INTERACTIVE} flex h-full flex-col overflow-hidden`}
+            >
+              <div className="relative aspect-[16/10] overflow-hidden">
+                <Image
+                  src={cover.src}
+                  placeholder={BLUR[cover.src] ? "blur" : "empty"}
+                  blurDataURL={BLUR[cover.src]}
+                  alt={cover.alt}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                  className="img-reveal object-cover"
+                />
+                <span className="absolute left-3 top-3 inline-flex items-center rounded-full bg-paper/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-ink backdrop-blur-sm">
                   {t("reportLabel")}
                 </span>
-                <h3 className="font-display text-xl font-semibold leading-snug tracking-tight text-paper">
-                  {t(`reports.${report.key}.title`)}
-                </h3>
-                <span className="absolute inset-x-0 bottom-0 h-[3px] brand-gradient" />
               </div>
               <div className="flex flex-1 flex-col p-5">
-                <p className="flex-1 text-sm leading-relaxed text-ink-muted">
+                <h3 className="font-display text-xl font-semibold leading-snug tracking-tight">
+                  {t(`reports.${report.key}.title`)}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-muted">
                   {t(`reports.${report.key}.body`)}
                 </p>
                 <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf">
@@ -57,7 +58,8 @@ export default function Reports() {
                 </span>
               </div>
             </Link>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

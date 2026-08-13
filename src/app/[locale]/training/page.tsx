@@ -6,6 +6,7 @@ import { seoMetadata } from "@/lib/meta";
 import PageHeader from "@/components/ui/page-header";
 import CtaBand from "@/components/ui/cta-band";
 import Reveal from "@/components/ui/reveal";
+import StaggerWords from "@/components/ui/stagger-words";
 
 type CoverItem = { title: string; body: string };
 type ProcessStep = { step: string; title: string; body: string };
@@ -42,22 +43,27 @@ function TrainingContent() {
 
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8">
         <Reveal>
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h2 className="heading-section">
             {t("coverTitle")}
           </h2>
         </Reveal>
-        <div className="mt-8 divide-y divide-line border-y border-line">
+        <div className="reveal-stagger mt-8 divide-y divide-line border-y border-line">
           {cover.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.05}>
-              <div className="grid gap-2 py-7 sm:grid-cols-12 sm:gap-8">
-                <p className="font-mono text-sm text-leaf sm:col-span-2">
+            <Reveal key={item.title}>
+              {/*
+                Rows, not cards, so a lift would read wrong here. The numeral
+                steps right and the row warms instead: same feedback, no layout
+                shift, and the divider rhythm stays intact.
+              */}
+              <div className="group -mx-4 grid gap-2 rounded-xl px-4 py-7 transition-colors duration-200 ease-out-soft hover:bg-mist/50 sm:grid-cols-12 sm:gap-8">
+                <p className="font-mono text-sm text-leaf/70 transition-all duration-200 ease-out-soft group-hover:translate-x-1 group-hover:text-leaf sm:col-span-2">
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="font-display text-xl font-semibold tracking-tight sm:col-span-4">
+                <h3 className="font-display text-xl font-semibold tracking-tight transition-colors duration-200 ease-out-soft group-hover:text-leaf sm:col-span-4">
                   {item.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-ink-muted sm:col-span-6">
-                  {item.body}
+                  <StaggerWords text={item.body} />
                 </p>
               </div>
             </Reveal>
@@ -67,13 +73,13 @@ function TrainingContent() {
 
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
         <Reveal>
-          <h2 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+          <h2 className="heading-section">
             {t("processTitle")}
           </h2>
         </Reveal>
-        <div className="mt-8 grid gap-10 sm:grid-cols-3 sm:gap-8">
-          {process.map((step, i) => (
-            <Reveal key={step.step} delay={i * 0.06}>
+        <div className="reveal-stagger mt-8 grid gap-10 sm:grid-cols-3 sm:gap-8">
+          {process.map((step) => (
+            <Reveal key={step.step}>
               <div className="border-t-2 border-ink/10 pt-5">
                 <p className="font-display text-4xl font-semibold tracking-tight text-leaf">
                   {step.step}
@@ -93,14 +99,14 @@ function TrainingContent() {
       <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
         <Reveal>
           <figure>
-            <div className="relative aspect-[21/9] overflow-hidden rounded-2xl">
-              <Image
-                src="/images/zest-launch.webp"
-                alt={t("imageAlt")}
-                fill
-                sizes="(max-width: 1280px) 100vw, 1280px"
-                className="object-cover"
-              />
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl">
+            <Image
+              src="/images/zest-launch-hero.webp"
+              alt={t("imageAlt")}
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="img-parallax object-cover"
+            />
             </div>
             <figcaption className="mt-3 text-xs leading-relaxed text-ink-muted">
               {t("caption")}

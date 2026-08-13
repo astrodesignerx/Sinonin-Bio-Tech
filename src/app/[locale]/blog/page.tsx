@@ -6,13 +6,14 @@ import { seoMetadata } from "@/lib/meta";
 import { Newspaper } from "@phosphor-icons/react/ssr";
 import { Link } from "@/i18n/navigation";
 import PageHeader from "@/components/ui/page-header";
+import { CARD_INTERACTIVE } from "@/components/ui/card";
 import Reveal from "@/components/ui/reveal";
 import { getAllPosts, type PostMeta } from "@/lib/blog";
 
 const POST_COVERS: Record<string, { src: string; alt: string }> = {
   "fifa-world-cup-lessons-alt-prot": {
     src: "/images/blog/fifa-world-cup-lessons.webp",
-    alt: "Football match under floodlights at Priestfield Stadium — players in blue and red kits on the pitch, a stand full of spectators in the background.",
+    alt: "Football match under floodlights at Priestfield Stadium, players in blue and red kits on the pitch, a stand full of spectators in the background.",
   },
   "alternative-protein-industry-failures": {
     src: "/images/blog/alternative-protein-failures.webp",
@@ -84,7 +85,6 @@ function BlogContent({
   format: Awaited<ReturnType<typeof getFormatter>>;
 }) {
   const t = useTranslations("blogPage");
-  const [featured, ...rest] = posts;
 
   const formatDate = (iso: string) =>
     format.dateTime(new Date(iso), { dateStyle: "long" });
@@ -99,46 +99,14 @@ function BlogContent({
       )}
 
       <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
-        {featured && (
-          <Reveal>
-            <Link
-              href={`/blog/${featured.slug}`}
-              className="group flex flex-col overflow-hidden rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-16px_rgba(16,31,56,0.18)] md:flex-row"
-            >
-              <div className="relative aspect-[16/10] w-full md:aspect-auto md:w-2/5">
-                {featured.cover ? (
-                  <Image
-                    src={featured.cover}
-                    alt={featured.coverAlt ?? featured.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 520px"
-                    className="object-cover"
-                  />
-                ) : (
-                  <FallbackCover slug={featured.slug} label={featured.title} />
-                )}
-              </div>
-              <div className="flex flex-1 flex-col p-6 sm:p-8">
-                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-leaf">
-                  {featured.category} · <PostDate date={formatDate(featured.date)} />
-                </p>
-                <h2 className="mt-3 font-display text-2xl font-semibold leading-snug tracking-tight sm:text-3xl">
-                  {featured.title}
-                </h2>
-                <p className="mt-3 max-w-2xl leading-relaxed text-ink-muted">
-                  {featured.excerpt}
-                </p>
-              </div>
-            </Link>
-          </Reveal>
-        )}
-
-        <div className="mt-6 grid gap-5 md:grid-cols-2">
-          {rest.map((post, i) => (
-            <Reveal key={post.slug} delay={0.05 + i * 0.05} className="h-full">
+        {/* One uniform card shape for every post: the newest no longer gets a
+            wide featured treatment, so the grid reads as a single set. */}
+        <div className="reveal-stagger grid gap-5 md:grid-cols-2">
+          {posts.map((post) => (
+            <Reveal key={post.slug} className="h-full">
               <Link
                 href={`/blog/${post.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-16px_rgba(16,31,56,0.18)]"
+                className={`${CARD_INTERACTIVE} flex h-full flex-col overflow-hidden`}
               >
                 <div className="relative aspect-[16/9] w-full">
                   {post.cover ? (
@@ -155,7 +123,7 @@ function BlogContent({
                 </div>
                 <div className="flex flex-1 flex-col p-5 sm:p-6">
                   <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-leaf">
-                    {post.category} · <PostDate date={formatDate(post.date)} />
+                    {post.category} | <PostDate date={formatDate(post.date)} />
                   </p>
                   <h3 className="mt-2 line-clamp-2 font-display text-xl font-semibold leading-snug tracking-tight">
                     {post.title}

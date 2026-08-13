@@ -8,6 +8,7 @@ import {
   EnvelopeSimple,
 } from "@phosphor-icons/react/ssr";
 import PageHeader from "@/components/ui/page-header";
+import { CARD } from "@/components/ui/card";
 import LeadForm from "@/components/forms/lead-form";
 import Reveal from "@/components/ui/reveal";
 import { site } from "@/lib/config";
@@ -44,11 +45,11 @@ function ContactContent() {
         <div className="grid gap-6 lg:grid-cols-12">
           <div className="space-y-6 lg:col-span-5">
             <Reveal>
-              <div className="rounded-2xl border border-line bg-white p-7">
+              <div className={`${CARD} p-7`}>
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-mist text-leaf">
                   <CalendarCheck size={20} />
                 </span>
-                <h2 className="mt-5 font-display text-2xl font-semibold tracking-tight">
+                <h2 className="mt-5 heading-sub">
                   {t("bookingTitle")}
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-ink-muted">
@@ -66,8 +67,8 @@ function ContactContent() {
               </div>
             </Reveal>
 
-            <Reveal delay={0.06}>
-              <div className="rounded-2xl border border-line bg-white p-7">
+            <Reveal order={1}>
+              <div className={`${CARD} p-7`}>
                 <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink-muted">
                   {t("detailsTitle")}
                 </h2>
@@ -89,9 +90,9 @@ function ContactContent() {
           </div>
 
           <div className="lg:col-span-7">
-            <Reveal delay={0.1}>
-              <div className="rounded-2xl border border-line bg-white p-7 sm:p-8">
-                <h2 className="font-display text-2xl font-semibold tracking-tight">
+            <Reveal order={1}>
+              <div className={`${CARD} p-7 sm:p-8`}>
+                <h2 className="heading-sub">
                   {t("formTitle")}
                 </h2>
                 <p className="mt-1.5 text-sm leading-relaxed text-ink-muted">
@@ -100,7 +101,7 @@ function ContactContent() {
                 <div className="mt-6">
                   <LeadForm
                     variant="contact"
-                    subject="Website contact — Sinonin Biotech"
+                    subject="Website contact, Sinonin Biotech"
                   />
                 </div>
               </div>

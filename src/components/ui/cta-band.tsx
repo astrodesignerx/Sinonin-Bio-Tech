@@ -13,11 +13,11 @@ export default function CtaBand({
   const nav = useTranslations("nav");
 
   return (
-    <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
+    <section className="mx-auto max-w-7xl px-4 pb-24 sm:px-6 sm:pb-32 lg:px-8">
       <Reveal>
         <div className="flex flex-col gap-8 rounded-2xl bg-forest p-8 text-paper sm:p-12 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h2 className="max-w-xl font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+            <h2 className="max-w-xl font-display text-3xl font-semibold leading-[1.1] tracking-tight sm:text-4xl">
               {title}
             </h2>
             <p className="mt-2 max-w-xl leading-relaxed text-paper/75">{body}</p>

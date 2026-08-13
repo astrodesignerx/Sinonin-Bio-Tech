@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { seoMetadata } from "@/lib/meta";
@@ -35,18 +36,48 @@ function AboutContent() {
     <>
       <PageHeader title={t("title")} intro={t("intro")} />
 
+      <Reveal>
+        <figure className="mx-auto mt-10 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative aspect-[21/9] overflow-hidden rounded-2xl">
+            <Image
+              src="/images/about/nandi.webp"
+              alt="Rolling green tea-covered hills in the Nandi highlands of Kenya, with a small insect farm building on the ridge, the same lush green habitat that gives Sinonin its name."
+              fill
+              priority
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="img-parallax object-cover"
+            />
+          </div>
+          <figcaption className="mt-3 text-xs leading-relaxed text-ink-muted">
+            Nandi highlands, Kenya, the same lush green habitat that gives Sinonin its name.
+          </figcaption>
+        </figure>
+      </Reveal>
+
       <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
         <section className="border-t border-line py-14 sm:py-16">
           <div className="grid gap-8 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <Reveal>
-                <h2 className="font-display text-3xl font-semibold tracking-tight lg:sticky lg:top-24">
-                  {t("nameTitle")}
-                </h2>
+                {/* The mark sits with the name section because this is where
+                    the name is explained: Nandi for the green habitat the
+                    logo's leaf refers to. */}
+                <div className="lg:sticky lg:top-24">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-mist">
+                    <Image
+                      src="/brand/logo.png"
+                      alt=""
+                      width={34}
+                      height={34}
+                      className="h-9 w-auto"
+                    />
+                  </span>
+                  <h2 className="heading-sub mt-5">{t("nameTitle")}</h2>
+                </div>
               </Reveal>
             </div>
             <div className="lg:col-span-7 lg:col-start-6">
-              <Reveal delay={0.05}>
+              <Reveal order={1}>
                 <p className="max-w-2xl text-lg leading-relaxed text-ink">
                   {t("nameBody")}
                 </p>
@@ -59,13 +90,13 @@ function AboutContent() {
           <div className="grid gap-8 lg:grid-cols-12">
             <div className="lg:col-span-4">
               <Reveal>
-                <h2 className="font-display text-3xl font-semibold tracking-tight lg:sticky lg:top-24">
+                <h2 className="heading-sub lg:sticky lg:top-24">
                   {t("founderTitle")}
                 </h2>
               </Reveal>
             </div>
-            <div className="lg:col-span-7 lg:col-start-6">
-              <Reveal delay={0.05}>
+            <div className="lg:col-span-5 lg:col-start-5">
+              <Reveal order={1}>
                 <p className="max-w-2xl leading-relaxed text-ink-muted">
                   {t("founderBody")}
                 </p>
@@ -87,13 +118,27 @@ function AboutContent() {
                 </ul>
               </Reveal>
             </div>
+            <div className="lg:col-span-3 lg:col-start-10">
+              <Reveal order={1}>
+                <div className="relative aspect-square">
+                  <Image
+                    src="/images/about/founder.webp"
+                    alt="Portrait of Dr. Seronei Chelulei Cheison, founder of Sinonin Biotech, in a dark suit and blue tie."
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 25vw"
+                    className="object-contain"
+                  />
+                </div>
+              </Reveal>
+            </div>
           </div>
         </section>
 
         <section className="border-t border-line py-14 sm:py-16">
           <div className="grid gap-5 md:grid-cols-2">
             <Reveal>
-              <div className="h-full rounded-2xl bg-mist p-7 sm:p-8">
+              <div className="group h-full overflow-hidden rounded-2xl bg-mist p-7 shadow-card transition duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8">
+                <span aria-hidden="true" className="mb-5 block h-[2px] w-12 origin-left scale-x-0 rounded-full brand-gradient transition-transform duration-300 ease-out-soft group-hover:scale-x-100" />
                 <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
                   {t("missionTitle")}
                 </h2>
@@ -102,8 +147,9 @@ function AboutContent() {
                 </p>
               </div>
             </Reveal>
-            <Reveal delay={0.06}>
-              <div className="h-full rounded-2xl bg-mist p-7 sm:p-8">
+            <Reveal order={1}>
+              <div className="group h-full overflow-hidden rounded-2xl bg-mist p-7 shadow-card transition duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8">
+                <span aria-hidden="true" className="mb-5 block h-[2px] w-12 origin-left scale-x-0 rounded-full brand-gradient transition-transform duration-300 ease-out-soft group-hover:scale-x-100" />
                 <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
                   {t("visionTitle")}
                 </h2>

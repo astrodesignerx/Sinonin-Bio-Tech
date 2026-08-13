@@ -82,7 +82,7 @@ function PostContent({
       </Link>
 
       <p className="mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-leaf">
-        {meta.category} · {dateStr}
+        {meta.category} | {dateStr}
       </p>
       <h1 className="mt-3 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl lg:text-[2.75rem]">
         {meta.title}

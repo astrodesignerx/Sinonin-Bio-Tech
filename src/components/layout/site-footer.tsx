@@ -53,6 +53,8 @@ export default function SiteFooter() {
 
   return (
     <footer className="bg-forest text-paper">
+      {/* Full-bleed brand band: the site's closing mark. */}
+      <div aria-hidden="true" className="gradient-breathe h-[3px] w-full brand-gradient" />
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

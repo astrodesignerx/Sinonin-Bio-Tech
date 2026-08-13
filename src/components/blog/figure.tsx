@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { CARD } from "@/components/ui/card";
 
 export default function Figure({
   src,
@@ -20,7 +21,7 @@ export default function Figure({
 
   return (
     <figure className="my-10">
-      <div className="overflow-hidden rounded-2xl border border-line bg-white">
+      <div className={`${CARD} overflow-hidden`}>
         <Image
           src={src}
           alt={alt}

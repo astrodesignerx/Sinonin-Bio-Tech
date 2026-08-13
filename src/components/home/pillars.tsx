@@ -2,14 +2,26 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ArrowRight, Bug, Flask, Plant } from "@phosphor-icons/react/ssr";
 import { Link } from "@/i18n/navigation";
-import Reveal from "@/components/ui/reveal";
+import SectionHeader from "@/components/ui/section-header";
+import { CARD_INTERACTIVE_SURFACE } from "@/components/ui/card";
 
-const CELL_LINK =
-  "group flex flex-col rounded-2xl border border-line bg-white transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_48px_-16px_rgba(16,31,56,0.18)]";
+/*
+  No background or border colour here, each cell sets its own. Tailwind emits
+  utilities of equal specificity, so a `bg-forest` appended after a shared
+  `bg-white` does not reliably win; keeping the surface out of the shared string
+  is what makes the mist and forest cells actually render.
+*/
+const CELL_LINK = `${CARD_INTERACTIVE_SURFACE} flex flex-col`;
 
-function CellCta({ label }: { label: string }) {
+const CELL_LIGHT = "border-line bg-white";
+
+function CellCta({ label, tone = "light" }: { label: string; tone?: "light" | "dark" }) {
   return (
-    <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf">
+    <span
+      className={`mt-6 inline-flex items-center gap-1.5 text-sm font-semibold ${
+        tone === "dark" ? "text-leaf-on-dark" : "text-leaf"
+      }`}
+    >
       {label}
       <ArrowRight
         size={15}
@@ -24,19 +36,19 @@ export default function Pillars() {
   const t = useTranslations("home");
 
   return (
-    <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
-      <Reveal>
-        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
-          {t("pillarsEyebrow")}
-        </p>
-        <h2 className="mt-3 max-w-2xl font-display text-3xl font-semibold tracking-tight sm:text-4xl">
-          {t("pillarsTitle")}
-        </h2>
-      </Reveal>
+    <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
+      <SectionHeader
+        eyebrow={t("pillarsEyebrow")}
+        title={t("pillarsTitle")}
+        intro={t("pillarsIntro")}
+      />
 
-      <div className="mt-12 grid gap-5 lg:grid-cols-6">
+      <div className="reveal-stagger mt-12 grid gap-5 sm:mt-14 lg:grid-cols-6">
         <div className="lg:col-span-4">
-          <Link href="/expertise#proteins" className={`${CELL_LINK} h-full p-7 sm:p-8`}>
+          <Link
+            href="/expertise#proteins"
+            className={`${CELL_LINK} ${CELL_LIGHT} h-full p-7 sm:p-8`}
+          >
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-mist text-leaf">
               <Plant size={20} />
             </span>
@@ -63,10 +75,13 @@ export default function Pillars() {
         </div>
 
         <div className="lg:col-span-2">
-          <Link href="/expertise#palatants" className={`${CELL_LINK} h-full overflow-hidden`}>
+          <Link
+            href="/expertise#palatants"
+            className={`${CELL_LINK} ${CELL_LIGHT} h-full overflow-hidden`}
+          >
             <div className="relative h-36 w-full">
               <Image
-                src="/images/bowls.webp"
+                src="/images/expertise/palatants.webp"
                 alt={t("pillars.palatants.imageAlt")}
                 fill
                 sizes="(max-width: 1024px) 100vw, 420px"
@@ -123,12 +138,12 @@ export default function Pillars() {
                 {t("pillars.insects.body")}
               </p>
               <span className="mt-auto pt-6">
-                <CellCta label={t("pillarsCta")} />
+                <CellCta label={t("pillarsCta")} tone="dark" />
               </span>
             </div>
             <div className="relative min-h-40 sm:w-2/5">
               <Image
-                src="/images/insect-powder.webp"
+                src="/images/expertise/insects-closeup.webp"
                 alt={t("pillars.insects.imageAlt")}
                 fill
                 sizes="(max-width: 640px) 100vw, 500px"

@@ -5,6 +5,7 @@ import Pillars from "@/components/home/pillars";
 import ProteinSecurity from "@/components/home/protein-security";
 import Reports from "@/components/home/reports";
 import Training from "@/components/home/training";
+import InsectStories from "@/components/home/insect-stories";
 import Founder from "@/components/home/founder";
 import LatestBlog from "@/components/home/latest-blog";
 import CtaBand from "@/components/ui/cta-band";
@@ -21,12 +22,13 @@ export default async function HomePage({
   return (
     <>
       <Hero />
-      <Supporters />
       <Pillars />
       <ProteinSecurity />
       <Reports />
       <Training />
       <Founder />
+      <Supporters />
+      <InsectStories />
       <LatestBlog />
       <CtaBand title={t("closeCtaTitle")} body={t("closeCtaBody")} />
     </>

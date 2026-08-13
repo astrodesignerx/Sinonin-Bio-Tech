@@ -7,12 +7,13 @@ import { CheckCircle } from "@phosphor-icons/react/ssr";
 import PageHeader from "@/components/ui/page-header";
 import CtaBand from "@/components/ui/cta-band";
 import Reveal from "@/components/ui/reveal";
+import FieldRail from "@/components/expertise/field-rail";
 
 const SECTIONS = [
-  { key: "proteins", image: "/images/hero-pulses.webp" },
-  { key: "palatants", image: "/images/bowls.webp" },
-  { key: "enzymes", image: null },
-  { key: "insects", image: "/images/insect-powder.webp" },
+  { key: "proteins", image: "/images/expertise/proteins.webp" },
+  { key: "palatants", image: "/images/expertise/palatants.webp" },
+  { key: "enzymes", image: "/images/expertise/enzymes.webp" },
+  { key: "insects", image: "/images/expertise/insects.webp" },
 ] as const;
 
 export async function generateMetadata({
@@ -43,67 +44,95 @@ function ExpertiseContent() {
     <>
       <PageHeader title={t("title")} intro={t("intro")} />
 
-      <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-        {SECTIONS.map((section) => {
-          const points = t.raw(`sections.${section.key}.points`) as string[];
-          return (
-            <section
-              key={section.key}
-              id={section.key}
-              className="scroll-mt-24 border-t border-line py-14 sm:py-16"
-            >
-              <div className="grid gap-8 lg:grid-cols-12">
-                <div className="lg:col-span-4">
-                  <div className="lg:sticky lg:top-24">
-                    <Reveal>
-                      <p className="font-mono text-sm text-leaf">
-                        {t(`sections.${section.key}.number`)}
-                      </p>
-                      <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight">
-                        {t(`sections.${section.key}.title`)}
-                      </h2>
-                    </Reveal>
-                  </div>
-                </div>
-                <div className="lg:col-span-7 lg:col-start-6">
-                  <Reveal delay={0.05}>
-                    <p className="max-w-2xl leading-relaxed text-ink-muted">
-                      {t(`sections.${section.key}.body`)}
+      {/*
+        One question, four answers. Each field opens with the question a client
+        actually arrives with rather than a noun label, and the rail on the left
+        doubles as a progress indicator. `overflow-x-clip` contains the images
+        that bleed off the right edge without introducing a scrollbar.
+      */}
+      <div className="mx-auto max-w-7xl overflow-x-clip px-4 pb-20 sm:px-6 lg:px-8">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+          <div className="hidden lg:col-span-3 lg:block">
+            <FieldRail
+              label={t("railLabel")}
+              items={SECTIONS.map((s) => ({
+                key: s.key,
+                number: t(`sections.${s.key}.number`),
+                title: t(`sections.${s.key}.title`),
+              }))}
+            />
+          </div>
+
+          <div className="lg:col-span-9">
+            {SECTIONS.map((section, i) => {
+              const points = t.raw(`sections.${section.key}.points`) as string[];
+              return (
+                <section
+                  key={section.key}
+                  id={section.key}
+                  className="scroll-mt-28 border-t border-line py-14 sm:py-20"
+                >
+                  <Reveal>
+                    <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
+                      {t(`sections.${section.key}.number`)} |{" "}
+                      {t(`sections.${section.key}.title`)}
                     </p>
-                    <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-muted">
-                      {t("deliverablesLabel")}
-                    </p>
-                    <ul className="mt-4 space-y-3">
-                      {points.map((point) => (
-                        <li key={point} className="flex items-start gap-3">
-                          <CheckCircle
-                            size={20}
-                            weight="fill"
-                            className="mt-0.5 shrink-0 text-leaf"
-                          />
-                          <span className="text-sm leading-relaxed text-ink">
-                            {point}
-                          </span>
-                        </li>
-                      ))}
-                    </ul>
-                    {section.image && (
-                      <div className="relative mt-8 h-52 overflow-hidden rounded-2xl sm:h-64">
-                        <Image
-                          src={section.image}
-                          alt={t(`sections.${section.key}.imageAlt`)}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 640px"
-                          className="object-cover"
-                        />
-                      </div>
-                    )}
+                    <h2 className="heading-section mt-4 max-w-2xl">
+                      {t(`sections.${section.key}.question`)}
+                    </h2>
                   </Reveal>
-                </div>
-              </div>
-            </section>
-          );
-        })}
+
+                  <div className="mt-8 grid gap-8 lg:grid-cols-2 lg:gap-10">
+                    <Reveal order={1}>
+                      <p className="leading-relaxed text-ink-muted">
+                        {t(`sections.${section.key}.body`)}
+                      </p>
+                      <p className="mt-8 font-mono text-[11px] uppercase tracking-[0.22em] text-ink-muted">
+                        {t("deliverablesLabel")}
+                      </p>
+                      <ul className="mt-4 space-y-3">
+                        {points.map((point) => (
+                          <li key={point} className="flex items-start gap-3">
+                            <CheckCircle
+                              size={20}
+                              weight="fill"
+                              className="mt-0.5 shrink-0 text-leaf"
+                            />
+                            <span className="text-sm leading-relaxed text-ink">
+                              {point}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </Reveal>
+
+                    {section.image && (
+                      <Reveal order={1}>
+                        {/* Alternating fields bleed to the right edge, so the
+                            page has rhythm instead of four identical rows. */}
+                        <div
+                          className={`relative h-64 overflow-hidden rounded-2xl sm:h-80 lg:h-full lg:min-h-72 ${
+                            i % 2 === 0
+                              ? "lg:-mr-[calc((100vw-min(100vw,80rem))/2+2rem)] lg:rounded-r-none"
+                              : ""
+                          }`}
+                        >
+                          <Image
+                            src={section.image}
+                            alt={t(`sections.${section.key}.imageAlt`)}
+                            fill
+                            sizes="(max-width: 1024px) 100vw, 50vw"
+                            className="img-reveal object-cover"
+                          />
+                        </div>
+                      </Reveal>
+                    )}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       <CtaBand title={t("ctaTitle")} body={t("ctaBody")} />
