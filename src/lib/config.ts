@@ -28,4 +28,4 @@ export const HERO_VIDEO: { webm: string; mp4: string; poster: string } | null = 
   components/home, so switching is a one-line change and no version has to be
   reconstructed from history to compare them.
 */
-export const HERO_VERSION = "v1" as const;
+export const HERO_VERSION: "v1" | "v2" = "v2";
