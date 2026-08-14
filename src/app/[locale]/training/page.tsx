@@ -78,13 +78,41 @@ function TrainingContent() {
           </h2>
         </Reveal>
         <div className="reveal-stagger mt-8 grid gap-10 sm:grid-cols-3 sm:gap-8">
-          {process.map((step) => (
+          {process.map((step, i) => (
             <Reveal key={step.step}>
-              <div className="border-t-2 border-ink/10 pt-5">
-                <p className="font-display text-4xl font-semibold tracking-tight text-leaf">
+              <div className="relative">
+                {/*
+                  The track. Three detached top rules made three objects; one
+                  line running through the numerals makes a route, and the eye
+                  follows it in order instead of scanning the columns as a set.
+
+                  Drawn per step rather than as one line across the grid, for
+                  two reasons. It has to turn: the columns stack below `sm`, so
+                  the run becomes vertical down the left of the chips, which a
+                  single element spanning the grid could not do without
+                  overshooting past the last step into empty space. And a
+                  segment belonging to its own step travels with that step as
+                  it reveals, so the route draws itself in sequence rather than
+                  standing there complete before the steps arrive.
+
+                  Each segment spans its own chip to the next one, so it has to
+                  cross the grid gap: `100%` of the column, less the 40px of
+                  chip it starts after, plus the 32px gutter — `100% - 0.5rem`.
+                  The last step starts no segment; the route ends at its chip.
+
+                  19px, not 20: centring a 2px line on a 40px chip is half the
+                  line's own width off the middle.
+                */}
+                {i < process.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute -bottom-10 left-[19px] top-10 w-0.5 bg-ink/10 sm:bottom-auto sm:left-10 sm:top-[19px] sm:h-0.5 sm:w-[calc(100%-0.5rem)]"
+                  />
+                )}
+                <p className="relative flex h-10 w-10 items-center justify-center rounded-full bg-leaf font-display text-base font-semibold text-paper">
                   {step.step}
                 </p>
-                <h3 className="mt-3 font-display text-lg font-semibold tracking-tight">
+                <h3 className="mt-5 font-display text-xl font-semibold tracking-tight">
                   {step.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-muted">

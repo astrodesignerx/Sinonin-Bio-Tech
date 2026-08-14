@@ -42,6 +42,8 @@ const RESISTANCE = 1.6;
 const RELEASE_MS = 140;
 /** Fallback for the spring back; the real length is `--duration-large`. */
 const RETURN_FALLBACK_MS = 700;
+/** Fallback for the wordmark dimming; the real length is `--duration-epic`. */
+const DIM_FALLBACK_MS = 1000;
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
@@ -167,14 +169,28 @@ export default function FooterWordmark() {
     /*
       The wordmark's brightness, as a flag rather than a level: on while the
       edge is engaged, off once it is let go. The transition itself lives in
-      CSS; the only part of its timing that belongs here is the way back down,
-      which has to last exactly as long as the spring below, so the light and
-      the edge arrive home together. Coming up has no such tie, so that
-      duration is left to the stylesheet's own scale.
+      CSS; the only part of its timing that belongs here is the way back down.
+
+      That is the longest beat on the scale, and deliberately longer than the
+      spring above it: the edge lands first and the light goes on leaving after
+      it, so the two are a lead and a follow rather than one movement. Letting
+      go is also the moment nobody is watching closely, which is where a slow
+      fade costs nothing and a quick one reads as the word being switched off.
+
+      Coming up has no such tie — it answers the pull, so it is quick — and
+      that duration stays in the stylesheet.
     */
+    const dimMs = cssMs("--duration-epic", DIM_FALLBACK_MS);
+
     const light = (on: boolean) => {
-      if (on) vars.style.removeProperty("--wm-lit-ms");
-      else vars.style.setProperty("--wm-lit-ms", `${returnMs}ms`);
+      if (on) {
+        vars.style.removeProperty("--wm-lit-ms");
+        vars.style.removeProperty("--wm-lit-ease");
+      } else {
+        vars.style.setProperty("--wm-lit-ms", `${dimMs}ms`);
+        // Named, not spelled out: the curve stays defined in one place.
+        vars.style.setProperty("--wm-lit-ease", "var(--ease-in-out-soft)");
+      }
       vars.style.setProperty("--wm-lit", on ? "1" : "0");
     };
 

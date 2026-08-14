@@ -15,7 +15,7 @@ export const BLUR: Record<string, string> = {
   "/images/blog/petfood-palatability-fresh-kill-signal.webp": "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAQCdASoQAAkAA4BaJZQE6AhwBZgAAP7xMoMPHAJ/7enrAVr+NVM0JnZAAA==",
   "/images/blog/petfood-palatability-replacing-meat.webp": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoQAAkAA4BaJZQCdAEUpRcRvVwAAP7zzufUxrTN+aaVkuVbvrXRUuvaKg269reb96a5jSbcZxAAAA==",
   "/images/blog/republica-2025-diaspora.webp": "data:image/webp;base64,UklGRnYAAABXRUJQVlA4IGoAAABQAgCdASoQAAsAA4BaJbACdDiAByVGB1uMzAAA/uz8jyh+MkF8Zg1jXPj+77N8LBhRmkDwrKIDugtHGLFujMtpQ6yVgH+S78bx97W/XmnJy/M7QGw5NWc4Qw9Bjl9peLS+JFOdJxTbFUAA",
-  "/images/stories/bsf-startup-testimony.webp": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAAAQAgCdASoQAAwAA4BaJYgCdAEUo3yFEcggAP7s+J1dhg3fa8j+pcMd7alu/yfJa+gT/DSKlNJRoAY8uhp85yjm6uvO92g8AAA=",
-  "/images/stories/kiambu-bsf.webp": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADwAQCdASoQAAkAA4BaJbACdAEXdftJ29AA/qZ+ChpRpoX5htUK67qZcQ2A8AM9gVLEo1CC7dhrI434DS02f6xMYuJ+yx27pY5/ysEQAAA=",
-  "/images/stories/smart-farm-bsf.webp": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAwAgCdASoQAAkAA4BaJbACdAEWz8KIaZ+TwAD2vBs0eTfTFvQA/ZXbkVsvcpWpqA/x8R+m9MAMAYYfl9dKPKtnkm1Qr6hNww91Q3I2PM+gS3e9d78YP+kfBL6UepYAAAA="
+  "/images/stories/bsf-startup-testimony.webp": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAAAwAgCdASoQAAkAA4BaJYgCdH8AE6zySdficAD9wSq+pdJ4v60wT/YVQn2IrrE1PvGlol6etzruPbYbF1CbdWFctriZFjQ/GAGtBemsAAA=",
+  "/images/stories/kiambu-bsf.webp": "data:image/webp;base64,UklGRlwAAABXRUJQVlA4IFAAAAAQAgCdASoQAAkAA4BaJaACdAD6PshsJgpgAP7c8t4X5BajU1I/Pf2Xzqjpsi+oCVLILNd3DYK2uVfKuqlZxfkOdt9Bn6i2xI/mVf4b93AAAA==",
+  "/images/stories/smart-farm-bsf.webp": "data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAADQAQCdASoQAAkAA4BaJbACdAC7JXP8AAD8M/lM5vAELV4HYUwST2B/Ee0FS57TEy9+E85Yv4WFOfzZtCie95Qte9LVeD0ET+21ZgxjKvgnMlp57TjHlPMQfBJNdSMAAAA="
 };

@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Bug, Flask, Plant } from "@phosphor-icons/react/ssr";
+import { ArrowRight, Bug, Plant } from "@phosphor-icons/react/ssr";
 import { Link } from "@/i18n/navigation";
 import SectionHeader from "@/components/ui/section-header";
 import { CARD_INTERACTIVE_SURFACE } from "@/components/ui/card";
+import CardVideo from "@/components/ui/card-video";
 import MoleculeCanvas from "@/components/home/molecule-canvas";
+import HelixCanvas from "@/components/home/helix-canvas";
 
 /*
   No background or border colour here, each cell sets its own. Tailwind emits
@@ -27,7 +29,7 @@ function CellCta({ label, tone = "light" }: { label: string; tone?: "light" | "d
       <ArrowRight
         size={15}
         weight="bold"
-        className="transition group-hover:translate-x-0.5"
+        className="transition motion-press group-hover:translate-x-0.5"
       />
     </span>
   );
@@ -115,7 +117,7 @@ export default function Pillars() {
                 alt={t("pillars.palatants.imageAlt")}
                 fill
                 sizes="(max-width: 1024px) 100vw, 420px"
-                className="object-cover"
+                className="img-reveal object-cover"
               />
             </div>
             <div className="flex flex-1 flex-col p-6">
@@ -133,22 +135,36 @@ export default function Pillars() {
         </div>
 
         <div className="lg:col-span-2">
+          {/*
+            Structured like the Palatants cell rather than the wide ones: a
+            media band on top, copy beneath, and no icon badge. This card had
+            neither a graphic nor an image, which left it the only empty cell
+            in the grid and sixty-odd pixels shorter than the one beside it.
+
+            The badge goes because the band now does that job. Keeping both
+            would push this cell taller than its row-mate and put two marks in
+            the same corner. So: narrow cells lead with a picture, wide cells
+            lead with an icon.
+          */}
           <Link
             href="/expertise#enzymes"
-            className={`${CELL_LINK} h-full border-transparent bg-mist p-6`}
+            data-helix-host
+            className={`${CELL_LINK} h-full overflow-hidden border-transparent bg-mist`}
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-leaf">
-              <Flask size={20} />
-            </span>
-            <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight">
-              {t("pillars.enzymes.title")}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-              {t("pillars.enzymes.body")}
-            </p>
-            <span className="mt-auto pt-6">
-              <CellCta label={t("pillarsCta")} />
-            </span>
+            <div className="relative h-36 w-full">
+              <HelixCanvas speed={0.6} interactive />
+            </div>
+            <div className="flex flex-1 flex-col p-6">
+              <h3 className="font-display text-2xl font-semibold tracking-tight">
+                {t("pillars.enzymes.title")}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                {t("pillars.enzymes.body")}
+              </p>
+              <span className="mt-auto pt-6">
+                <CellCta label={t("pillarsCta")} />
+              </span>
+            </div>
           </Link>
         </div>
 
@@ -171,13 +187,24 @@ export default function Pillars() {
                 <CellCta label={t("pillarsCta")} tone="dark" />
               </span>
             </div>
+            {/*
+              Same panel, same `object-cover` framing as the still it replaces,
+              and cut to the same 4:3 at the same pixel size so the crop lands
+              where it did before.
+
+              No WebM. VP9 is usually the smaller of the two and is listed first
+              everywhere else on this site, but on this clip it lost: thousands
+              of larvae all moving at once is close to the worst case for it,
+              and at matched quality it came out larger than H.264 at every
+              setting tried. Shipping a second file that is bigger than the one
+              it is meant to save on would be pure ceremony.
+            */}
             <div className="relative min-h-40 sm:w-2/5">
-              <Image
-                src="/images/expertise/insects-closeup.webp"
-                alt={t("pillars.insects.imageAlt")}
-                fill
-                sizes="(max-width: 640px) 100vw, 500px"
-                className="object-cover"
+              <CardVideo
+                mp4="/videos/insects-closeup.mp4"
+                poster="/images/expertise/insects-closeup-poster.webp"
+                label={t("pillars.insects.imageAlt")}
+                className="img-reveal"
               />
             </div>
           </Link>
