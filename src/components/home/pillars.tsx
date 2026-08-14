@@ -4,6 +4,7 @@ import { ArrowRight, Bug, Flask, Plant } from "@phosphor-icons/react/ssr";
 import { Link } from "@/i18n/navigation";
 import SectionHeader from "@/components/ui/section-header";
 import { CARD_INTERACTIVE_SURFACE } from "@/components/ui/card";
+import MoleculeCanvas from "@/components/home/molecule-canvas";
 
 /*
   No background or border colour here, each cell sets its own. Tailwind emits
@@ -47,28 +48,57 @@ export default function Pillars() {
         <div className="lg:col-span-4">
           <Link
             href="/expertise#proteins"
-            className={`${CELL_LINK} ${CELL_LIGHT} h-full p-7 sm:p-8`}
+            data-molecule-host
+            className={`${CELL_LINK} ${CELL_LIGHT} relative h-full overflow-hidden p-7 sm:p-8`}
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-full bg-mist text-leaf">
+            {/*
+              E2D, running down the diagonal toward the bottom right. It is the
+              aroma compound that signals fresh prey to a predator, so it
+              belongs against Proteins rather than in the fold: there it was
+              the subject, here it is evidence sitting behind the claim.
+
+              Drawn whole and at full strength, above the rest of the card
+              rather than washed out behind it. It can sit on top because it
+              was measured against the text and clears every glyph: nothing is
+              obscured, so there is no reason to fade it.
+
+              Sized and centred to sit wholly inside the card. Tilting a long
+              chain costs height: at 32 degrees the molecule needs far more
+              vertical room than its own thickness, so it is the card's height,
+              not its width, that limits how big this can be.
+
+              Still `pointer-events-none`. The card is a link, and a molecule
+              that swallowed clicks in its own corner would be a trap; the
+              pointer tracking works off cursor position instead, so hover and
+              navigation behave exactly as they did before it was here.
+            */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute right-4 top-1/2 z-10 hidden h-56 w-[22rem] -translate-y-1/2 rotate-[32deg] sm:block"
+            >
+              <MoleculeCanvas speed={0.35} interactive />
+            </div>
+
+            <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-mist text-leaf">
               <Plant size={20} />
             </span>
-            <h3 className="mt-5 font-display text-2xl font-semibold tracking-tight">
+            <h3 className="relative mt-5 font-display text-2xl font-semibold tracking-tight">
               {t("pillars.proteins.title")}
             </h3>
-            <p className="mt-2 max-w-lg text-sm leading-relaxed text-ink-muted">
+            <p className="relative mt-2 max-w-md text-sm leading-relaxed text-ink-muted">
               {t("pillars.proteins.body")}
             </p>
-            <ul className="mt-5 flex flex-wrap gap-2">
+            <ul className="relative mt-5 flex flex-wrap gap-2">
               {(t.raw("pillars.proteins.sources") as string[]).map((s) => (
                 <li
                   key={s}
-                  className="rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-ink-muted"
+                  className="rounded-full border border-line bg-white/70 px-3 py-1 font-mono text-[11px] uppercase tracking-wider text-ink-muted backdrop-blur-[2px]"
                 >
                   {s}
                 </li>
               ))}
             </ul>
-            <span className="mt-auto pt-6">
+            <span className="relative mt-auto pt-6">
               <CellCta label={t("pillarsCta")} />
             </span>
           </Link>
