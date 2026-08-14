@@ -445,13 +445,27 @@
   }
 }
 
+/*
+  No `will-change` on any of the animations in this file, and that is the
+  considered position rather than an omission.
+
+  `will-change` is a warning that motion is *about* to start — it buys the
+  browser time to promote an element to its own compositor layer before the
+  first frame. An element that is already running a transform or opacity
+  animation is promoted anyway, for as long as the animation runs. Declaring it
+  alongside one buys nothing at the start and costs afterwards: every class
+  here is permanent, so the layer would be held for the life of the page. On a
+  blog index that is one retained layer per card cover, none of them moving.
+
+  Where it would genuinely help is a hint dropped on hover-intent and cleared
+  when the motion ends. Nothing here has that shape.
+*/
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .img-reveal {
       animation: img-settle 1s var(--ease-out-soft) both;
       animation-timeline: view();
       animation-range: entry 0% entry 65%;
-      will-change: transform;
     }
 
     .eyebrow-shimmer {
@@ -516,7 +530,6 @@
       animation: img-drift linear both;
       animation-timeline: view();
       animation-range: cover 0% cover 100%;
-      will-change: transform;
     }
   }
 }
@@ -532,7 +545,6 @@
   @media (prefers-reduced-motion: no-preference) {
     .img-parallax {
       animation: img-float 28s var(--ease-in-out-soft) infinite alternate;
-      will-change: transform;
     }
   }
 }
@@ -792,12 +804,10 @@
 
   .hero-breathe {
     animation: hero-breathe var(--hero-breathe-period, 24s) var(--ease-in-out-soft) infinite alternate;
-    will-change: transform;
   }
 
   .hero-glow {
     animation: hero-glow 18s var(--ease-in-out-soft) infinite;
-    will-change: transform, opacity;
   }
 
   /*
