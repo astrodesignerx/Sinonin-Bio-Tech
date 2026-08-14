@@ -66,20 +66,20 @@ export default function FieldRail({
                     the indicator encodes position, it isn't decoration. */}
                 <span className="relative h-[2px] w-8 shrink-0 overflow-hidden rounded-full bg-line">
                   <span
-                    className={`absolute inset-0 origin-left brand-gradient transition-transform duration-300 ease-out-soft ${
+                    className={`absolute inset-0 origin-left brand-gradient transition-transform motion-panel ${
                       on ? "scale-x-100" : "scale-x-0"
                     }`}
                   />
                 </span>
                 <span
-                  className={`font-mono text-[11px] tracking-[0.14em] transition-colors duration-200 ease-out-soft ${
+                  className={`font-mono text-[11px] tracking-[0.14em] transition-colors motion-quick ${
                     on ? "text-ink-muted" : "text-ink-muted/60"
                   }`}
                 >
                   {item.number}
                 </span>
                 <span
-                  className={`text-sm transition-colors duration-200 ease-out-soft ${
+                  className={`text-sm transition-colors motion-quick ${
                     on
                       ? "font-semibold text-ink"
                       : "text-ink-muted group-hover:text-ink"

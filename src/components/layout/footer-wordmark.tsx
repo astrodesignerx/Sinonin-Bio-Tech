@@ -33,9 +33,14 @@ import { useEffect, useRef } from "react";
 const HIDDEN_EM = 0.32;
 /** Wheel travel that gets roughly two thirds of the way open. */
 const RESISTANCE = 1.6;
-/** Quiet time after the last wheel event before it springs back. */
+/*
+  Quiet time after the last wheel event before it springs back. Not a duration
+  from the motion scale: it is how long to wait before deciding the reader has
+  stopped pulling, which is a property of trackpads rather than of the site.
+*/
 const RELEASE_MS = 140;
-const RETURN_MS = 620;
+/** Fallback for the spring back; the real length is `--duration-large`. */
+const RETURN_FALLBACK_MS = 700;
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
@@ -133,9 +138,37 @@ export default function FooterWordmark() {
 
     const atBottom = () => window.scrollY >= docBottom() - 2;
 
+    /*
+      The spring's length, taken from the motion scale rather than written out
+      again here: this is the same "entrance-sized" beat the rest of the site
+      uses, and a second copy of the number is how the two drift apart. Read
+      once, since it is a constant on `:root` and nothing changes it.
+    */
+    const returnMs =
+      parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--duration-large",
+        ),
+      ) || RETURN_FALLBACK_MS;
+
+    /*
+      The wordmark's brightness, as a flag rather than a level: on while the
+      edge is engaged, off once it is let go. The transition itself lives in
+      CSS; the only part of its timing that belongs here is the way back down,
+      which has to last exactly as long as the spring below, so the light and
+      the edge arrive home together. Coming up has no such tie, so that
+      duration is left to the stylesheet's own scale.
+    */
+    const light = (on: boolean) => {
+      if (on) vars.style.removeProperty("--wm-lit-ms");
+      else vars.style.setProperty("--wm-lit-ms", `${returnMs}ms`);
+      vars.style.setProperty("--wm-lit", on ? "1" : "0");
+    };
+
     const clear = () => {
       vars.style.setProperty("--wm-open", "0");
       vars.style.setProperty("--wm-pull", "0px");
+      light(false);
     };
 
     /*
@@ -151,6 +184,8 @@ export default function FooterWordmark() {
 
     const springBack = () => {
       cancelAnimationFrame(raf);
+      // Dim over the length of the spring, so the light and the edge leave together.
+      light(false);
       const from = open;
       if (from === 0) return;
       const t0 = performance.now();
@@ -162,7 +197,7 @@ export default function FooterWordmark() {
           accum = 0;
           return;
         }
-        const k = Math.min(1, (now - t0) / RETURN_MS);
+        const k = Math.min(1, (now - t0) / returnMs);
         apply(from * (1 - easeOut(k)));
         if (k < 1) raf = requestAnimationFrame(step);
         else accum = 0;
@@ -183,6 +218,7 @@ export default function FooterWordmark() {
       // We are driving the edge now, so the browser should not also scroll.
       e.preventDefault();
       cancelAnimationFrame(raf);
+      light(true);
       accum = Math.max(0, accum + e.deltaY);
       // Approaches the limit instead of reaching it: freely at first, stiff at the end.
       apply(1 - Math.exp(-accum / (max * RESISTANCE)));
@@ -212,11 +248,9 @@ export default function FooterWordmark() {
         ref={word}
         aria-hidden="true"
         /*
-          No opacity transition here on purpose. The brightness is driven by
-          `--wm-open`, which changes every frame while the edge is being
-          pulled, and a transition on top of a per-frame value lags the drag
-          instead of smoothing it. The easing that matters already lives in the
-          pull's resistance curve and its spring back.
+          The brightness transition lives in `.wordmark-lift`, driven by the
+          `--wm-lit` flag rather than by the live pull depth, so it can be
+          eased without chasing the drag. See globals.css.
 
           The one step change, full to resting dimness when the elastic
           attaches on mount, happens while the footer is still below the fold,

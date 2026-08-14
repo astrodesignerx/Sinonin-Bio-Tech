@@ -55,11 +55,11 @@ function TrainingContent() {
                 steps right and the row warms instead: same feedback, no layout
                 shift, and the divider rhythm stays intact.
               */}
-              <div className="group -mx-4 grid gap-2 rounded-xl px-4 py-7 transition-colors duration-200 ease-out-soft hover:bg-mist/50 sm:grid-cols-12 sm:gap-8">
-                <p className="font-mono text-sm text-leaf/70 transition-all duration-200 ease-out-soft group-hover:translate-x-1 group-hover:text-leaf sm:col-span-2">
+              <div className="group -mx-4 grid gap-2 rounded-xl px-4 py-7 transition-colors motion-quick hover:bg-mist/50 sm:grid-cols-12 sm:gap-8">
+                <p className="font-mono text-sm text-leaf/70 transition-all motion-quick group-hover:translate-x-1 group-hover:text-leaf sm:col-span-2">
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <h3 className="font-display text-xl font-semibold tracking-tight transition-colors duration-200 ease-out-soft group-hover:text-leaf sm:col-span-4">
+                <h3 className="font-display text-xl font-semibold tracking-tight transition-colors motion-quick group-hover:text-leaf sm:col-span-4">
                   {item.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-ink-muted sm:col-span-6">

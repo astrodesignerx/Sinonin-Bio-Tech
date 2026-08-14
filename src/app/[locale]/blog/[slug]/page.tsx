@@ -75,7 +75,7 @@ function PostContent({
     <article className="mx-auto max-w-3xl px-4 pt-12 pb-20 sm:px-6 sm:pt-16 sm:pb-24">
       <Link
         href="/blog"
-        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted transition hover:text-ink"
+        className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted transition motion-press hover:text-ink"
       >
         <ArrowLeft size={15} weight="bold" />
         {backLabel}

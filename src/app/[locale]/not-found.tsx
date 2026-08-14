@@ -17,7 +17,7 @@ export default function NotFound() {
       <Magnetic className="mt-8">
         <Link
           href="/"
-          className="inline-flex items-center rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+          className="inline-flex items-center rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
         >
           {t("backHome")}
         </Link>

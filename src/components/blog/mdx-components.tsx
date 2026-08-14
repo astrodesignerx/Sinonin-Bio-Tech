@@ -31,7 +31,7 @@ export const mdxComponents: Record<string, ElementType> = {
   },
   a: (props) => (
     <a
-      className="font-medium text-leaf underline decoration-leaf/40 underline-offset-2 transition hover:decoration-leaf"
+      className="font-medium text-leaf underline decoration-leaf/40 underline-offset-2 transition motion-press hover:decoration-leaf"
       {...props}
     />
   ),

@@ -75,12 +75,12 @@ export default function InsectStories() {
                     sizes="(max-width: 768px) 100vw, 420px"
                     className="img-reveal object-cover"
                   />
-                  <span className="absolute inset-0 bg-forest/25 transition duration-200 ease-out-soft group-hover/play:bg-forest/10" />
+                  <span className="absolute inset-0 bg-forest/25 transition motion-quick group-hover/play:bg-forest/10" />
                   <span className="absolute inset-0 flex items-center justify-center">
                     <PlayCircle
                       size={56}
                       weight="fill"
-                      className="text-paper drop-shadow-md transition duration-200 ease-out-soft group-hover/play:scale-110"
+                      className="text-paper drop-shadow-md transition motion-quick group-hover/play:scale-110"
                     />
                   </span>
                 </button>
@@ -93,7 +93,7 @@ export default function InsectStories() {
                   href={`https://www.youtube.com/watch?v=${v.id}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-auto pt-4 text-sm font-semibold text-leaf transition hover:text-forest"
+                  className="mt-auto pt-4 text-sm font-semibold text-leaf transition motion-press hover:text-forest"
                 >
                   {t("storiesWatch")}
                 </a>

@@ -148,8 +148,8 @@ function AboutContent() {
         <section className="border-t border-line py-14 sm:py-16">
           <div className="grid gap-5 md:grid-cols-2">
             <Reveal>
-              <div className="group h-full overflow-hidden rounded-2xl bg-mist p-7 shadow-card transition duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8">
-                <span aria-hidden="true" className="mb-5 block h-[2px] w-12 origin-left scale-x-0 rounded-full brand-gradient transition-transform duration-300 ease-out-soft group-hover:scale-x-100" />
+              <div className="group h-full overflow-hidden rounded-2xl bg-mist p-7 shadow-card transition motion-quick hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8">
+                <span aria-hidden="true" className="mb-5 block h-[2px] w-12 origin-left scale-x-0 rounded-full brand-gradient transition-transform motion-panel group-hover:scale-x-100" />
                 <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
                   {t("missionTitle")}
                 </h2>
@@ -159,8 +159,8 @@ function AboutContent() {
               </div>
             </Reveal>
             <Reveal order={1}>
-              <div className="group h-full overflow-hidden rounded-2xl bg-mist p-7 shadow-card transition duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8">
-                <span aria-hidden="true" className="mb-5 block h-[2px] w-12 origin-left scale-x-0 rounded-full brand-gradient transition-transform duration-300 ease-out-soft group-hover:scale-x-100" />
+              <div className="group h-full overflow-hidden rounded-2xl bg-mist p-7 shadow-card transition motion-quick hover:-translate-y-0.5 hover:shadow-card-hover sm:p-8">
+                <span aria-hidden="true" className="mb-5 block h-[2px] w-12 origin-left scale-x-0 rounded-full brand-gradient transition-transform motion-panel group-hover:scale-x-100" />
                 <h2 className="font-mono text-[11px] uppercase tracking-[0.22em] text-leaf">
                   {t("visionTitle")}
                 </h2>

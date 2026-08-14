@@ -44,7 +44,7 @@ export default function FooterNav({
               <Link
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`text-sm transition hover:text-leaf-on-dark ${
+                className={`text-sm transition motion-press hover:text-leaf-on-dark ${
                   active ? "text-leaf-on-dark" : "text-paper/75"
                 }`}
               >

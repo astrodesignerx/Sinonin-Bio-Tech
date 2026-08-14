@@ -73,7 +73,7 @@ function ReportContent({
       <Reveal>
         <Link
           href="/reports"
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted transition hover:text-ink"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-ink-muted transition motion-press hover:text-ink"
         >
           <ArrowLeft size={15} weight="bold" />
           {rp("back")}
@@ -138,7 +138,7 @@ function ReportContent({
                       <ArrowRight
                         size={14}
                         weight="bold"
-                        className="transition group-hover:translate-x-0.5"
+                        className="transition motion-press group-hover:translate-x-0.5"
                       />
                     </Link>
                   </li>

@@ -152,7 +152,7 @@ export default function SiteHeader({
 
         <nav
           aria-hidden={searching ? true : undefined}
-          className={`hidden items-center gap-7 transition-opacity duration-200 ease-out-soft xl:flex ${searching ? "pointer-events-none opacity-0" : "opacity-100"}`}
+          className={`hidden items-center gap-7 transition-opacity motion-quick xl:flex ${searching ? "pointer-events-none opacity-0" : "opacity-100"}`}
           aria-label={t("ariaLabel")}
         >
           {NAV_ITEMS.map((item) => {
@@ -188,7 +188,7 @@ export default function SiteHeader({
                     size={12}
                     weight="bold"
                     aria-hidden="true"
-                    className={`transition duration-200 ease-out-soft ${
+                    className={`transition motion-quick ${
                       mega === item.key ? "rotate-180" : ""
                     }`}
                   />
@@ -205,14 +205,14 @@ export default function SiteHeader({
             aria-label={t("search")}
             aria-expanded={searching}
             aria-keyshortcuts="Meta+K Control+K"
-            className="flex h-9 w-9 items-center justify-center rounded-full text-ink-muted transition duration-200 ease-out-soft hover:bg-mist hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-ink-muted transition motion-quick hover:bg-mist hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf"
           >
             <MagnifyingGlass size={18} weight="bold" />
           </button>
           <LocaleSwitcher />
           <Link
             href="/contact"
-            className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+            className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
           >
             <CalendarCheck size={15} weight="bold" />
             {t("cta")}
@@ -279,7 +279,7 @@ export default function SiteHeader({
                         alt=""
                         fill
                         sizes="300px"
-                        className="object-cover transition duration-300 ease-out-soft group-hover:scale-[1.04]"
+                        className="object-cover transition motion-panel group-hover:scale-[1.04]"
                       />
                     )}
                   </span>
@@ -288,7 +288,7 @@ export default function SiteHeader({
                     <ArrowRight
                       size={14}
                       weight="bold"
-                      className="mt-1 shrink-0 text-leaf transition duration-200 ease-out-soft group-hover:translate-x-0.5"
+                      className="mt-1 shrink-0 text-leaf transition motion-quick group-hover:translate-x-0.5"
                     />
                   </span>
                   {entry.meta && (
@@ -317,7 +317,7 @@ export default function SiteHeader({
                 setOpen(false);
                 setSearching(true);
               }}
-              className="mb-2 flex items-center gap-3 rounded-lg border border-line px-3 py-3 text-base text-ink-muted transition hover:border-ink/30 hover:text-ink"
+              className="mb-2 flex items-center gap-3 rounded-lg border border-line px-3 py-3 text-base text-ink-muted transition motion-press hover:border-ink/30 hover:text-ink"
             >
               <MagnifyingGlass size={18} weight="bold" aria-hidden="true" />
               {t("search")}
@@ -351,7 +351,7 @@ export default function SiteHeader({
                           <Link
                             href={entry.href}
                             onClick={() => setOpen(false)}
-                            className="block py-2 text-sm text-ink-muted transition hover:text-ink"
+                            className="block py-2 text-sm text-ink-muted transition motion-press hover:text-ink"
                           >
                             {entry.title}
                           </Link>
@@ -367,7 +367,7 @@ export default function SiteHeader({
               <Link
                 href="/contact"
                 onClick={() => setOpen(false)}
-                className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+                className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
               >
                 <CalendarCheck size={15} weight="bold" />
                 {t("cta")}

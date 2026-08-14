@@ -117,7 +117,7 @@ export default function StatFigure({
     <div ref={ref}>
       {/* Rule draws left to right, leading the figure. */}
       <span
-        className={`block h-[2px] w-full origin-left overflow-hidden rounded-full transition-transform duration-500 ease-out-soft ${
+        className={`block h-[2px] w-full origin-left overflow-hidden rounded-full transition-transform motion-slow ${
           dark ? "bg-white/25" : "bg-ink/15"
         } ${shown ? "scale-x-100" : "scale-x-0"}`}
       />

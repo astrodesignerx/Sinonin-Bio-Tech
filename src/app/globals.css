@@ -34,8 +34,27 @@
   --shadow-card-hover: 0 2px 4px rgba(16, 31, 56, 0.06),
     0 24px 56px -24px rgba(16, 31, 56, 0.24);
 
-  /* Decelerate curve: fast in, gentle out. Default for micro-interactions. */
+  /*
+    Motion curves.
+
+    `out-soft` is the default and covers almost everything: fast in, gentle
+    out, which is how a thing that was pushed comes to rest.
+
+    `out-expo` is the same idea taken further — nearly all of the distance is
+    covered in the first third. Reserved for arrivals from off-screen, where
+    the long tail is what makes something look like it travelled rather than
+    faded.
+
+    `in-out-soft` is the exception, for motion with no beginning or end to
+    accent: crossfades between two clips, and loops that reverse and come
+    back. A decelerate curve on a loop puts a visible stall at each end.
+
+    Linear is deliberately absent. The one place it appears in this file is on
+    `visibility`, which is a discrete swap with no in-between to interpolate.
+  */
   --ease-out-soft: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
 @theme inline {
@@ -85,6 +104,58 @@
   );
 }
 
+/*
+  The motion scale, as utilities.
+
+  Duration and curve are set together and never offered separately, because
+  they are one decision: 150ms on a decelerate curve is a button acknowledging
+  a press, and the same 150ms on a loop curve is a stutter. Splitting them into
+  two class slots is what lets a component end up with a considered duration
+  and whatever easing happened to be inherited.
+
+  Paired with a `transition-*` property utility at the call site:
+
+    transition-colors motion-press
+    transition motion-quick
+
+  These deliberately do not set `transition-property` themselves. Naming the
+  properties that actually move is what keeps a hover off `all`, which is how
+  layout properties get animated by accident.
+*/
+@utility motion-press {
+  transition-duration: var(--duration-press);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+@utility motion-quick {
+  transition-duration: var(--duration-quick);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+@utility motion-panel {
+  transition-duration: var(--duration-panel);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+@utility motion-slow {
+  transition-duration: var(--duration-slow);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+@utility motion-large {
+  transition-duration: var(--duration-large);
+  transition-timing-function: var(--ease-out-soft);
+}
+
+/*
+  The one crossfade case, so it takes the symmetric curve rather than the
+  decelerate one: a dissolve has no arrival to cushion.
+*/
+@utility motion-epic {
+  transition-duration: var(--duration-epic);
+  transition-timing-function: var(--ease-in-out-soft);
+}
+
 @layer base {
   /*
     Header height in one place. The sticky bar, the page backdrop that starts
@@ -94,6 +165,45 @@
   */
   :root {
     --header-h: 74px;
+
+    /*
+      Motion durations, as one scale.
+
+      Named for the job rather than the number, because the number is the part
+      that should be free to change. When the whole site's hovers feel a touch
+      slow, that is one edit here, not thirty across the components.
+
+      Declared here rather than in `@theme` on purpose. Tailwind has no
+      `--duration-*` theme namespace (it does have `--ease-*`, which is why the
+      curves above are up there and generate `ease-out-soft` and friends), so a
+      duration put in `@theme` would generate no utility and could be dropped
+      from the output as unused. `:root` is where `--header-h` already lives
+      for the same "one value, several consumers" reason.
+
+      press   pointer feedback: hover, focus ring, the 1px press dip
+      quick   a small thing changing state: icon, colour, single control
+      panel   a surface opening or closing: menu, overlay, card lift
+      slow    something being drawn rather than moved: a meter, a rule
+      large   entrances, and the footer edge springing back
+      epic    the two full-width moments: hero dissolve, wordmark arrival
+
+      The gaps are wide on purpose. A scale whose steps are 20ms apart is a
+      scale nobody can pick from, and every value in it looks equally right.
+
+      The staggers are lead/follow gaps between siblings, not durations: one
+      focal point moving through a group, rather than a group moving at once.
+      `--stagger` separates a container from its contents, `--stagger-tight`
+      separates those contents from each other — the group has to read as
+      closer to itself than it is to whatever it came out of.
+    */
+    --duration-press: 150ms;
+    --duration-quick: 200ms;
+    --duration-panel: 260ms;
+    --duration-slow: 500ms;
+    --duration-large: 700ms;
+    --duration-epic: 1000ms;
+    --stagger: 90ms;
+    --stagger-tight: 45ms;
   }
 
   body {
@@ -128,7 +238,7 @@
   @media (prefers-reduced-motion: no-preference) {
     .reveal,
     .reveal-stagger > * {
-      animation: reveal-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: reveal-up var(--duration-large) var(--ease-out-expo) both;
       animation-timeline: view();
       /*
         Scroll-driven animations have no time-based delay — `animation-delay` is
@@ -170,10 +280,10 @@
 */
 .mega-panel {
   transition:
-    clip-path 260ms var(--ease-out-soft),
-    opacity 200ms var(--ease-out-soft),
-    backdrop-filter 260ms var(--ease-out-soft),
-    visibility 0s linear 260ms;
+    clip-path var(--duration-panel) var(--ease-out-soft),
+    opacity var(--duration-quick) var(--ease-out-soft),
+    backdrop-filter var(--duration-panel) var(--ease-out-soft),
+    visibility 0s linear var(--duration-panel);
   clip-path: inset(0 0 100% 0);
   opacity: 0;
   backdrop-filter: blur(0px);
@@ -205,10 +315,10 @@
   --mega-scrim: rgba(16, 31, 56, 0.18);
 
   transition:
-    opacity 260ms var(--ease-out-soft),
-    backdrop-filter 260ms var(--ease-out-soft),
-    background-color 260ms var(--ease-out-soft),
-    visibility 0s linear 260ms;
+    opacity var(--duration-panel) var(--ease-out-soft),
+    backdrop-filter var(--duration-panel) var(--ease-out-soft),
+    background-color var(--duration-panel) var(--ease-out-soft),
+    visibility 0s linear var(--duration-panel);
   opacity: 0;
   backdrop-filter: blur(0px);
   background-color: transparent;
@@ -251,7 +361,7 @@
 }
 
 .lightbox {
-  animation: lightbox-in 200ms var(--ease-out-soft) both;
+  animation: lightbox-in var(--duration-quick) var(--ease-out-soft) both;
 }
 
 .lightbox-scrim {
@@ -260,7 +370,7 @@
 }
 
 .lightbox-panel {
-  animation: lightbox-panel-in 260ms var(--ease-out-soft) both;
+  animation: lightbox-panel-in var(--duration-panel) var(--ease-out-soft) both;
 }
 
 /*
@@ -287,19 +397,24 @@
 }
 
 .mega-panel[data-open="true"] .mega-card {
-  animation: mega-card-in 200ms var(--ease-out-soft) both;
+  animation: mega-card-in var(--duration-quick) var(--ease-out-soft) both;
 }
+/*
+  The cards wait one full stagger for the container to start unrolling, then
+  follow each other at half that: the panel leads, the contents trail it in a
+  tighter rhythm than the one that separates them from it.
+*/
 .mega-panel[data-open="true"] li:nth-child(1) .mega-card {
-  animation-delay: 90ms;
+  animation-delay: var(--stagger);
 }
 .mega-panel[data-open="true"] li:nth-child(2) .mega-card {
-  animation-delay: 135ms;
+  animation-delay: calc(var(--stagger) + 1 * var(--stagger-tight));
 }
 .mega-panel[data-open="true"] li:nth-child(3) .mega-card {
-  animation-delay: 180ms;
+  animation-delay: calc(var(--stagger) + 2 * var(--stagger-tight));
 }
 .mega-panel[data-open="true"] li:nth-child(4) .mega-card {
-  animation-delay: 225ms;
+  animation-delay: calc(var(--stagger) + 3 * var(--stagger-tight));
 }
 
 /*
@@ -416,7 +531,7 @@
 @supports not (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .img-parallax {
-      animation: img-float 28s ease-in-out infinite alternate;
+      animation: img-float 28s var(--ease-in-out-soft) infinite alternate;
       will-change: transform;
     }
   }
@@ -439,7 +554,7 @@
   */
   .gradient-breathe {
     background-size: 320% 100%;
-    animation: gradient-breathe 14s ease-in-out infinite;
+    animation: gradient-breathe 14s var(--ease-in-out-soft) infinite;
   }
 
   /*
@@ -459,7 +574,7 @@
   */
   .wordmark-sweep {
     background-size: 240% 100%;
-    animation: gradient-breathe 22s ease-in-out infinite;
+    animation: gradient-breathe 22s var(--ease-in-out-soft) infinite;
   }
 }
 
@@ -534,8 +649,23 @@
 }
 
 /*
-  Pull-coupled brightness: the word sits back at rest and comes up to full as
-  the edge is stretched, so the pull is rewarded with more than just geometry.
+  Pull-lit brightness: the word rests at half strength and comes up to full
+  while the edge is being stretched, so the pull is rewarded with more than
+  just geometry.
+
+  Driven by `--wm-lit` (0 or 1) rather than by `--wm-open`, which is the live
+  pull depth. Two reasons. A value that changes every frame cannot be
+  transitioned — the transition would chase the drag and lag it — and tying
+  brightness to depth would mean a short pull only ever half-lights the word,
+  so the reward would depend on how hard someone happened to flick. A flag
+  lets the light have its own timing: it comes up as soon as the edge is
+  engaged, at all, and leaves when the edge is let go.
+
+  The two directions are not the same length. Coming up is a panel-speed
+  acknowledgement of the pull, which is the default below. Going back down has
+  to last as long as the spring, so the light leaves with the edge rather than
+  snapping off ahead of it — and that length is the script's to know, which is
+  why it can override it through `--wm-lit-ms`.
 
   Gated on the footer actually having the elastic behaviour attached. Without
   that gate a touch or reduced-motion visitor, who can never pull anything,
@@ -543,7 +673,9 @@
   brighten it.
 */
 [data-elastic="on"] .wordmark-lift {
-  opacity: calc(0.74 + 0.26 * var(--wm-open, 0));
+  opacity: calc(0.5 + 0.5 * var(--wm-lit, 0));
+  transition: opacity var(--wm-lit-ms, var(--duration-panel))
+    var(--ease-out-soft);
 }
 
 /*
@@ -565,7 +697,7 @@
 */
 @media (prefers-reduced-motion: no-preference) {
   .wordmark-enter {
-    animation: wordmark-in 1000ms var(--ease-out-soft) both;
+    animation: wordmark-in var(--duration-epic) var(--ease-out-soft) both;
   }
 }
 
@@ -645,26 +777,26 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-step {
-    animation: hero-rise 700ms var(--ease-out-soft) both;
-    animation-delay: calc(var(--hero-step, 0) * 90ms);
+    animation: hero-rise var(--duration-large) var(--ease-out-soft) both;
+    animation-delay: calc(var(--hero-step, 0) * var(--stagger));
   }
 
   .hero-rule-in {
     transform-origin: left;
-    animation: hero-rule 500ms var(--ease-out-soft) both;
+    animation: hero-rule var(--duration-slow) var(--ease-out-soft) both;
   }
 
   .hero-media {
-    animation: hero-wipe 800ms var(--ease-out-soft) 320ms both;
+    animation: hero-wipe var(--duration-large) var(--ease-out-soft) 320ms both;
   }
 
   .hero-breathe {
-    animation: hero-breathe 24s ease-in-out infinite alternate;
+    animation: hero-breathe var(--hero-breathe-period, 24s) var(--ease-in-out-soft) infinite alternate;
     will-change: transform;
   }
 
   .hero-glow {
-    animation: hero-glow 18s ease-in-out infinite;
+    animation: hero-glow 18s var(--ease-in-out-soft) infinite;
     will-change: transform, opacity;
   }
 
@@ -679,7 +811,7 @@
     focus pull.
   */
   .hero-dissolve {
-    animation: hero-dissolve 1000ms ease-in-out;
+    animation: hero-dissolve var(--duration-epic) var(--ease-in-out-soft);
   }
 }
 

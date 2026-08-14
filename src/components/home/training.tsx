@@ -30,7 +30,7 @@ export default function Training() {
           </ul>
           <Link
             href="/training"
-            className="mt-8 inline-flex items-center gap-2 rounded-full border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/40 active:translate-y-px"
+            className="mt-8 inline-flex items-center gap-2 rounded-full border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition motion-press hover:border-ink/40 active:translate-y-px"
           >
             {t("trainingCta")}
             <ArrowRight size={16} weight="bold" />

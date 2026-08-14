@@ -30,12 +30,22 @@ export default function Founder() {
                 </li>
               ))}
             </ul>
+            {/*
+              The arrow moves, not the gap. Animating `gap` on hover asks the
+              browser to lay the line out again every frame and nudges the text
+              along with it; translating the arrow is the same picture on the
+              compositor, and the label stays put.
+            */}
             <Link
               href="/about"
-              className="mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf transition hover:gap-2.5"
+              className="group mt-8 inline-flex items-center gap-1.5 text-sm font-semibold text-leaf"
             >
               {t("founderCta")}
-              <ArrowRight size={15} weight="bold" />
+              <ArrowRight
+                size={15}
+                weight="bold"
+                className="transition-transform motion-press group-hover:translate-x-0.5"
+              />
             </Link>
           </Reveal>
         </div>

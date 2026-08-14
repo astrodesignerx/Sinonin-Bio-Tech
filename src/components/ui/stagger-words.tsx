@@ -30,7 +30,7 @@ export default function StaggerWords({
       {words.map((word, i) => (
         <Fragment key={`${word}-${i}`}>
           <span
-            className="inline-block transition-transform duration-200 ease-out-soft group-hover:-translate-y-0.5"
+            className="inline-block transition-transform motion-quick group-hover:-translate-y-0.5"
             style={{ transitionDelay: `${Math.min(i, maxSteps) * step}ms` }}
           >
             {word}

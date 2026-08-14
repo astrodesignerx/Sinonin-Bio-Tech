@@ -30,7 +30,7 @@ export default function Supporters() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={s.name}
-                className="inline-block transition"
+                className="inline-block transition motion-press"
               >
                 <Image
                   src={`/images/supporters/${s.key}.png`}
@@ -38,7 +38,7 @@ export default function Supporters() {
                   width={s.width}
                   height={s.height}
                   sizes={`${s.width}px`}
-                  className="h-9 w-auto grayscale transition duration-200 ease-out-soft hover:grayscale-0 sm:h-10"
+                  className="h-9 w-auto grayscale transition motion-quick hover:grayscale-0 sm:h-10"
                 />
               </a>
             </li>

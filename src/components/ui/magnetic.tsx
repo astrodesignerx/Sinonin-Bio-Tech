@@ -46,7 +46,7 @@ export default function Magnetic({
       onMouseMove={onMove}
       onMouseLeave={reset}
       onBlur={reset}
-      className={`inline-block transition-transform duration-300 ease-out-soft ${className}`}
+      className={`inline-block transition-transform motion-panel ${className}`}
     >
       {children}
     </span>

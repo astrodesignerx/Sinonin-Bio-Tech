@@ -190,7 +190,7 @@ export default function LeadForm({
       <button
         type="submit"
         disabled={busy}
-        className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60"
+        className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px disabled:cursor-not-allowed disabled:opacity-60"
       >
         <PaperPlaneTilt size={16} weight="bold" />
         {busy

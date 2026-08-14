@@ -105,7 +105,7 @@ export default function VideoLightbox({
             type="button"
             onClick={onClose}
             aria-label={closeLabel}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/25 text-paper transition duration-200 ease-out-soft hover:border-white/60 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/25 text-paper transition motion-quick hover:border-white/60 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-paper"
           >
             <X size={18} weight="bold" />
           </button>

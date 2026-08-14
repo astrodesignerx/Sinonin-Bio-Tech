@@ -119,7 +119,7 @@ export default function SiteFooter() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={name}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-paper/70 transition hover:border-white/40 hover:text-paper active:translate-y-px"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 text-paper/70 transition motion-press hover:border-white/40 hover:text-paper active:translate-y-px"
                 >
                   <Icon size={18} />
                 </a>
@@ -141,7 +141,7 @@ export default function SiteFooter() {
             </h2>
             <a
               href={`mailto:${t("email")}`}
-              className="mt-4 inline-flex items-center gap-2 text-sm text-paper/75 transition hover:text-leaf-on-dark"
+              className="mt-4 inline-flex items-center gap-2 text-sm text-paper/75 transition motion-press hover:text-leaf-on-dark"
             >
               <EnvelopeSimple size={15} />
               {t("email")}
@@ -152,7 +152,7 @@ export default function SiteFooter() {
             <p className="mt-2 text-sm text-paper/75">{t("hoursDays")}</p>
             <Link
               href="/contact"
-              className="mt-6 inline-flex items-center rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-paper transition hover:border-white/50 active:translate-y-px"
+              className="mt-6 inline-flex items-center rounded-full border border-white/20 px-5 py-2.5 text-sm font-semibold text-paper transition motion-press hover:border-white/50 active:translate-y-px"
             >
               {nav("cta")}
             </Link>

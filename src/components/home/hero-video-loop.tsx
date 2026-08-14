@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useTranslations } from "next-intl";
 import type { HeroClip } from "@/lib/config";
+import { durationMs, HERO_BREATHE_S } from "@/lib/motion";
 
 /*
   Cycles the hero clips with a dissolve instead of looping a single file.
@@ -53,18 +54,31 @@ function usePrefersReducedMotion() {
   );
 }
 
-/** Dissolve length, and how long the outgoing layer is held underneath. */
-const FADE_MS = 1000;
-const FADE_S = FADE_MS / 1000;
+/*
+  The dissolve runs on `motion-epic`, so its length is `--duration-epic` and
+  the number below is only a fallback for the moment before styles resolve.
+  It is read from the token at mount rather than declared here, because this
+  and the CSS have to agree exactly: the handover is timed to finish as the
+  clip ends, and a JS constant that drifted from the class would either cut to
+  a frozen final frame or hold a dead layer on screen.
+*/
+const FADE_FALLBACK_MS = 1000;
 
 /*
-  Full cycle of the `hero-breathe` drift: 24s, doubled because it alternates.
+  How long after the dissolve should have finished the backstop gives up
+  waiting for `transitionend`. Long enough to lose the race with it on any
+  machine, since winning that race is the failure.
+*/
+const BACKSTOP_GRACE_MS = 400;
+
+/*
+  Full cycle of the `hero-breathe` drift, doubled because it alternates.
   Each layer starts its copy of that animation offset by however long the loop
   has already been running, so every layer is at the same point in the drift.
   Without it a new layer restarts the slow zoom from the beginning and the
   camera visibly snaps back to wide in the middle of the dissolve.
 */
-const BREATHE_PERIOD_S = 48;
+const BREATHE_PERIOD_S = HERO_BREATHE_S * 2;
 
 export default function HeroVideoLoop({ clips }: { clips: HeroClip[] }) {
   const t = useTranslations("home");
@@ -77,6 +91,16 @@ export default function HeroVideoLoop({ clips }: { clips: HeroClip[] }) {
   const phase0 = useRef<number | null>(null);
   // Guards the handover so a burst of timeupdate events can only fire it once.
   const handing = useRef(false);
+  // Dissolve length, read from the same token the CSS class uses.
+  const fadeMs = useRef(FADE_FALLBACK_MS);
+
+  /*
+    Declared before the effects that consume it, so it has already run by the
+    time the first handover is scheduled. Effects fire in declaration order.
+  */
+  useEffect(() => {
+    fadeMs.current = durationMs("epic", FADE_FALLBACK_MS);
+  }, []);
 
   const [cur, setCur] = useState(0);
   // True while the outgoing clip is still being held underneath the incoming.
@@ -109,7 +133,7 @@ export default function HeroVideoLoop({ clips }: { clips: HeroClip[] }) {
   const onProgress = useCallback(
     (el: HTMLVideoElement) => {
       if (!Number.isFinite(el.duration)) return;
-      if (el.duration - el.currentTime <= FADE_S) advance();
+      if (el.duration - el.currentTime <= fadeMs.current / 1000) advance();
     },
     [advance],
   );
@@ -147,7 +171,7 @@ export default function HeroVideoLoop({ clips }: { clips: HeroClip[] }) {
     const id = window.setTimeout(() => {
       setFading(false);
       layers.current[1 - activeLayer]?.pause();
-    }, FADE_MS + 400);
+    }, fadeMs.current + BACKSTOP_GRACE_MS);
     return () => window.clearTimeout(id);
   }, [cur, activeLayer, reduced]);
 
@@ -195,7 +219,15 @@ export default function HeroVideoLoop({ clips }: { clips: HeroClip[] }) {
   const alt = t(`heroClips.${clip.key}.alt`);
 
   return (
-    <div ref={wrap} className="absolute inset-0">
+    <div
+      ref={wrap}
+      /*
+        The drift's period, handed to the CSS animation from the same constant
+        the phase calculation above uses, so the two can never disagree.
+      */
+      style={{ "--hero-breathe-period": `${HERO_BREATHE_S}s` } as React.CSSProperties}
+      className="absolute inset-0"
+    >
       {reduced ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img
@@ -215,7 +247,7 @@ export default function HeroVideoLoop({ clips }: { clips: HeroClip[] }) {
                 ref={attach(layer)}
                 className={`hero-breathe absolute inset-0 h-full w-full object-cover ${
                   isActive
-                    ? "z-20 opacity-100 transition-opacity duration-1000 ease-in-out"
+                    ? "z-20 opacity-100 transition-opacity motion-epic"
                     : fading
                       ? "z-10 opacity-100"
                       : "z-10 opacity-0"

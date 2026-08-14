@@ -12,7 +12,7 @@
 const SURFACE = "rounded-2xl shadow-card";
 
 const MOTION =
-  "transition duration-200 ease-out-soft hover:-translate-y-0.5 hover:shadow-card-hover";
+  "transition motion-quick hover:-translate-y-0.5 hover:shadow-card-hover";
 
 export const CARD_SURFACE = SURFACE;
 

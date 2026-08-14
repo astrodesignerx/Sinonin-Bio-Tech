@@ -117,7 +117,7 @@ export default function SiteSearch({
                 type="button"
                 onClick={close}
                 aria-label={labels.close}
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-muted transition duration-200 ease-out-soft hover:bg-mist hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-ink-muted transition motion-quick hover:bg-mist hover:text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf"
               >
                 <X size={18} weight="bold" />
               </button>
@@ -147,7 +147,7 @@ export default function SiteSearch({
                         onClick={close}
                         onMouseEnter={() => setCursor(i)}
                         aria-current={i === cursor ? "true" : undefined}
-                        className={`flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 text-sm transition-colors duration-150 ease-out-soft ${
+                        className={`flex items-center justify-between gap-4 rounded-lg px-3 py-2.5 text-sm transition-colors motion-press ${
                           i === cursor ? "bg-mist text-ink" : "text-ink-muted hover:text-ink"
                         }`}
                       >

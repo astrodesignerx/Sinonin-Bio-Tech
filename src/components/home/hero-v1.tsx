@@ -64,7 +64,7 @@ export default function HeroV1() {
               <Magnetic>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+                  className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
                 >
                   <CalendarCheck size={16} weight="bold" />
                   {t("primaryCta")}
@@ -72,7 +72,7 @@ export default function HeroV1() {
               </Magnetic>
               <Link
                 href="/expertise"
-                className="inline-flex items-center gap-2 rounded-full border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition hover:border-ink/40 active:translate-y-px"
+                className="inline-flex items-center gap-2 rounded-full border border-ink/15 px-6 py-3 text-sm font-semibold text-ink transition motion-press hover:border-ink/40 active:translate-y-px"
               >
                 {t("secondaryCta")}
                 <ArrowRight size={16} weight="bold" />

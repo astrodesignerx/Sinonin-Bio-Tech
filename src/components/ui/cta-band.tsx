@@ -32,7 +32,7 @@ export default function CtaBand({
           <Magnetic className="shrink-0 self-start lg:self-auto">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-semibold text-forest transition hover:bg-white active:translate-y-px"
+              className="inline-flex items-center gap-2 rounded-full bg-paper px-6 py-3 text-sm font-semibold text-forest transition motion-press hover:bg-white active:translate-y-px"
             >
               <CalendarCheck size={16} weight="bold" />
               {nav("cta")}

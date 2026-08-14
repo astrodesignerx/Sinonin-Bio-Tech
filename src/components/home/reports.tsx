@@ -53,7 +53,7 @@ export default function Reports() {
                   <ArrowRight
                     size={15}
                     weight="bold"
-                    className="transition group-hover:translate-x-0.5"
+                    className="transition motion-press group-hover:translate-x-0.5"
                   />
                 </span>
               </div>

@@ -37,12 +37,17 @@ export default function LatestBlog() {
       <SectionHeader
         title={t("blogTitle")}
         action={
+          // Arrow, not gap — see the note on the same pattern in founder.tsx.
           <Link
             href="/blog"
-            className="hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-leaf transition hover:gap-2.5 sm:inline-flex"
+            className="group hidden shrink-0 items-center gap-1.5 text-sm font-semibold text-leaf sm:inline-flex"
           >
             {t("blogCta")}
-            <ArrowRight size={15} weight="bold" />
+            <ArrowRight
+              size={15}
+              weight="bold"
+              className="transition-transform motion-press group-hover:translate-x-0.5"
+            />
           </Link>
         }
       />

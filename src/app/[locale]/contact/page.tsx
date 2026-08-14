@@ -61,7 +61,7 @@ function ContactContent() {
                     href={site.bookingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+                    className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
                   >
                     <CalendarCheck size={16} weight="bold" />
                     {t("bookingCta")}
@@ -77,7 +77,7 @@ function ContactContent() {
                 </h2>
                 <a
                   href={`mailto:${site.email}`}
-                  className="mt-4 flex items-center gap-3 text-sm text-ink transition hover:text-leaf"
+                  className="mt-4 flex items-center gap-3 text-sm text-ink transition motion-press hover:text-leaf"
                 >
                   <EnvelopeSimple size={18} className="shrink-0 text-leaf" />
                   {site.email}
