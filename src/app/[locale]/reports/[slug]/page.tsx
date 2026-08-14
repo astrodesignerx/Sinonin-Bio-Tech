@@ -160,7 +160,7 @@ function ReportContent({
                     alt={cover.alt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 40vw"
-                    className="object-cover"
+                    className="img-reveal object-cover"
                   />
                   <span className="absolute left-3 top-3 inline-flex items-center rounded-full bg-paper/85 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.18em] text-ink backdrop-blur-sm">
                     {rp("freeLabel")}

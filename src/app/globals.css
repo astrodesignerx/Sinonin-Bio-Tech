@@ -230,9 +230,57 @@
 }
 
 /*
-  Scroll-driven reveal — progressive enhancement only.
-  Browsers without `animation-timeline` (and reduced-motion users) see the
-  content fully visible by default; nothing is ever gated on JavaScript.
+  Reveal: one animation, two triggers.
+
+  The motion itself is the `reveal-up` and `img-settle` keyframes at the bottom
+  of this file, and it is defined once. What differs between the two blocks
+  below is only what *starts* it.
+
+  The first trigger is a scroll timeline, which is the better mechanism where it
+  exists: the animation is tied to the reader's scroll position rather than to a
+  clock, so it moves at their pace and reverses if they scroll back. It costs no
+  JavaScript at all.
+
+  The second is an IntersectionObserver, for engines that have no scroll
+  timelines. It is a worse mechanism — it runs on a timer once triggered, so a
+  reader who stops mid-scroll still sees it finish — but the alternative was
+  that most of the web saw no intro animation whatsoever, which made "the cards
+  animate in" a statement about Chromium rather than about this site.
+
+  Which one runs is decided in one place, by reveal-fallback.tsx, and never by
+  both. That component sets `data-reveal-driver="js"` on <html> only when it has
+  established that scroll timelines are missing, so the rules below simply do
+  not match in a browser that took the first path.
+*/
+
+/*
+  Shared by both triggers, so it sits outside either: it assigns a position in
+  the cascade and nothing else. The scroll path turns that number into an offset
+  in the scroll range, the JS path turns it into an animation delay.
+
+  Grid children cascade in DOM order; capped so long lists stay snappy.
+*/
+.reveal-stagger > *:nth-child(2) {
+  --reveal-order: 1;
+}
+.reveal-stagger > *:nth-child(3) {
+  --reveal-order: 2;
+}
+.reveal-stagger > *:nth-child(4) {
+  --reveal-order: 3;
+}
+.reveal-stagger > *:nth-child(n + 5) {
+  --reveal-order: 4;
+}
+
+/* Don't let a nested reveal inherit its parent's place in the cascade. */
+.reveal-stagger > * > * {
+  --reveal-order: 0;
+}
+
+/*
+  Trigger one: the scroll timeline. Content is fully visible by default and this
+  only ever enhances it, so nothing is gated on JavaScript here.
 */
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
@@ -249,25 +297,48 @@
       animation-range: entry calc(var(--reveal-order, 0) * 7%) entry
         calc(40% + var(--reveal-order, 0) * 7%);
     }
+  }
+}
 
-    /* Grid children cascade in DOM order; capped so long lists stay snappy. */
-    .reveal-stagger > *:nth-child(2) {
-      --reveal-order: 1;
-    }
-    .reveal-stagger > *:nth-child(3) {
-      --reveal-order: 2;
-    }
-    .reveal-stagger > *:nth-child(4) {
-      --reveal-order: 3;
-    }
-    .reveal-stagger > *:nth-child(n + 5) {
-      --reveal-order: 4;
-    }
+/*
+  Trigger two: the observer.
 
-    /* Don't let a nested reveal inherit its parent's place in the cascade. */
-    .reveal-stagger > * > * {
-      --reveal-order: 0;
-    }
+  `wait` and `in` are set by script, and only ever on elements that were below
+  the fold when the page loaded. That is what keeps this safe: the markup ships
+  visible, script hides an element only at the same moment it commits to
+  bringing it back, and it declines to touch anything the reader can already
+  see. If the script never runs, or fails halfway, every one of these selectors
+  stops matching and the content is simply there.
+
+  The hidden state has to match what the keyframes actually animate. `reveal-up`
+  moves opacity and offset, so hiding is `opacity: 0`. `img-settle` only ever
+  touches transform — an image held at `opacity: 0` would animate its scale back
+  to rest and stay invisible — so it waits at the overscale the keyframes start
+  from instead.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal-driver="js"] [data-reveal="wait"] {
+    opacity: 0;
+  }
+
+  [data-reveal-driver="js"] [data-reveal="in"] {
+    animation: reveal-up var(--duration-large) var(--ease-out-expo) both;
+    animation-delay: calc(var(--reveal-order, 0) * var(--stagger));
+  }
+
+  [data-reveal-driver="js"] .img-reveal[data-reveal="wait"] {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+
+  /*
+    An image inside a staggered group is already being delayed by the wrapper
+    that carries the group's position, so it takes none of its own; two delays
+    on one arrival reads as the picture lagging its own card.
+  */
+  [data-reveal-driver="js"] .img-reveal[data-reveal="in"] {
+    animation: img-settle var(--duration-large) var(--ease-out-soft) both;
+    animation-delay: 0s;
   }
 }
 
@@ -364,9 +435,23 @@
   animation: lightbox-in var(--duration-quick) var(--ease-out-soft) both;
 }
 
+/*
+  No `backdrop-filter` here, deliberately.
+
+  A blur across the whole viewport is composited in tiles, and the seams
+  between those tiles show as faint horizontal lines. They appear and vanish
+  rather than sitting still because the filter re-samples whenever anything
+  behind it repaints, and behind this scrim are four animating canvases and a
+  video loop; every frame of those is another chance for the seams to move.
+
+  It was also buying almost nothing. At 0.9 alpha the backdrop contributes a
+  tenth of the final pixel, so blurring it changes a tenth of a near-black
+  field. Raising the scrim to 0.94 cuts what bleeds through by another forty
+  per cent, which does the job the blur was nominally there for, with no
+  per-frame resampling of the entire viewport and no seams.
+*/
 .lightbox-scrim {
-  background-color: rgba(0, 0, 0, 0.9);
-  backdrop-filter: blur(20px);
+  background-color: rgba(0, 0, 0, 0.94);
 }
 
 .lightbox-panel {
@@ -463,7 +548,13 @@
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .img-reveal {
-      animation: img-settle 1s var(--ease-out-soft) both;
+      /*
+        The duration is inert on a scroll timeline — progress comes from the
+        scroll position, not a clock — but it is written from the scale anyway
+        so it reads as the same animation as the observer path rather than
+        appearing to disagree with it.
+      */
+      animation: img-settle var(--duration-large) var(--ease-out-soft) both;
       animation-timeline: view();
       animation-range: entry 0% entry 65%;
     }
@@ -673,11 +764,14 @@
   lets the light have its own timing: it comes up as soon as the edge is
   engaged, at all, and leaves when the edge is let go.
 
-  The two directions are not the same length. Coming up is a panel-speed
-  acknowledgement of the pull, which is the default below. Going back down has
-  to last as long as the spring, so the light leaves with the edge rather than
-  snapping off ahead of it — and that length is the script's to know, which is
-  why it can override it through `--wm-lit-ms`.
+  The two directions are not the same, and only one of them is set here.
+  Coming up answers the pull, so it is quick and decelerates: panel speed on
+  the standard curve, which is what the defaults below give. Going down is the
+  long way — slower than the spring, on the symmetric curve, so the word ebbs
+  evenly instead of dropping most of its light in the first fifth of the fade
+  and then crawling. Both of those are the script's to say, through
+  `--wm-lit-ms` and `--wm-lit-ease`, because it is the half that knows a
+  release from a pull.
 
   Gated on the footer actually having the elastic behaviour attached. Without
   that gate a touch or reduced-motion visitor, who can never pull anything,
@@ -687,7 +781,7 @@
 [data-elastic="on"] .wordmark-lift {
   opacity: calc(0.5 + 0.5 * var(--wm-lit, 0));
   transition: opacity var(--wm-lit-ms, var(--duration-panel))
-    var(--ease-out-soft);
+    var(--wm-lit-ease, var(--ease-out-soft));
 }
 
 /*

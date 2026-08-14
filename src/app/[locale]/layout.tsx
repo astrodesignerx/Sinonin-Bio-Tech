@@ -10,6 +10,7 @@ import SiteHeader, { type MegaItem } from "@/components/layout/site-header";
 import { type SearchDoc } from "@/components/layout/site-search";
 import { REPORT_SLUGS } from "@/lib/reports";
 import SiteFooter from "@/components/layout/site-footer";
+import RevealFallback from "@/components/ui/reveal-fallback";
 import { getAllPosts } from "@/lib/blog";
 
 const display = Space_Grotesk({
@@ -116,6 +117,12 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-dvh flex-col">
         <NextIntlClientProvider>
+          {/*
+            Renders nothing. Drives the reveal animations in browsers without
+            scroll timelines; see reveal-fallback.tsx. Mounted at the layout so
+            one observer serves the whole page rather than one per section.
+          */}
+          <RevealFallback />
           <SiteHeader posts={latestPosts} searchDocs={searchDocs} />
           <main id="main" className="flex-1">
             {children}

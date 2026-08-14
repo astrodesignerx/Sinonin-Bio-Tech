@@ -115,7 +115,7 @@ function BlogContent({
                       alt={post.coverAlt ?? post.title}
                       fill
                       sizes="(max-width: 768px) 100vw, 620px"
-                      className="object-cover"
+                      className="img-reveal object-cover"
                     />
                   ) : (
                     <FallbackCover slug={post.slug} label={post.title} />

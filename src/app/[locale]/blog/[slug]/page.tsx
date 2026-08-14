@@ -98,7 +98,7 @@ function PostContent({
               fill
               priority
               sizes="(max-width: 768px) 100vw, 720px"
-              className="object-cover"
+              className="img-reveal object-cover"
             />
           </div>
           {meta.coverCredit && (

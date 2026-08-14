@@ -20,7 +20,7 @@ export default function Figure({
   const h = Number(height);
 
   return (
-    <figure className="my-10">
+    <figure className="reveal my-10">
       <div className={`${CARD} overflow-hidden`}>
         <Image
           src={src}
@@ -28,7 +28,7 @@ export default function Figure({
           width={w}
           height={h}
           sizes="(max-width: 768px) 100vw, 720px"
-          className="h-auto w-full"
+          className="img-reveal h-auto w-full"
         />
       </div>
       {caption && (
