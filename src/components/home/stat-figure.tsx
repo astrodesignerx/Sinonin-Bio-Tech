@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
+import { durationMs } from "@/lib/motion";
 
 // Layout effect on the client, plain effect during SSR (where it is a no-op
 // and React would otherwise warn).
@@ -48,6 +50,7 @@ export default function StatFigure({
   tone?: "dark" | "light";
 }) {
   const parsed = useMemo(() => parse(value), [value]);
+  const reduced = usePrefersReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const zeroed = useRef(false);
   const [shown, setShown] = useState(false);
@@ -58,16 +61,15 @@ export default function StatFigure({
 
   useIsomorphicLayoutEffect(() => {
     if (zeroed.current || !parsed) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (reduced) return;
     zeroed.current = true;
     setDisplay(`${parsed.prefix}${(0).toFixed(parsed.decimals)}${parsed.suffix}`);
-  }, [parsed]);
+  }, [parsed, reduced]);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let raf = 0;
     let timer = 0;
 
@@ -76,7 +78,9 @@ export default function StatFigure({
         setDisplay(value);
         return;
       }
-      const DURATION = 1100;
+      // The count-up is one of the site's full-length moments, so it takes the
+      // same beat as the hero dissolve rather than a number of its own.
+      const DURATION = durationMs("epic", 1000);
       let startedAt: number | null = null;
       const step = (now: number) => {
         startedAt ??= now;
@@ -109,7 +113,7 @@ export default function StatFigure({
       window.clearTimeout(timer);
       cancelAnimationFrame(raf);
     };
-  }, [parsed, value]);
+  }, [parsed, value, reduced]);
 
   const dark = tone === "dark";
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import type { HeroClip } from "@/lib/config";
 import { durationMs, HERO_BREATHE_S } from "@/lib/motion";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
 /*
   Cycles the hero clips with a dissolve instead of looping a single file.
@@ -34,25 +35,6 @@ import { durationMs, HERO_BREATHE_S } from "@/lib/motion";
   The second file is not requested until the first is actually playing, so the
   fold still costs one video on load no matter how many clips are in the list.
 */
-
-const REDUCE_QUERY = "(prefers-reduced-motion: reduce)";
-
-/*
-  Read as an external store rather than synced into state by an effect, so the
-  first render already knows the answer and no playback starts before a
-  reduced-motion preference can cancel it.
-*/
-function usePrefersReducedMotion() {
-  return useSyncExternalStore(
-    (onChange) => {
-      const q = window.matchMedia(REDUCE_QUERY);
-      q.addEventListener("change", onChange);
-      return () => q.removeEventListener("change", onChange);
-    },
-    () => window.matchMedia(REDUCE_QUERY).matches,
-    () => false,
-  );
-}
 
 /*
   The dissolve runs on `motion-epic`, so its length is `--duration-epic` and

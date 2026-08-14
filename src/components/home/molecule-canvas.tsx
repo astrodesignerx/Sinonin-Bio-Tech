@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 import {
   E2D_ATOMS,
   E2D_BONDS,
@@ -94,6 +95,7 @@ export default function MoleculeCanvas({
   interactive?: boolean;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const canvas = ref.current;
@@ -311,7 +313,6 @@ export default function MoleculeCanvas({
 
     resize();
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       draw(2.4);
       const ro = new ResizeObserver(() => {
@@ -424,7 +425,12 @@ export default function MoleculeCanvas({
       cancelAnimationFrame(raf);
       cancelAnimationFrame(settle);
     };
-  }, [atoms, bonds, speed, interactive]);
+    /*
+      `reduced` is a dependency so that turning the preference on mid-session
+      tears the loop down and repaints the assembled frame, rather than leaving
+      whatever was decided at mount running for the rest of the visit.
+    */
+  }, [atoms, bonds, speed, interactive, reduced]);
 
   return (
     <canvas

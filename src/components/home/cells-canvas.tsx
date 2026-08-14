@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
 /*
   Animated Voronoi "cells" backdrop.
@@ -105,6 +106,7 @@ export default function CellsCanvas({
   scale?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const reduced = usePrefersReducedMotion();
 
   useEffect(() => {
     const canvas = ref.current;
@@ -192,7 +194,6 @@ export default function CellsCanvas({
       draw(0);
     });
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
       const ro = new ResizeObserver(() => {
         resize();
@@ -280,7 +281,9 @@ export default function CellsCanvas({
         the element is collected.
       */
     };
-  }, [base, alt, edge, scale]);
+    // See the note in molecule-canvas: `reduced` here is what makes turning
+    // the preference on mid-session actually stop the loop.
+  }, [base, alt, edge, scale, reduced]);
 
   return (
     <canvas

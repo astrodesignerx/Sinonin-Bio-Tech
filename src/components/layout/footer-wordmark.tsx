@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
 /*
   The closing wordmark, and the elastic bottom edge that reveals it.
@@ -44,7 +45,25 @@ const RETURN_FALLBACK_MS = 700;
 
 const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
 
+/*
+  Read one duration off the motion scale, in milliseconds.
+
+  The unit has to be checked rather than assumed. The scale is written in `ms`,
+  but the CSS is minified on the way out and `700ms` ships as `.7s`, so a plain
+  `parseFloat` gets 0.7 and the spring finishes before it starts.
+*/
+const cssMs = (name: string, fallback: number) => {
+  const raw = getComputedStyle(document.documentElement)
+    .getPropertyValue(name)
+    .trim();
+  const n = parseFloat(raw);
+  if (!Number.isFinite(n)) return fallback;
+  if (raw.endsWith("ms")) return n;
+  return raw.endsWith("s") ? n * 1000 : fallback;
+};
+
 export default function FooterWordmark() {
+  const reduced = usePrefersReducedMotion();
   const box = useRef<HTMLDivElement>(null);
   const word = useRef<HTMLParagraphElement>(null);
 
@@ -53,7 +72,6 @@ export default function FooterWordmark() {
     const wordEl = word.current;
     if (!boxEl || !wordEl) return;
 
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     /*
       Arrival. Held back until the footer is actually on screen, then released
@@ -144,12 +162,7 @@ export default function FooterWordmark() {
       uses, and a second copy of the number is how the two drift apart. Read
       once, since it is a constant on `:root` and nothing changes it.
     */
-    const returnMs =
-      parseFloat(
-        getComputedStyle(document.documentElement).getPropertyValue(
-          "--duration-large",
-        ),
-      ) || RETURN_FALLBACK_MS;
+    const returnMs = cssMs("--duration-large", RETURN_FALLBACK_MS);
 
     /*
       The wordmark's brightness, as a flag rather than a level: on while the
@@ -233,8 +246,17 @@ export default function FooterWordmark() {
       window.removeEventListener("resize", measure);
       window.clearTimeout(releaseTimer);
       cancelAnimationFrame(raf);
+      /*
+        Hand back the flag as well as the listeners. This effect re-runs if the
+        reader turns reduced motion on mid-visit, and the run that follows
+        returns before it can set the flag again. Leaving it set would strand
+        the wordmark at its resting dimness with the pull that brightens it now
+        gone — the exact state the flag exists to prevent.
+      */
+      vars.removeAttribute("data-elastic");
+      clear();
     };
-  }, []);
+  }, [reduced]);
 
   return (
     <div ref={box} className="wordmark-box mt-14">

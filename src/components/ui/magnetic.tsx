@@ -21,6 +21,16 @@ export default function Magnetic({
 }) {
   const ref = useRef<HTMLSpanElement>(null);
 
+  /*
+    The one place that still asks the media queries directly rather than going
+    through `usePrefersReducedMotion`, and deliberately so: this is called on
+    every pointer move, so it is already re-reading the answer continuously.
+    A subscription would buy nothing here except a re-render per preference
+    change on an element whose whole job is to not re-render while it moves.
+
+    The pointer-type test has to be live for the same reason — a laptop with a
+    touchscreen can switch between fine and coarse input mid-session.
+  */
   const allowed = () =>
     typeof window !== "undefined" &&
     window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
