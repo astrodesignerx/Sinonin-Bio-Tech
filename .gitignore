@@ -45,3 +45,8 @@ next-env.d.ts
 
 # local-only secrets (never commit)
 .github-token
+
+# Source masters. The raw video these clips were cut from lives outside the
+# repo (see Content/README.md) — the web-ready encodes in public/videos are
+# what the site actually ships, and they are a fiftieth of the size.
+/Content/*.mp4
