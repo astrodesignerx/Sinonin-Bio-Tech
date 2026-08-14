@@ -5,7 +5,8 @@ import { Link } from "@/i18n/navigation";
 import BrandRule from "@/components/ui/brand-rule";
 import Magnetic from "@/components/ui/magnetic";
 import CellsCanvas from "@/components/home/cells-canvas";
-import { HERO_VIDEO } from "@/lib/config";
+import { HERO_CLIPS } from "@/lib/config";
+import HeroVideoLoop from "@/components/home/hero-video-loop";
 
 /*
   Hero V2. Full-bleed animated cells fill the fold, the type sits directly on
@@ -21,6 +22,9 @@ import { HERO_VIDEO } from "@/lib/config";
 
   V1's leaf glow is dropped here: the cells already supply the depth behind the
   headline, and running both would be two ambient effects competing.
+
+  The media is a cycling sequence rather than one looping clip, alternating
+  bowl and bench so the fold states the proposition instead of decorating it.
 */
 export default function HeroV2() {
   const t = useTranslations("home");
@@ -85,39 +89,34 @@ export default function HeroV2() {
           </div>
 
           {/*
-            Contained rather than bled to the edge as in V1: the cells now
-            provide the full-bleed, so the media reads as an object resting on
-            them. A deeper shadow than the site default does the lifting.
+            Runs off the right edge as in V1. The negative margin is the exact
+            gap between the container's content edge and the viewport, so the
+            media breaks the container line the rest of the page keeps; the
+            section's `overflow-hidden` absorbs the overhang.
+
+            The shadow and ring stay, but the right rounding goes: a corner
+            radius on an edge that is off-screen would only announce that the
+            frame stops just out of view.
           */}
-          <figure className="lg:col-span-6">
-            <div className="hero-media relative h-64 w-full overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(16,31,56,0.45)] ring-1 ring-white/40 sm:h-80 lg:h-[clamp(24rem,calc(100svh-22rem),34rem)]">
-              {HERO_VIDEO ? (
-                <video
-                  className="hero-breathe absolute inset-0 h-full w-full object-cover"
-                  poster={HERO_VIDEO.poster}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="metadata"
-                  aria-label={t("heroVideoAlt")}
-                >
-                  <source src={HERO_VIDEO.webm} type="video/webm" />
-                  <source src={HERO_VIDEO.mp4} type="video/mp4" />
-                </video>
+          <figure className="lg:col-span-6 lg:mr-[calc(-1*((100vw-min(100vw,80rem))/2+2rem))]">
+            <div className="hero-media relative h-64 w-full overflow-hidden rounded-2xl shadow-[0_30px_80px_-30px_rgba(16,31,56,0.45)] ring-1 ring-white/40 sm:h-80 lg:h-[clamp(24rem,calc(100svh-22rem),34rem)] lg:rounded-r-none">
+              {HERO_CLIPS.length > 0 ? (
+                <HeroVideoLoop clips={HERO_CLIPS} />
               ) : (
-                <Image
-                  src="/images/hero-pulses.webp"
-                  alt={t("heroImageAlt")}
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="hero-breathe object-cover"
-                />
+                <>
+                  <Image
+                    src="/images/hero-pulses.webp"
+                    alt={t("heroImageAlt")}
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="hero-breathe object-cover"
+                  />
+                  <figcaption className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink backdrop-blur-sm">
+                    {t("heroCaption")}
+                  </figcaption>
+                </>
               )}
-              <figcaption className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-paper/85 px-3.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-ink backdrop-blur-sm">
-                {t(HERO_VIDEO ? "heroVideoCaption" : "heroCaption")}
-              </figcaption>
             </div>
           </figure>
         </div>

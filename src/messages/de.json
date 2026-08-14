@@ -151,7 +151,27 @@
     "storiesClose": "Video schließen",
     "pillarsIntro": "Vier verbundene Felder, ein Innovationspartner. Wir arbeiten entlang des gesamten Wegs vom Rohstoff bis zum fertigen Produkt, damit Protein, Palatant und Prozess gemeinsam gelöst werden statt isoliert.",
     "heroVideoAlt": "Ein Hund frisst aus einem blau gesprenkelten Napf vor hellem Studiohintergrund.",
-    "heroVideoCaption": "Palatabilität am Napf"
+    "heroVideoCaption": "Palatabilität am Napf",
+    "heroMoleculeAlt": "Rotierendes Kugel-Stab-Modell von trans-4,5-Epoxy-(E)-2-decenal, dem Aromastoff, der Raubtieren frische Beute signalisiert.",
+    "heroMoleculeCaption": "E2D | das Frischebeute-Signal",
+    "heroClips": {
+      "bowl": {
+        "caption": "Schmackhaftigkeit am Napf",
+        "alt": "Ein Hund frisst aus einem blau gesprenkelten Napf vor hellem Studiohintergrund."
+      },
+      "flasks": {
+        "caption": "Formulierung im Labor",
+        "alt": "Eine Person mit Handschuhen bewegt eine Petrischale zwischen Kolben mit farbigen Flüssigkeiten auf einer Laborbank."
+      },
+      "cat": {
+        "caption": "Die Katze entscheidet",
+        "alt": "Eine schwarze Katze frisst aus einem Edelstahlnapf auf hellem Boden."
+      },
+      "scope": {
+        "caption": "Analyse unter dem Mikroskop",
+        "alt": "Eine behandschuhte Hand justiert einen Objektträger an einem Labormikroskop."
+      }
+    }
   },
   "pageMeta": {
     "expertise": {

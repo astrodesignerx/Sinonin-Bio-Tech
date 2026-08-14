@@ -151,7 +151,27 @@
     "storiesClose": "Close video",
     "pillarsIntro": "Four connected fields, one innovation partner. We work across the whole path from raw material to finished product, so the protein, the palatant and the process are solved together rather than in isolation.",
     "heroVideoAlt": "A dog eating from a speckled blue bowl against a pale studio background.",
-    "heroVideoCaption": "Palatability at the bowl"
+    "heroVideoCaption": "Palatability at the bowl",
+    "heroMoleculeAlt": "Rotating ball-and-stick model of trans-4,5-epoxy-(E)-2-decenal, the aroma compound that signals a fresh kill to a predator.",
+    "heroMoleculeCaption": "E2D | the fresh-kill signal",
+    "heroClips": {
+      "bowl": {
+        "caption": "Palatability at the bowl",
+        "alt": "A dog eating from a speckled blue bowl against a pale studio background."
+      },
+      "flasks": {
+        "caption": "Formulation at the bench",
+        "alt": "A gloved researcher moving a petri dish between flasks of coloured liquid on a laboratory bench."
+      },
+      "cat": {
+        "caption": "The cat decides",
+        "alt": "A black cat eating from a steel bowl on a pale floor."
+      },
+      "scope": {
+        "caption": "Analysis under the scope",
+        "alt": "A gloved hand adjusting a specimen slide on a laboratory microscope."
+      }
+    }
   },
   "pageMeta": {
     "expertise": {
