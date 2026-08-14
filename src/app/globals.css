@@ -406,6 +406,31 @@
   }
 }
 
+/*
+  Scroll-driven animation is Chromium-only at present, so without this the
+  image simply never moves in Firefox or Safari, which is most of the traffic
+  this page will see. The fallback is a slow drift on its own clock: not tied
+  to scroll, but the alternative is a still frame next to copy that claims the
+  work is alive.
+*/
+@supports not (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .img-parallax {
+      animation: img-float 28s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+  }
+}
+
+@keyframes img-float {
+  from {
+    transform: scale(1.06) translate3d(-0.8%, -0.6%, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(0.8%, 0.6%, 0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   /*
     Sized well past the element so a given colour actually travels the band
@@ -415,6 +440,143 @@
   .gradient-breathe {
     background-size: 320% 100%;
     animation: gradient-breathe 14s ease-in-out infinite;
+  }
+
+  /*
+    The closing wordmark carries the same brand gradient as the 3px band at the
+    top of the footer, at the other extreme of scale: the site's signature
+    stated once as a hairline and once at full height.
+
+    Slower and less zoomed than the band. On a 3px strip the movement had to be
+    exaggerated to register at all; across letterforms this size the same
+    settings would sweep colour through the word fast enough to read as a
+    flicker. 240% over 22s puts roughly one colour in each letter and takes its
+    time moving them along.
+
+    Oscillates on the shared `gradient-breathe` keyframes rather than looping in
+    one direction, because the gradient runs orange to blue and does not tile:
+    a linear loop would snap blue back to orange on every repeat.
+  */
+  .wordmark-sweep {
+    background-size: 240% 100%;
+    animation: gradient-breathe 22s ease-in-out infinite;
+  }
+}
+
+/*
+  Closing wordmark sizing.
+
+  The word is set to fill the footer's content width exactly, stopping at the
+  same gutters as the columns above it rather than bleeding to the viewport.
+  That is a container measurement, not a viewport one: past 1280px the content
+  stops widening while the viewport keeps going, so a `vw` size would overshoot
+  the gutter on wide screens. `cqw` measures the box instead, so one number
+  holds at every width.
+
+  30.79 is not a guess. Measured from the font: "Sinonin" in Space Grotesk Bold
+  at -0.05em tracking is 3.248x its own font size wide, and 100 / 3.248 = 30.79.
+
+  The `vw` line above it is a fallback for engines without container query
+  units, capped so it cannot overshoot the 1280px content ceiling.
+*/
+.wordmark-box {
+  container-type: inline-size;
+}
+
+.wordmark-fill {
+  font-size: min(30.79vw, 374px);
+  font-size: 30.79cqw;
+}
+
+/*
+  How much of the wordmark the page edge cuts off.
+
+  `--wm-open` runs 0 (the resting state, bottom quarter cropped) to 1 (the word
+  standing clear of the edge). It is a custom property rather than a fixed
+  margin so the elastic pull can drive it: raising it grows the footer, which
+  is the bottom edge stretching.
+
+  em, so the crop stays a fixed proportion of the letterforms at every width
+  rather than a fixed number of pixels that would cut a phone differently from
+  a monitor.
+*/
+.wordmark-crop {
+  margin-bottom: calc(-0.32em * (1 - var(--wm-open, 0)));
+}
+
+/*
+  Soft dissolve at the cut.
+
+  The page edge crossing the letterforms was a guillotine; this gives it a few
+  pixels of falloff so the word sinks into the edge instead of being sliced by
+  it. The stops are in percentages of the line box, which is where the geometry
+  is already known: the box is 1em, the resting cut is at 0.68 of it, so the
+  fade runs 65% to 68% and the last three per cent of the box does the work.
+
+  Both stops carry `32% * --wm-open` so the falloff travels with the elastic
+  edge rather than sitting at a fixed height while the cut moves out from under
+  it. Fully open they land at 97% and 100%, past the ink's own bottom at 86.5%,
+  so the whole word is solid when the edge is pulled clear of it.
+*/
+.wordmark-dissolve {
+  --wm-cut: calc(68% + 32% * var(--wm-open, 0));
+  --wm-fade: calc(65% + 32% * var(--wm-open, 0));
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 var(--wm-fade),
+    transparent var(--wm-cut)
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 var(--wm-fade),
+    transparent var(--wm-cut)
+  );
+}
+
+/*
+  Pull-coupled brightness: the word sits back at rest and comes up to full as
+  the edge is stretched, so the pull is rewarded with more than just geometry.
+
+  Gated on the footer actually having the elastic behaviour attached. Without
+  that gate a touch or reduced-motion visitor, who can never pull anything,
+  would be left looking at a permanently dimmed wordmark with no way to
+  brighten it.
+*/
+[data-elastic="on"] .wordmark-lift {
+  opacity: calc(0.74 + 0.26 * var(--wm-open, 0));
+}
+
+/*
+  The wordmark's arrival: it fades up out of the page edge when the footer
+  first comes into view.
+
+  It rises rather than simply appearing, and it rises from below, so the same
+  edge that crops the word is where the word comes from. A plain fade would
+  read as an asset loading late; coming up out of the cut makes the crop look
+  deliberate.
+
+  On the wrapper, not the word itself, because the word is already running the
+  gradient sweep and the `animation` shorthand would replace it. Percentage
+  rather than em on the translate: em here resolves against the wrapper's
+  inherited 16px, not the wordmark's 374px, so it would be a couple of pixels.
+
+  Once only. This is the end of the page, and something that re-ran every time
+  the reader came back to the footer would turn a full stop into a tic.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  .wordmark-enter {
+    animation: wordmark-in 1000ms var(--ease-out-soft) both;
+  }
+}
+
+@keyframes wordmark-in {
+  from {
+    opacity: 0;
+    transform: translateY(10%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -504,6 +666,30 @@
   .hero-glow {
     animation: hero-glow 18s ease-in-out infinite;
     will-change: transform, opacity;
+  }
+
+  /*
+    A dip into softness across a clip change, peaking at the midpoint where
+    the two images are most mixed. It hides the detail mismatch between very
+    different scenes, a studio floor giving way to a lab bench, which a
+    straight dissolve shows as two sharp pictures briefly superimposed.
+
+    Applied to the layer stack rather than either clip, so both go soft
+    together. 3px is enough to soften an edge and not enough to read as a
+    focus pull.
+  */
+  .hero-dissolve {
+    animation: hero-dissolve 1000ms ease-in-out;
+  }
+}
+
+@keyframes hero-dissolve {
+  0%,
+  100% {
+    filter: blur(0px);
+  }
+  50% {
+    filter: blur(3px);
   }
 }
 
