@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import Magnetic from "@/components/ui/magnetic";
 import { Link } from "@/i18n/navigation";
 
 export default function NotFound() {
@@ -13,12 +14,14 @@ export default function NotFound() {
         {t("title")}
       </h1>
       <p className="mx-auto mt-3 max-w-md text-ink-muted">{t("body")}</p>
-      <Link
-        href="/"
-        className="mt-8 inline-flex items-center rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
-      >
-        {t("backHome")}
-      </Link>
+      <Magnetic className="mt-8">
+        <Link
+          href="/"
+          className="inline-flex items-center rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+        >
+          {t("backHome")}
+        </Link>
+      </Magnetic>
     </div>
   );
 }

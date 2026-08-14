@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react/ssr";
 import PageHeader from "@/components/ui/page-header";
 import { CARD } from "@/components/ui/card";
+import Magnetic from "@/components/ui/magnetic";
 import LeadForm from "@/components/forms/lead-form";
 import Reveal from "@/components/ui/reveal";
 import { site } from "@/lib/config";
@@ -55,15 +56,17 @@ function ContactContent() {
                 <p className="mt-2 text-sm leading-relaxed text-ink-muted">
                   {t("bookingBody")}
                 </p>
-                <a
-                  href={site.bookingUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
-                >
-                  <CalendarCheck size={16} weight="bold" />
-                  {t("bookingCta")}
-                </a>
+                <Magnetic className="mt-6">
+                  <a
+                    href={site.bookingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition hover:bg-forest active:translate-y-px"
+                  >
+                    <CalendarCheck size={16} weight="bold" />
+                    {t("bookingCta")}
+                  </a>
+                </Magnetic>
               </div>
             </Reveal>
 

@@ -11,7 +11,8 @@ const POSTS = [
     key: "palatability",
     slug: "petfood-palatability-alternative-proteins",
     image: "/images/blog-palatability.webp",
-    coverAlt: "Two side-by-side bowls of petfood for dogs and cats",
+    coverAlt:
+      "Overhead view of a dog's paws waiting beside a full bowl of dry kibble on a wooden floor.",
   },
   {
     key: "fifa",
