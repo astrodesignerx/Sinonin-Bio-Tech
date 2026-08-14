@@ -367,9 +367,7 @@
     "otherTitle": "More reports",
     "brandsLabel": "On shelf today",
     "brandsTitle": "Products already using this material",
-    "brandsNote": "Product names and images belong to their respective owners and are shown as market examples, not endorsements.",
-    "brandsView": "View larger image",
-    "brandsClose": "Close image"
+    "brandsNote": "Product names and images belong to their respective owners and are shown as market examples, not endorsements."
   },
   "aboutPage": {
     "title": "About Us",

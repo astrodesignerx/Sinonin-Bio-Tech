@@ -121,8 +121,6 @@ function ReportContent({
               title={rp("brandsTitle")}
               note={rp("brandsNote")}
               items={REPORT_BRANDS[reportSlug] ?? []}
-              viewLabel={rp("brandsView")}
-              closeLabel={rp("brandsClose")}
             />
 
             <div className="mt-12 border-t border-line pt-8">
