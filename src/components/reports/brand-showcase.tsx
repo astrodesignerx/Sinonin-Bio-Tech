@@ -3,10 +3,13 @@ import Image from "next/image";
 /*
   Products named in a report, shown as examples of what is already on shelf.
 
-  These are third-party products, so the images are supplied by the client and
-  dropped into `public/images/brands/`. A cell with no image yet degrades to a
-  typographic card rather than a broken frame, so the section can ship before
-  every licence is cleared.
+  These are third-party products. The images live in `public/images/brands/`
+  and are wired up per product in lib/brands.ts, alongside the note this section
+  prints beneath them: shown as market examples, not endorsements.
+
+  `image` stays optional. A cell without one degrades to a typographic card
+  rather than a broken frame, which is what lets a new product be named in a
+  report before its packshot has been sourced.
 */
 export type BrandExample = {
   brand: string;
@@ -42,7 +45,21 @@ export default function BrandShowcase({
             key={`${item.brand}-${item.product}`}
             className="flex flex-col overflow-hidden rounded-2xl border border-line bg-white shadow-card"
           >
-            <div className="relative aspect-[16/10] w-full bg-mist">
+            {/*
+              White behind a packshot, mist behind the initials.
+
+              These are retail product shots and every one of them is cut out on
+              a white background, so a tinted panel would frame each product in
+              a white rectangle a few pixels inside its own cell. The tint is
+              what the typographic fallback needs — two letters on white would
+              read as a cell that failed to load rather than one that never had
+              a picture — so it stays exactly where it was.
+            */}
+            <div
+              className={`relative aspect-[16/10] w-full ${
+                item.image ? "bg-white" : "bg-mist"
+              }`}
+            >
               {item.image ? (
                 <Image
                   src={item.image}
