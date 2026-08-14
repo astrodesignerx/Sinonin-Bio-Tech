@@ -1,4 +1,4 @@
-import Image from "next/image";
+import BrandPackshot from "@/components/reports/brand-packshot";
 
 /*
   Products named in a report, shown as examples of what is already on shelf.
@@ -24,11 +24,16 @@ export default function BrandShowcase({
   title,
   note,
   items,
+  viewLabel,
+  closeLabel,
 }: {
   label: string;
   title: string;
   note?: string;
   items: BrandExample[];
+  /** Accessible name for the zoom trigger, e.g. "View larger image". */
+  viewLabel: string;
+  closeLabel: string;
 }) {
   if (!items.length) return null;
 
@@ -55,28 +60,22 @@ export default function BrandShowcase({
               read as a cell that failed to load rather than one that never had
               a picture — so it stays exactly where it was.
             */}
-            <div
-              className={`relative aspect-[16/10] w-full ${
-                item.image ? "bg-white" : "bg-mist"
-              }`}
-            >
-              {item.image ? (
-                <Image
-                  src={item.image}
-                  alt={item.imageAlt ?? `${item.brand} ${item.product}`}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="img-reveal object-contain p-4"
-                />
-              ) : (
+            {item.image ? (
+              <BrandPackshot
+                item={{ ...item, image: item.image }}
+                viewLabel={viewLabel}
+                closeLabel={closeLabel}
+              />
+            ) : (
+              <div className="relative aspect-[16/10] w-full bg-mist">
                 <span
                   aria-hidden="true"
                   className="absolute inset-0 flex items-center justify-center font-display text-2xl font-semibold tracking-tight text-leaf/25"
                 >
                   {item.brand.slice(0, 2).toUpperCase()}
                 </span>
-              )}
-            </div>
+              </div>
+            )}
             <div className="flex flex-1 flex-col p-4">
               <p className="font-display text-sm font-semibold tracking-tight text-ink">
                 {item.brand}

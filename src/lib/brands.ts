@@ -62,7 +62,7 @@ export const REPORT_BRANDS: Record<string, BrandExample[]> = {
       product: "ami Cat dry catfood",
       image: "/images/brands/ami-cat-dry.webp",
       imageAlt:
-        "A white bag of ami One Planet complete dry cat food, photographed on white-painted boards.",
+        "A white bag of ami CATS One Planet complete plant-based dry cat food, made in Italy.",
     },
     {
       brand: "Forza10",

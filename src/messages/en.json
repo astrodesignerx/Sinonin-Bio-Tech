@@ -60,7 +60,7 @@
       "insects": {
         "title": "Insects",
         "body": "A growing catalogue of insect products on the market, plus formulation expertise to tailor them to petfood applications, safety assessment included.",
-        "imageAlt": "Close-up of a steel tray filled with pale black soldier fly larvae, the raw material for insect protein meal."
+        "imageAlt": "Close-up of a dense, shifting mass of dark black soldier fly larvae, the raw material for insect protein meal."
       }
     },
     "pillarsCta": "Learn more",
@@ -367,7 +367,9 @@
     "otherTitle": "More reports",
     "brandsLabel": "On shelf today",
     "brandsTitle": "Products already using this material",
-    "brandsNote": "Product names and images belong to their respective owners and are shown as market examples, not endorsements."
+    "brandsNote": "Product names and images belong to their respective owners and are shown as market examples, not endorsements.",
+    "brandsView": "View larger image",
+    "brandsClose": "Close image"
   },
   "aboutPage": {
     "title": "About Us",

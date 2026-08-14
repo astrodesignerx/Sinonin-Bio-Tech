@@ -60,7 +60,7 @@
       "insects": {
         "title": "Insekten",
         "body": "Ein wachsender Katalog an Insektenprodukten auf dem Markt, plus Formulierungs-Know-how für spezifische Petfood-Anwendungen, inklusive Sicherheitsbewertung.",
-        "imageAlt": "Nahaufnahme einer Edelstahlschale voller heller Schwarzer Soldatenfliegenlarven, der Rohstoff für Insektenprotein-Mehl."
+        "imageAlt": "Nahaufnahme einer dichten, sich bewegenden Masse dunkler Schwarzer Soldatenfliegenlarven, der Rohstoff für Insektenprotein-Mehl."
       }
     },
     "pillarsCta": "Mehr erfahren",
@@ -367,7 +367,9 @@
     "otherTitle": "Weitere Berichte",
     "brandsLabel": "Heute im Handel",
     "brandsTitle": "Produkte, die dieses Material bereits einsetzen",
-    "brandsNote": "Produktnamen und Bilder gehören den jeweiligen Eigentümern und dienen als Marktbeispiele, nicht als Empfehlung."
+    "brandsNote": "Produktnamen und Bilder gehören den jeweiligen Eigentümern und dienen als Marktbeispiele, nicht als Empfehlung.",
+    "brandsView": "Bild vergrößern",
+    "brandsClose": "Bild schließen"
   },
   "aboutPage": {
     "title": "Über uns",
