@@ -171,26 +171,73 @@ export default function CellsCanvas({
     };
 
     resize();
+    /*
+      Paint once up front, before any observer has had a chance to report.
+      The loop below only starts when the IntersectionObserver says the canvas
+      is on screen, and that first callback arrives a frame late; if anything
+      then keeps `running` false, the backdrop would stay blank instead of
+      merely still. One frame here means the worst case is a static pattern.
+    */
+    draw(0);
+
+    /*
+      ...and once more after layout. Measuring in the effect can catch the
+      canvas before it has been given its width, which produced a one-pixel
+      drawing buffer stretched across the whole fold. `resize` only rewrites
+      the buffer when the size actually changes, so this is free when the
+      first measurement was already right.
+    */
+    const settle = requestAnimationFrame(() => {
+      resize();
+      draw(0);
+    });
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduced) {
-      draw(0);
       const ro = new ResizeObserver(() => {
         resize();
         draw(0);
       });
       ro.observe(canvas);
-      return () => ro.disconnect();
+      return () => {
+        ro.disconnect();
+        cancelAnimationFrame(settle);
+      };
     }
 
     let raf = 0;
     let start: number | null = null;
     let running = false;
+    // Where the animation had got to, so any redraw can resume from it.
+    let lastT = 0;
+
+    /*
+      The canvas can be laid out at zero size on the first pass, which makes
+      that first paint a 1x1 no-op. Redraw when it gets its real size, so a
+      late layout does not leave an empty backdrop.
+
+      Redrawing here is not optional, and skipping it while the loop was
+      running is what made the footer flicker as its elastic edge was pulled.
+      Assigning `canvas.width`/`height` reallocates the drawing buffer and
+      clears it, and this context is `alpha: false`, so a cleared buffer is
+      opaque black rather than nothing. Resize observations are delivered after
+      layout but before paint, so a resize without a redraw puts a black frame
+      on screen and the next animation frame takes it away again.
+
+      Redrawing at `lastT` rather than 0 also matters: 0 would snap the pattern
+      back to its starting state mid-drag.
+    */
+    const ro = new ResizeObserver(() => {
+      resize();
+      draw(lastT);
+    });
+    ro.observe(canvas);
 
     const frame = (now: number) => {
       start ??= now;
       resize();
-      draw((now - start) / 1000);
+      lastT = (now - start) / 1000;
+      draw(lastT);
       raf = requestAnimationFrame(frame);
     };
 
@@ -213,9 +260,25 @@ export default function CellsCanvas({
 
     return () => {
       io.disconnect();
+      ro.disconnect();
       document.removeEventListener("visibilitychange", onVisibility);
       cancelAnimationFrame(raf);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      cancelAnimationFrame(settle);
+      /*
+        Deliberately NOT calling WEBGL_lose_context here.
+
+        That looks like tidy cleanup and is the reason this backdrop rendered
+        only some of the time. A canvas element owns exactly one context for
+        its lifetime: once lost, every later getContext("webgl2") on the same
+        element returns that same dead context, and every draw against it is a
+        silent no-op. React runs effects mount/unmount/mount in StrictMode and
+        again on Fast Refresh, so the second run inherited a killed context and
+        painted nothing, while a run that happened not to be doubled painted
+        fine. Hence intermittent.
+
+        Dropping the reference is enough; the context goes with the canvas when
+        the element is collected.
+      */
     };
   }, [base, alt, edge, scale]);
 
