@@ -384,6 +384,26 @@
       "MARS Petcare",
       "Sinonin Group"
     ],
+    "groupTitle": "Die Unternehmensgruppe",
+    "groupIntro": "Sinonin Biotech ist eines von vier Unternehmen der Sinonin-Gruppe, die kenianische Landwirtschaft, Lebensmittelproduktion und vegane Aromalösungen umfasst.",
+    "group": {
+      "tea": {
+        "name": "Sinonin Tea Estate",
+        "note": "Teeanbau und -verarbeitung in Kenia."
+      },
+      "food": {
+        "name": "Sinonin Food Innovations",
+        "note": "Lebensmittelentwicklung und der Weg der Gruppe, Technologie und Know-how nach Kenia zu übertragen."
+      },
+      "kipkenda": {
+        "name": "Kipkenda Poultry",
+        "note": "Geflügelhaltung, das Vorzeigeprojekt der Gruppe, aufgebaut mit Unterstützung von WIDU.africa."
+      },
+      "vlavour": {
+        "name": "Vegah Vlavour Solutions",
+        "note": "Vegane Aroma- und Palatant-Lösungen."
+      }
+    },
     "missionTitle": "Unsere Mission",
     "missionBody": "Wir liefern unseren Kunden Mehrwert durch die Führung disruptiver Innovation bei alternativen Proteinen und Palatabilitätsverstärkern, mit tiefer Expertise in angewandter Wissenschaft und Produktentwicklungserfahrung, um Veränderungen in Rohstoffanwendungen und -validierung voranzutreiben.",
     "visionTitle": "Unsere Vision",

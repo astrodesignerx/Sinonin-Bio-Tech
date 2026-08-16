@@ -1,0 +1,709 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Proposal: Sinonin Biotech Website</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4; margin: 0; }
+
+  :root{
+    --bg:#232323;
+    --panel:#2c2c2c;
+    --panel-2:#333333;
+    --edge:#3f3f3f;
+    --edge-soft:#383838;
+    --text:#f4f4f2;
+    --muted:#9c9c96;
+    --dim:#7a7a75;
+    --leaf:#22c55e;
+    --leaf-dim:#1a9e4b;
+    --warn:#d98b5f;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  body{
+    font-family:'Inter','Segoe UI',system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    font-size:9.6pt;
+    line-height:1.62;
+    font-weight:300;
+  }
+
+  .page{
+    width:210mm; height:297mm;
+    padding:16mm 15mm 14mm;
+    background:var(--bg);
+    position:relative;
+    overflow:hidden;
+    page-break-after:always;
+    display:flex; flex-direction:column;
+  }
+  .page:last-child{ page-break-after:auto; }
+
+  h1,h2,h3,h4,.display{ font-family:'Space Grotesk','Segoe UI',sans-serif; font-weight:600; letter-spacing:-0.015em; }
+
+  .eyebrow{
+    font-family:'JetBrains Mono',ui-monospace,monospace;
+    font-size:6.6pt; font-weight:500;
+    letter-spacing:0.22em; text-transform:uppercase;
+    color:var(--dim);
+  }
+  .eyebrow.leaf{ color:var(--leaf); }
+
+  .rule{ height:1px; background:var(--edge); border:0; }
+
+  /* ---------- cover ---------- */
+  .cover{ justify-content:space-between; }
+  .brandrow{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .mark{ display:flex; align-items:center; }
+  .astrologo{ width:56mm; height:auto; display:block; }
+  .wordmark .name{
+    font-family:'Space Grotesk',sans-serif; font-weight:700;
+    font-size:15pt; letter-spacing:0.02em; line-height:1;
+  }
+  .wordmark .sub{
+    font-family:'JetBrains Mono',monospace; font-size:6.2pt;
+    letter-spacing:0.42em; color:var(--muted); margin-top:2.5mm;
+  }
+  .refbox{ text-align:right; }
+  .refbox .num{ font-family:'Space Grotesk',sans-serif; font-size:12pt; color:var(--dim); font-weight:500; }
+
+  .covertitle{ margin-top:auto; }
+  .covertitle .kind{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:44pt; font-weight:700; line-height:0.95; letter-spacing:-0.03em;
+  }
+  .covertitle .what{
+    font-size:15pt; font-weight:400; color:var(--text);
+    font-family:'Space Grotesk',sans-serif; margin-top:5mm; letter-spacing:-0.01em;
+  }
+  .thesis{
+    margin-top:7mm; max-width:132mm; font-size:10.4pt;
+    color:#dcdcd8; font-weight:300; line-height:1.68;
+  }
+  .thesis b{ font-weight:600; color:#fff; }
+
+  .previewbox{
+    margin-top:9mm; border:1px solid var(--leaf-dim);
+    background:rgba(34,197,94,0.07);
+    padding:6mm 7mm; display:flex; align-items:center; justify-content:space-between; gap:8mm;
+  }
+  .previewbox .lbl{ font-family:'JetBrains Mono',monospace; font-size:6.4pt; letter-spacing:0.2em; text-transform:uppercase; color:var(--leaf); }
+  .previewbox .url{ font-family:'Space Grotesk',sans-serif; font-size:12.5pt; font-weight:600; color:#fff; margin-top:1.5mm; letter-spacing:-0.01em; }
+  .previewbox .hint{ font-size:8pt; color:var(--muted); margin-top:1.5mm; }
+
+  .coverfoot{ margin-top:auto; padding-top:9mm; border-top:1px solid var(--edge); display:flex; justify-content:space-between; gap:10mm; }
+  .coverfoot .col .k{ font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); }
+  .coverfoot .col .v{ font-size:8.8pt; margin-top:1.8mm; color:#e6e6e2; line-height:1.5; }
+
+  /* ---------- inner page furniture ---------- */
+  .phead{ display:flex; justify-content:space-between; align-items:baseline; padding-bottom:3.5mm; border-bottom:1px solid var(--edge); margin-bottom:7mm; }
+  .phead .t{ font-family:'Space Grotesk',sans-serif; font-size:8.4pt; font-weight:500; letter-spacing:0.04em; color:var(--muted); }
+  .pfoot{ margin-top:auto; padding-top:5mm; border-top:1px solid var(--edge-soft); display:flex; justify-content:space-between; font-family:'JetBrains Mono',monospace; font-size:6pt; letter-spacing:0.16em; text-transform:uppercase; color:var(--dim); }
+
+  .sechead{ font-size:20pt; font-weight:600; line-height:1.1; letter-spacing:-0.025em; margin-bottom:2mm; }
+  .sechead.sm{ font-size:16pt; }
+  .lede{ font-size:9.8pt; color:#d2d2ce; max-width:150mm; line-height:1.66; }
+
+  p{ margin-bottom:3.2mm; }
+  p:last-child{ margin-bottom:0; }
+  strong{ font-weight:600; color:#fff; }
+  .leafc{ color:var(--leaf); }
+
+  /* ---------- panels ---------- */
+  .panel{ border:1px solid var(--edge); background:var(--panel); }
+  .panel .ph{ background:var(--panel-2); padding:3mm 5mm; border-bottom:1px solid var(--edge); font-family:'JetBrains Mono',monospace; font-size:6.4pt; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:flex; justify-content:space-between; }
+  .panel .pb{ padding:4.5mm; }
+
+  /* ---------- comparison table ---------- */
+  table{ width:100%; border-collapse:collapse; }
+  .cmp{ font-size:8.6pt; }
+  .cmp thead th{
+    font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--muted); font-weight:500; text-align:left; padding:0 3mm 2.5mm; border-bottom:1px solid var(--edge);
+  }
+  .cmp thead th.old{ color:var(--dim); }
+  .cmp thead th.new{ color:var(--leaf); }
+  .cmp td{ padding:2.6mm 3mm; border-bottom:1px solid var(--edge-soft); vertical-align:top; }
+  .cmp tr:last-child td{ border-bottom:0; }
+  .cmp .metric{ color:#cfcfcb; width:39%; font-weight:300; }
+  .cmp .old{ width:29%; color:#bdbdb8; font-family:'JetBrains Mono',monospace; font-size:7.8pt; }
+  .cmp .new{ width:32%; color:#fff; font-family:'JetBrains Mono',monospace; font-size:7.8pt; font-weight:500; }
+  .cmp .new b{ color:var(--leaf); font-weight:500; }
+  .cmp .old b{ color:var(--warn); font-weight:500; }
+
+
+  /* ---------- timeline ---------- */
+  .tl{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:9mm; }
+  .tlitem{ padding-right:7mm; }
+  .tlk{ font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.18em; text-transform:uppercase; color:var(--leaf); }
+  .tlline{ position:relative; height:1px; background:var(--edge); margin:3.5mm 0 4mm; }
+  .tldot{ position:absolute; left:0; top:50%; transform:translateY(-50%); width:2.4mm; height:2.4mm; border-radius:50%; background:var(--leaf); }
+  .tlt{ font-size:8.6pt; color:#c9c9c5; line-height:1.5; }
+  .tlt b{ color:#fff; font-weight:600; }
+
+  /* ---------- phone screenshots ---------- */
+  .shotlead{ font-family:'Space Grotesk',sans-serif; font-size:13pt; font-weight:600; color:#fff;
+             letter-spacing:-0.015em; margin-top:11mm; }
+  .shots{ display:grid; grid-template-columns:1fr 1fr; gap:14mm; margin-top:6mm; }
+  .col{ text-align:center; }
+  .col img{ display:block; width:62mm; height:auto; margin:0 auto;
+            border:1px solid var(--edge); border-radius:3mm; }
+  .col .cap{ font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.18em;
+             text-transform:uppercase; color:var(--dim); margin-top:4mm; }
+  .col.now .cap{ color:var(--leaf); }
+  .col p{ font-size:8.6pt; color:#c9c9c5; line-height:1.55; margin-top:2.5mm; text-align:left; }
+  .col p strong{ color:#fff; }
+
+  /* ---------- findings ---------- */
+  .find{ border-left:2px solid var(--edge); padding:0 0 0 5mm; margin-bottom:5.5mm; }
+  .find.hot{ border-left-color:var(--warn); }
+  .find h4{ font-size:10.2pt; font-weight:600; margin-bottom:1.6mm; letter-spacing:-0.01em; }
+  .find p{ font-size:8.8pt; color:#c8c8c4; line-height:1.6; margin-bottom:0; }
+  .find .num{ font-family:'JetBrains Mono',monospace; color:var(--warn); font-size:8.4pt; }
+
+  /* ---------- benefits ---------- */
+  .bgrid{ display:grid; grid-template-columns:1fr 1fr; gap:3.8mm; }
+  .ben{ border:1px solid var(--edge); background:var(--panel); padding:3.8mm 4.5mm; }
+  .ben .n{ font-family:'JetBrains Mono',monospace; font-size:6.4pt; color:var(--leaf); letter-spacing:0.18em; }
+  .ben h4{ font-size:10pt; font-weight:600; margin:2mm 0 1.8mm; letter-spacing:-0.01em; line-height:1.25; }
+  .ben p{ font-size:8.3pt; color:#c2c2be; line-height:1.55; margin:0; }
+
+  /* ---------- scope ---------- */
+  .scope{ display:grid; grid-template-columns:1fr 1fr; gap:5mm; }
+  .slist{ list-style:none; }
+  .slist li{ position:relative; padding-left:4.5mm; margin-bottom:1.7mm; font-size:8.5pt; color:#c9c9c5; line-height:1.45; }
+  .slist li::before{ content:''; position:absolute; left:0; top:1.7mm; width:1.5mm; height:1.5mm; background:var(--leaf); }
+  .slist li b{ color:#fff; font-weight:600; }
+
+  .freebox{ border:1px solid var(--leaf-dim); background:rgba(34,197,94,0.06); padding:4.5mm 5mm; margin-top:4mm; }
+  .freebox .ttl{ font-family:'Space Grotesk',sans-serif; font-size:11pt; font-weight:600; margin-bottom:1.5mm; }
+  .freerow{ display:flex; justify-content:space-between; align-items:baseline; padding:1.9mm 0; border-bottom:1px solid rgba(34,197,94,0.18); font-size:8.6pt; }
+  .freerow:last-of-type{ border-bottom:0; }
+  .freerow .d{ color:#d6d6d2; padding-right:6mm; }
+  .freerow .v{ font-family:'JetBrains Mono',monospace; font-size:8pt; white-space:nowrap; }
+  .freerow .v s{ color:var(--dim); }
+  .freerow .v em{ font-style:normal; color:var(--leaf); font-weight:500; }
+
+  /* ---------- price ---------- */
+  .priced{ width:100%; border-collapse:collapse; font-size:9pt; }
+  .priced thead th{ font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); font-weight:500; text-align:left; padding:0 4mm 2.5mm; border-bottom:1px solid var(--edge); }
+  .priced thead th:last-child{ text-align:right; }
+  .priced td{ padding:3.4mm 4mm; border-bottom:1px solid var(--edge-soft); vertical-align:top; }
+  .priced td:last-child{ text-align:right; font-family:'JetBrains Mono',monospace; white-space:nowrap; }
+  .priced .desc{ color:#c6c6c2; font-size:8.2pt; margin-top:1mm; line-height:1.5; }
+  .priced .nil{ color:var(--leaf); }
+
+  .total{ display:flex; justify-content:flex-end; align-items:stretch; margin-top:5mm; }
+  .total .lbl{ border:1px solid var(--edge); border-right:0; padding:4.5mm 7mm; font-family:'JetBrains Mono',monospace; font-size:6.6pt; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; }
+  .total .amt{ border:1px solid var(--leaf-dim); background:rgba(34,197,94,0.09); padding:4.5mm 8mm; font-family:'Space Grotesk',sans-serif; font-size:17pt; font-weight:700; letter-spacing:-0.02em; display:flex; align-items:center; }
+
+  .twocol{ display:grid; grid-template-columns:1fr 1fr; gap:6mm; }
+  .terms li{ list-style:none; position:relative; padding-left:4mm; margin-bottom:2mm; font-size:8.2pt; color:#c2c2be; line-height:1.5; }
+  .terms li::before{ content:''; position:absolute; left:0; top:1.6mm; width:1.2mm; height:1.2mm; background:var(--dim); border-radius:50%; }
+
+  .steps{ counter-reset:s; list-style:none; }
+  .steps li{ counter-increment:s; position:relative; padding-left:7mm; margin-bottom:3mm; font-size:8.7pt; color:#cbcbc7; line-height:1.55; }
+  .steps li::before{
+    content:counter(s); position:absolute; left:0; top:0.2mm;
+    font-family:'JetBrains Mono',monospace; font-size:7pt; color:var(--leaf);
+    border:1px solid var(--leaf-dim); width:4.6mm; height:4.6mm; display:flex; align-items:center; justify-content:center;
+  }
+  .steps li b{ color:#fff; font-weight:600; }
+
+  .paybox{ border:1px solid var(--edge); background:var(--panel); padding:4mm 5mm; }
+  .paybox .k{ font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.2em; text-transform:uppercase; color:var(--dim); margin-bottom:2.5mm; }
+  .payrow{ display:flex; justify-content:space-between; font-size:8.4pt; padding:1.4mm 0; }
+  .payrow .a{ color:var(--muted); }
+  .payrow .b{ color:#fff; font-family:'JetBrains Mono',monospace; font-size:7.8pt; }
+
+  .signrow{ display:grid; grid-template-columns:1fr 1fr; gap:10mm; margin-top:4mm; margin-bottom:1mm; }
+  .sign .line{ border-bottom:1px solid var(--edge); height:11mm; }
+  .sign .cap{ font-family:'JetBrains Mono',monospace; font-size:6.2pt; letter-spacing:0.18em; text-transform:uppercase; color:var(--dim); margin-top:2.5mm; }
+
+  .note{ font-size:7.4pt; color:var(--dim); line-height:1.55; font-style:italic; }
+</style>
+</head>
+<body>
+
+<!-- ============ PAGE 1 | COVER ============ -->
+<section class="page cover">
+  <div class="brandrow">
+    <div class="mark">
+        <svg viewBox="0 0 963 256" fill="none" xmlns="http://www.w3.org/2000/svg" class="astrologo">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M126.857 2.14449C111.072 11.7708 72.7207 70.1142 62.9562 99.3563C60.6737 106.191 61.7515 110.922 65.8869 112.235C67.314 112.687 79.0758 112.104 92.0261 110.94C118.103 108.593 157.13 108.916 179.839 111.666C194.469 113.438 198.628 112.803 200.591 108.493C201.72 106.017 201.438 103.909 199.128 97.5348C188.392 67.9133 154.849 16.6487 137.042 2.65074C132.692 -0.768669 131.714 -0.817654 126.857 2.14449Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M93.5519 127.344C75.1798 129.357 58.6179 132.477 56.3618 134.349C55.3982 135.149 54.6094 136.815 54.6094 138.051C54.6094 140.646 57.5715 143.214 72.9701 153.968C89.743 165.682 105.524 180.041 117.302 194.309C130.65 210.476 131.651 210.651 141.979 198.62C159.676 178.006 173.782 165.36 197.602 148.756C203.357 144.745 208.372 140.665 208.748 139.689C209.122 138.713 208.452 136.837 207.26 135.52C200.195 127.712 133.771 122.936 93.5519 127.344Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M30.3206 158.419C26.395 163.613 18.2761 179.782 13.3216 192.275C5.59344 211.76 -2.35338 250.626 0.650244 254.246C2.75438 256.781 4.4553 256.586 12.8279 252.849C38.1808 241.533 69.7405 232.97 97.9726 229.745C113.629 227.957 114.931 227.572 114.931 224.724C114.931 217.712 84.2447 185.07 65.0071 171.618C51.1825 161.95 37.9835 154.336 35.049 154.336C34.1458 154.336 32.0178 156.174 30.3206 158.419Z" fill="white"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M219.773 157.652C205.583 165.156 186.599 179.35 173.802 192.022C160.51 205.185 147.551 221.068 147.551 224.199C147.551 226.922 151.272 228.077 165.138 229.658C191.803 232.701 223.472 241.222 249.481 252.354C254.761 254.614 259.989 256.114 261.101 255.687C265.577 253.97 261.822 228.153 253.487 203.328C245.796 180.425 231.964 154.336 227.512 154.336C226.705 154.336 223.222 155.828 219.773 157.652Z" fill="white"/>
+<path d="M342.101 75.8691L373.55 5.30913H389.678L421.229 75.8691H404.093L378.288 13.5747H384.739L358.833 75.8691H342.101ZM357.825 60.7491L362.16 48.3507H398.448L402.883 60.7491H357.825ZM461.813 77.0787C456.168 77.0787 450.759 76.3395 445.584 74.8611C440.41 73.3155 436.244 71.3331 433.085 68.9139L438.629 56.6163C441.653 58.7667 445.215 60.5475 449.314 61.9587C453.48 63.3027 457.68 63.9747 461.914 63.9747C465.14 63.9747 467.727 63.6723 469.676 63.0675C471.692 62.3955 473.17 61.4883 474.111 60.3459C475.052 59.2035 475.522 57.8931 475.522 56.4147C475.522 54.5331 474.783 53.0547 473.304 51.9795C471.826 50.8371 469.877 49.9299 467.458 49.2579C465.039 48.5187 462.351 47.8467 459.394 47.2419C456.504 46.5699 453.581 45.7635 450.624 44.8227C447.735 43.8819 445.08 42.6723 442.661 41.1939C440.242 39.7155 438.26 37.7667 436.714 35.3475C435.236 32.9283 434.496 29.8371 434.496 26.0739C434.496 22.0419 435.572 18.3795 437.722 15.0867C439.94 11.7267 443.232 9.07233 447.6 7.12353C452.036 5.10754 457.58 4.09954 464.232 4.09954C468.668 4.09954 473.036 4.63714 477.336 5.71233C481.637 6.72033 485.434 8.26593 488.727 10.3491L483.687 22.7475C480.394 20.8659 477.101 19.4883 473.808 18.6147C470.516 17.6739 467.29 17.2035 464.132 17.2035C460.973 17.2035 458.386 17.5731 456.37 18.3123C454.354 19.0515 452.909 20.0259 452.036 21.2355C451.162 22.3779 450.725 23.7219 450.725 25.2675C450.725 27.0819 451.464 28.5603 452.943 29.7027C454.421 30.7779 456.37 31.6515 458.789 32.3235C461.208 32.9955 463.863 33.6675 466.752 34.3395C469.709 35.0115 472.632 35.7843 475.522 36.6579C478.479 37.5315 481.167 38.7075 483.586 40.1859C486.005 41.6643 487.954 43.6131 489.432 46.0323C490.978 48.4515 491.751 51.5091 491.751 55.2051C491.751 59.1699 490.642 62.7987 488.424 66.0915C486.207 69.3843 482.88 72.0387 478.445 74.0547C474.077 76.0707 468.533 77.0787 461.813 77.0787ZM526.621 75.8691V18.6147H504.041V5.30913H565.529V18.6147H542.95V75.8691H526.621ZM584.395 75.8691V5.30913H614.535C624.346 5.30913 631.973 7.59393 637.416 12.1635C642.859 16.6659 645.581 22.9155 645.581 30.9123C645.581 36.1539 644.338 40.6899 641.851 44.5203C639.365 48.2835 635.837 51.1731 631.267 53.1891C626.698 55.2051 621.255 56.2131 614.938 56.2131H593.467L600.725 49.0563V75.8691H584.395ZM629.251 75.8691L611.611 50.2659H629.05L646.891 75.8691H629.251ZM600.725 50.8707L593.467 43.2099H614.031C619.071 43.2099 622.834 42.1347 625.32 39.9843C627.807 37.7667 629.05 34.7427 629.05 30.9123C629.05 27.0147 627.807 23.9907 625.32 21.8403C622.834 19.6899 619.071 18.6147 614.031 18.6147H593.467L600.725 10.8531V50.8707ZM702.871 77.0787C697.293 77.0787 692.119 76.1715 687.348 74.3571C682.644 72.5427 678.545 69.9891 675.05 66.6963C671.623 63.4035 668.935 59.5395 666.986 55.1043C665.105 50.6691 664.164 45.8307 664.164 40.5891C664.164 35.3475 665.105 30.5091 666.986 26.0739C668.935 21.6387 671.657 17.7747 675.151 14.4819C678.645 11.1891 682.745 8.63553 687.449 6.82113C692.153 5.00674 697.26 4.09954 702.77 4.09954C708.348 4.09954 713.455 5.00674 718.092 6.82113C722.796 8.63553 726.861 11.1891 730.289 14.4819C733.783 17.7747 736.505 21.6387 738.453 26.0739C740.402 30.4419 741.377 35.2803 741.377 40.5891C741.377 45.8307 740.402 50.7027 738.453 55.2051C736.505 59.6403 733.783 63.5043 730.289 66.7971C726.861 70.0227 722.796 72.5427 718.092 74.3571C713.455 76.1715 708.381 77.0787 702.871 77.0787ZM702.77 63.1683C705.929 63.1683 708.818 62.6307 711.439 61.5555C714.127 60.4803 716.479 58.9347 718.495 56.9187C720.511 54.9027 722.057 52.5171 723.132 49.7619C724.274 47.0067 724.845 43.9491 724.845 40.5891C724.845 37.2291 724.274 34.1715 723.132 31.4163C722.057 28.6611 720.511 26.2755 718.495 24.2595C716.546 22.2435 714.228 20.6979 711.54 19.6227C708.852 18.5475 705.929 18.0099 702.77 18.0099C699.612 18.0099 696.689 18.5475 694.001 19.6227C691.38 20.6979 689.061 22.2435 687.045 24.2595C685.029 26.2755 683.45 28.6611 682.308 31.4163C681.233 34.1715 680.695 37.2291 680.695 40.5891C680.695 43.8819 681.233 46.9395 682.308 49.7619C683.45 52.5171 684.996 54.9027 686.945 56.9187C688.961 58.9347 691.313 60.4803 694.001 61.5555C696.689 62.6307 699.612 63.1683 702.77 63.1683ZM351.374 183.869V113.309H383.429C391.089 113.309 397.843 114.788 403.689 117.744C409.536 120.634 414.105 124.7 417.398 129.941C420.691 135.183 422.337 141.399 422.337 148.589C422.337 155.712 420.691 161.928 417.398 167.237C414.105 172.479 409.536 176.578 403.689 179.535C397.843 182.424 391.089 183.869 383.429 183.869H351.374ZM367.704 170.463H382.622C387.326 170.463 391.392 169.589 394.819 167.842C398.313 166.028 401.001 163.474 402.883 160.181C404.832 156.888 405.806 153.024 405.806 148.589C405.806 144.087 404.832 140.223 402.883 136.997C401.001 133.704 398.313 131.184 394.819 129.437C391.392 127.623 387.326 126.716 382.622 126.716H367.704V170.463ZM444.732 183.869V113.309H498.056V126.413H460.961V170.765H499.366V183.869H444.732ZM459.752 154.436V141.735H493.721V154.436H459.752ZM545.623 185.079C539.978 185.079 534.569 184.34 529.394 182.861C524.22 181.316 520.053 179.333 516.895 176.914L522.439 164.616C525.463 166.767 529.025 168.548 533.124 169.959C537.29 171.303 541.49 171.975 545.724 171.975C548.949 171.975 551.537 171.672 553.485 171.068C555.501 170.396 556.98 169.488 557.921 168.346C558.861 167.204 559.332 165.893 559.332 164.415C559.332 162.533 558.593 161.055 557.114 159.98C555.636 158.837 553.687 157.93 551.268 157.258C548.849 156.519 546.161 155.847 543.204 155.242C540.314 154.57 537.391 153.764 534.434 152.823C531.545 151.882 528.89 150.672 526.471 149.194C524.052 147.716 522.069 145.767 520.524 143.348C519.045 140.928 518.306 137.837 518.306 134.074C518.306 130.042 519.381 126.38 521.532 123.087C523.749 119.727 527.042 117.072 531.41 115.124C535.845 113.108 541.389 112.1 548.042 112.1C552.477 112.1 556.845 112.637 561.146 113.712C565.447 114.72 569.244 116.266 572.537 118.349L567.497 130.748C564.204 128.866 560.911 127.488 557.618 126.615C554.325 125.674 551.1 125.204 547.941 125.204C544.783 125.204 542.196 125.573 540.18 126.312C538.164 127.052 536.719 128.026 535.845 129.236C534.972 130.378 534.535 131.722 534.535 133.268C534.535 135.082 535.274 136.56 536.753 137.703C538.231 138.778 540.18 139.652 542.599 140.324C545.018 140.996 547.673 141.668 550.562 142.34C553.519 143.012 556.442 143.784 559.332 144.658C562.289 145.532 564.977 146.708 567.396 148.186C569.815 149.664 571.764 151.613 573.242 154.032C574.788 156.452 575.561 159.509 575.561 163.205C575.561 167.17 574.452 170.799 572.234 174.092C570.017 177.384 566.69 180.039 562.255 182.055C557.887 184.071 552.343 185.079 545.623 185.079ZM596.799 183.869V113.309H613.128V183.869H596.799ZM674.024 185.079C668.446 185.079 663.306 184.205 658.602 182.458C653.965 180.644 649.899 178.09 646.405 174.797C642.978 171.504 640.29 167.64 638.341 163.205C636.459 158.77 635.518 153.898 635.518 148.589C635.518 143.28 636.459 138.408 638.341 133.973C640.29 129.538 643.011 125.674 646.506 122.381C650 119.088 654.099 116.568 658.803 114.821C663.507 113.007 668.682 112.1 674.326 112.1C680.576 112.1 686.187 113.141 691.16 115.224C696.2 117.308 700.434 120.332 703.861 124.296L693.378 133.973C690.824 131.285 688.035 129.303 685.011 128.026C681.987 126.682 678.694 126.01 675.133 126.01C671.706 126.01 668.581 126.548 665.758 127.623C662.936 128.698 660.483 130.244 658.4 132.26C656.384 134.276 654.805 136.661 653.662 139.416C652.587 142.172 652.05 145.229 652.05 148.589C652.05 151.882 652.587 154.906 653.662 157.661C654.805 160.416 656.384 162.836 658.4 164.919C660.483 166.935 662.902 168.48 665.658 169.556C668.48 170.631 671.571 171.168 674.931 171.168C678.157 171.168 681.282 170.664 684.306 169.656C687.397 168.581 690.387 166.8 693.277 164.314L702.55 176.108C698.72 178.997 694.251 181.215 689.144 182.76C684.104 184.306 679.064 185.079 674.024 185.079ZM702.55 176.108L687.632 173.991V147.48H702.55V176.108ZM727.799 183.869V113.309H741.306L782.937 164.112H776.385V113.309H792.513V183.869H779.106L737.375 133.066H743.927V183.869H727.799ZM819.287 183.869V113.309H872.61V126.413H835.516V170.765H873.921V183.869H819.287ZM834.306 154.436V141.735H868.276V154.436H834.306ZM896.994 183.869V113.309H927.133C936.944 113.309 944.571 115.594 950.014 120.164C955.458 124.666 958.179 130.916 958.179 138.912C958.179 144.154 956.936 148.69 954.45 152.52C951.963 156.284 948.435 159.173 943.866 161.189C939.296 163.205 933.853 164.213 927.536 164.213H906.066L913.323 157.056V183.869H896.994ZM941.85 183.869L924.21 158.266H941.648L959.49 183.869H941.85ZM913.323 158.871L906.066 151.21H926.629C931.669 151.21 935.432 150.135 937.918 147.984C940.405 145.767 941.648 142.743 941.648 138.912C941.648 135.015 940.405 131.991 937.918 129.84C935.432 127.69 931.669 126.615 926.629 126.615H906.066L913.323 118.853V158.871Z" fill="white"/>
+<path d="M362.914 238.524C364.32 238.916 365.426 239.63 366.232 240.667C367.039 241.681 367.442 242.971 367.442 244.537C367.442 246.634 366.647 248.247 365.057 249.376C363.49 250.505 361.198 251.069 358.18 251.069H346.637V226.877H357.488C360.253 226.877 362.384 227.43 363.882 228.536C365.403 229.642 366.163 231.174 366.163 233.133C366.163 234.4 365.863 235.494 365.264 236.416C364.688 237.337 363.905 238.04 362.914 238.524ZM350.093 229.677V237.418H357.177C358.951 237.418 360.311 237.096 361.255 236.45C362.223 235.782 362.707 234.815 362.707 233.547C362.707 232.28 362.223 231.324 361.255 230.679C360.311 230.011 358.951 229.677 357.177 229.677H350.093ZM358.041 248.27C360 248.27 361.474 247.947 362.465 247.302C363.456 246.657 363.951 245.643 363.951 244.261C363.951 241.565 361.981 240.217 358.041 240.217H350.093V248.27H358.041ZM417.997 248.063V251.069H400.441V226.877H417.514V229.884H403.897V237.314H416.027V240.252H403.897V248.063H417.997ZM460.233 242.706V251.069H456.812V242.637L447.204 226.877H450.902L458.644 239.63L466.42 226.877H469.841L460.233 242.706ZM510.87 251.346C508.428 251.346 506.228 250.816 504.269 249.756C502.311 248.673 500.767 247.187 499.638 245.298C498.532 243.409 497.979 241.3 497.979 238.973C497.979 236.646 498.532 234.538 499.638 232.649C500.767 230.76 502.311 229.285 504.269 228.225C506.228 227.142 508.428 226.601 510.87 226.601C513.29 226.601 515.478 227.142 517.437 228.225C519.395 229.285 520.927 230.76 522.033 232.649C523.139 234.515 523.692 236.623 523.692 238.973C523.692 241.323 523.139 243.443 522.033 245.332C520.927 247.199 519.395 248.673 517.437 249.756C515.478 250.816 513.29 251.346 510.87 251.346ZM510.87 248.27C512.644 248.27 514.234 247.867 515.64 247.06C517.068 246.254 518.186 245.148 518.992 243.743C519.821 242.314 520.236 240.724 520.236 238.973C520.236 237.222 519.821 235.644 518.992 234.239C518.186 232.81 517.068 231.693 515.64 230.886C514.234 230.08 512.644 229.677 510.87 229.677C509.096 229.677 507.483 230.08 506.032 230.886C504.603 231.693 503.474 232.81 502.645 234.239C501.839 235.644 501.435 237.222 501.435 238.973C501.435 240.724 501.839 242.314 502.645 243.743C503.474 245.148 504.603 246.254 506.032 247.06C507.483 247.867 509.096 248.27 510.87 248.27ZM577.427 226.877V251.069H574.594L560.078 233.029V251.069H556.622V226.877H559.456L573.971 244.918V226.877H577.427ZM612.317 226.877H622.512C625.069 226.877 627.339 227.384 629.32 228.398C631.302 229.412 632.834 230.84 633.917 232.683C635.023 234.504 635.576 236.6 635.576 238.973C635.576 241.346 635.023 243.455 633.917 245.298C632.834 247.118 631.302 248.535 629.32 249.549C627.339 250.562 625.069 251.069 622.512 251.069H612.317V226.877ZM622.304 248.063C624.263 248.063 625.979 247.682 627.454 246.922C628.952 246.162 630.104 245.102 630.91 243.743C631.716 242.36 632.12 240.77 632.12 238.973C632.12 237.176 631.716 235.598 630.91 234.239C630.104 232.856 628.952 231.785 627.454 231.025C625.979 230.264 624.263 229.884 622.304 229.884H615.773V248.063H622.304ZM705.446 226.877H708.902V248.063H722.001V251.069H705.446V226.877ZM753.614 226.877H757.07V251.069H753.614V226.877ZM814.391 251.069L814.356 233.444L805.612 248.132H804.023L795.279 233.547V251.069H791.961V226.877H794.795L804.887 243.881L814.84 226.877H817.674L817.708 251.069H814.391ZM852.617 226.877H856.073V251.069H852.617V226.877ZM895.767 229.884H887.473V226.877H907.483V229.884H899.189V251.069H895.767V229.884ZM945.642 251.346C943.821 251.346 942.059 251.069 940.354 250.516C938.672 249.94 937.347 249.203 936.38 248.305L937.658 245.609C938.58 246.438 939.755 247.118 941.183 247.648C942.635 248.155 944.121 248.408 945.642 248.408C947.646 248.408 949.144 248.074 950.134 247.406C951.125 246.715 951.621 245.805 951.621 244.676C951.621 243.846 951.344 243.178 950.791 242.671C950.261 242.141 949.593 241.738 948.787 241.462C948.003 241.185 946.886 240.874 945.434 240.529C943.614 240.091 942.14 239.653 941.011 239.215C939.905 238.777 938.949 238.109 938.142 237.211C937.359 236.289 936.967 235.057 936.967 233.513C936.967 232.223 937.301 231.059 937.969 230.022C938.661 228.985 939.697 228.156 941.08 227.534C942.462 226.912 944.179 226.601 946.229 226.601C947.658 226.601 949.063 226.785 950.445 227.154C951.828 227.522 953.014 228.052 954.005 228.744L952.865 231.508C951.851 230.863 950.768 230.379 949.616 230.057C948.464 229.711 947.335 229.538 946.229 229.538C944.271 229.538 942.796 229.896 941.805 230.61C940.838 231.324 940.354 232.246 940.354 233.375C940.354 234.204 940.63 234.884 941.183 235.414C941.736 235.921 942.416 236.324 943.222 236.623C944.052 236.9 945.169 237.199 946.575 237.522C948.395 237.96 949.858 238.397 950.964 238.835C952.07 239.273 953.014 239.941 953.798 240.84C954.604 241.738 955.007 242.948 955.007 244.468C955.007 245.736 954.662 246.899 953.971 247.959C953.279 248.996 952.231 249.825 950.826 250.447C949.42 251.046 947.692 251.346 945.642 251.346Z" fill="white"/>
+</svg>
+      </div>
+    </div>
+    <div class="refbox">
+      <div class="eyebrow">Proposal</div>
+      <div class="num">#97-P</div>
+    </div>
+  </div>
+
+  <div class="covertitle">
+    <div class="eyebrow leaf">Sinonin Biotech GmbH &nbsp;·&nbsp; 16 August 2026</div>
+    <div class="kind" style="margin-top:6mm;">Website<br>Redesign</div>
+    <div class="what">sinoninbio.tech, rebuilt in English and German.</div>
+
+    <p class="thesis">
+      Dr. Cheison, your website has been on my mind for about a year. I finally had the skills to do something
+      about it, so I did. <b>Everything in this document is already built and live.</b> Open it on your phone,
+      tablet or laptop before you read any further.
+    </p>
+
+    <div class="previewbox">
+      <div>
+        <div class="lbl">Live preview</div>
+        <div class="url">sinonin-bio-tech.vercel.app</div>
+        <div class="hint">Full site, both languages, all pages. Use the EN / DE switch in the header.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="coverfoot">
+    <div class="col">
+      <div class="k">Prepared for</div>
+      <div class="v">Sinonin Biotech GmbH<br>Marienstr. 15, 27299 Langwedel, Germany</div>
+    </div>
+    <div class="col">
+      <div class="k">Prepared by</div>
+      <div class="v">Keith Ng'eny, Astro Designer<br>astrodesignerx@gmail.com · +254 757 001 242</div>
+    </div>
+    <div class="col">
+      <div class="k">Investment</div>
+      <div class="v" style="font-family:'Space Grotesk',sans-serif;font-size:12pt;font-weight:600;">KSh 40,000</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PAGE 2 | WHY ============ -->
+<section class="page">
+  <div class="phead">
+    <div class="t">Sinonin Biotech · Website Redesign Proposal</div>
+    <div class="t">01</div>
+  </div>
+
+  <div class="eyebrow leaf">Why you are receiving this</div>
+  <h2 class="sechead" style="margin-top:3mm;">I know this brand. Now I can build for it too.</h2>
+
+  <div class="tl">
+    <div class="tlitem">
+      <div class="tlk">Two years ago</div>
+      <div class="tlline"><span class="tldot"></span></div>
+      <div class="tlt">I started designing for Sinonin, and learned the pillars, the supporters and the science behind them.</div>
+    </div>
+    <div class="tlitem">
+      <div class="tlk">Last year</div>
+      <div class="tlline"><span class="tldot"></span></div>
+      <div class="tlt">I looked at the website properly and saw it was making all of that <b>look smaller than it is</b>.</div>
+    </div>
+    <div class="tlitem">
+      <div class="tlk">Since then</div>
+      <div class="tlline"><span class="tldot"></span></div>
+      <div class="tlt">Design was only half the problem, so I went and learned the other half.</div>
+    </div>
+    <div class="tlitem">
+      <div class="tlk">August 2026</div>
+      <div class="tlline"><span class="tldot"></span></div>
+      <div class="tlt">The rebuild is <b>finished and live</b>, in English and German, waiting for you to open it.</div>
+    </div>
+  </div>
+
+  <div class="shotlead">Same phone. Same connection. Nothing scrolled.</div>
+
+  <div class="shots">
+    <div class="col">
+      <img src="shot-old.png" alt="The current sinoninbio.tech homepage on a phone.">
+      <div class="cap">sinoninbio.tech today</div>
+      <p>A logo, a tagline and a menu button. The sentence that says what Sinonin actually does sits
+      <strong>937 pixels further down</strong>, and the page keeps loading for <strong>27 seconds</strong>.</p>
+    </div>
+    <div class="col now">
+      <img src="shot-new.png" alt="The rebuilt homepage on a phone.">
+      <div class="cap">The rebuild</div>
+      <p>The claim is the first thing you read, the two things you want a visitor to do are under your
+      thumb, and the page has <strong>already finished loading</strong>.</p>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>Astro Designer · Proposal #97-P</span><span>Page 2 of 7</span></div>
+</section>
+
+<!-- ============ PAGE 3 | TABLE ============ -->
+<section class="page">
+  <div class="phead">
+    <div class="t">Sinonin Biotech · Website Redesign Proposal</div>
+    <div class="t">02</div>
+  </div>
+
+  <div class="eyebrow leaf">What I measured</div>
+  <h2 class="sechead" style="margin-top:3mm;">The current site, side by side with the new one.</h2>
+
+  <div class="panel" style="margin-top:6mm;">
+    <div class="ph"><span>Homepage · measured cold over the public internet</span><span>16 Aug 2026</span></div>
+    <div class="pb" style="padding:4mm 5mm 3mm;">
+      <table class="cmp">
+        <thead>
+          <tr><th>Metric</th><th class="old">sinoninbio.tech (current)</th><th class="new">New build</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="metric">Total page weight</td><td class="old"><b>10.9 MB</b></td><td class="new"><b>0.77 MB</b></td></tr>
+          <tr><td class="metric">Requests to load one page</td><td class="old"><b>104</b></td><td class="new"><b>18</b></td></tr>
+          <tr><td class="metric">HTML document alone</td><td class="old">3,300 KB</td><td class="new">27 KB</td></tr>
+          <tr><td class="metric">Stylesheets</td><td class="old"><b>44 files · 9.0 MB</b></td><td class="new">2 files · 99 KB</td></tr>
+          <tr><td class="metric">Scripts</td><td class="old">45</td><td class="new">bundled</td></tr>
+          <tr><td class="metric">Time to fully loaded</td><td class="old"><b>27.2 s</b></td><td class="new"><b>3.4 s</b></td></tr>
+          <tr><td class="metric">Page usable (DOM ready)</td><td class="old">15.1 s</td><td class="new">1.6 s</td></tr>
+          <tr><td class="metric">Sideways scrolling on a phone</td><td class="old"><b>Yes: 383px in a 375px screen</b></td><td class="new">None</td></tr>
+          <tr><td class="metric">Headline position on a phone</td><td class="old"><b>937px down (1.2 screens)</b></td><td class="new"><b>In the first screen</b></td></tr>
+          <tr><td class="metric">Main heading (H1)</td><td class="old">"Sinonin Biotech GmbH" ×2</td><td class="new">The proposition ×1</td></tr>
+          <tr><td class="metric">Search description tag</td><td class="old"><b>None</b></td><td class="new">Every page</td></tr>
+          <tr><td class="metric">Languages declared to Google</td><td class="old"><b>English only</b></td><td class="new">EN · DE · default</td></tr>
+          <tr><td class="metric">Image shown when shared</td><td class="old"><b>BMWK.png, a funder's logo</b></td><td class="new">Branded, 1200px</td></tr>
+          <tr><td class="metric">Platform</td><td class="old">WordPress 7.0.4 + plugins</td><td class="new">47 pre-built pages</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:6mm;">
+    The single line that matters most: a visitor on a phone waits <strong style="font-style:normal;">27 seconds</strong>
+    and downloads <strong style="font-style:normal;">10.9 MB</strong> (of which 9 MB is stylesheet code from stacked
+    plugins, not content) before the page finishes. The rebuilt site delivers the same message in 0.77 MB.
+  </p>
+
+  <p class="note" style="margin-top:4mm;">
+    Method: both sites were loaded in the same browser, over the public internet, from a cold cache, and the
+    browser's own performance timings were read directly. Nothing here is a third-party score. Page weight and
+    request counts are directly comparable; load times vary with connection and location.
+  </p>
+
+  <div class="pfoot"><span>Astro Designer · Proposal #97-P</span><span>Page 3 of 7</span></div>
+</section>
+
+<!-- ============ PAGE 4 | FINDINGS ============ -->
+<section class="page">
+  <div class="phead">
+    <div class="t">Sinonin Biotech · Website Redesign Proposal</div>
+    <div class="t">03</div>
+  </div>
+
+  <div class="eyebrow leaf">Beyond the numbers</div>
+  <h2 class="sechead" style="margin-top:3mm;">The four I most wanted to fix.</h2>
+  <p class="lede" style="margin-top:4mm;">
+    Speed was the easy part. These four cost you enquiries directly, and not one of them is visible from the
+    homepage, which is why they have gone unnoticed.
+  </p>
+
+  <div style="margin-top:8mm;">
+    <div class="find hot" style="margin-bottom:7mm;">
+      <h4>1 &nbsp;·&nbsp; Market Reports: your commercial page is empty</h4>
+      <p>The hub page shows a stale <span class="num">"4 Oct, 2022 · Administrator · 0"</span> byline and no reports
+      at all. The four report pages beneath it <em>do</em> have working order forms, asking for name, email, phone,
+      company and job title: a properly designed lead capture. So the machinery for selling reports already
+      exists; the page standing in front of it is dead, and the forms sit two levels down a menu where a buyer
+      has to go looking. <strong>Of everything in this document, this is the one I would have fixed first.</strong></p>
+    </div>
+
+    <div class="find hot" style="margin-bottom:7mm;">
+      <h4>2 &nbsp;·&nbsp; The blog is one page of <span class="num">26,429 words</span></h4>
+      <p>The blog index does not list your articles. It prints six of them in full, end to end, on a single
+      address. <span class="num">103,216 pixels</span> tall, roughly <span class="num">127 phone screens</span> of
+      scrolling. Nobody reaches the sixth piece. It also places six H1 headings on one page, which tells Google
+      the index and the real articles are competing, and splits the ranking you have earned between them.
+      <strong>The writing is the best asset you have, and the current setup buries it.</strong></p>
+    </div>
+
+    <div class="find hot" style="margin-bottom:7mm;">
+      <h4>3 &nbsp;·&nbsp; A German company, invisible in German</h4>
+      <p>The site is English-only and declares no German alternative to search engines whatsoever. For a GmbH
+      registered in Langwedel, selling into European petfood manufacturing, every German-language search for
+      insect protein, palatants or formulation support currently resolves to a competitor.
+      <strong>This is the largest untapped audience you have, and it costs nothing extra to reach.</strong></p>
+    </div>
+
+    <div class="find hot">
+      <h4>4 &nbsp;·&nbsp; Product images at <span class="num">71 × 108 pixels</span></h4>
+      <p>The packshot on the insect protein page is natively 71 pixels wide, stretched to fill its slot, visibly
+      soft next to the brands it is meant to represent. Your logo, meanwhile, ships at 1,280px into a 216px space,
+      roughly 35× more data than needed. On that same page only four of eight images loaded at all, against five
+      brands named in the copy. <strong>You sell scientific precision, and the pictures should not be the thing undercutting it.</strong></p>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>Astro Designer · Proposal #97-P</span><span>Page 4 of 7</span></div>
+</section>
+
+<!-- ============ PAGE 5 | BENEFITS ============ -->
+<section class="page">
+  <div class="phead">
+    <div class="t">Sinonin Biotech · Website Redesign Proposal</div>
+    <div class="t">04</div>
+  </div>
+
+  <div class="eyebrow leaf">What this changes</div>
+  <h2 class="sechead" style="margin-top:3mm;">Eight things you get that you do not have today.</h2>
+  <p class="lede" style="margin-top:4mm;">
+    Outcomes rather than features: what changes about the business, not the code.
+  </p>
+
+  <div class="bgrid" style="margin-top:7mm;">
+    <div class="ben">
+      <div class="n">01</div>
+      <h4>Your reports become buyable</h4>
+      <p>A working Market Reports hub, plus a dedicated page per report with its own request form. The revenue path
+      that is currently blocked by an empty page is open.</p>
+    </div>
+    <div class="ben">
+      <div class="n">02</div>
+      <h4>You can sell in German</h4>
+      <p>The full site in both languages, not a translated homepage. A German buyer reads German, and Google can
+      finally see that you serve the market you are registered in.</p>
+    </div>
+    <div class="ben">
+      <div class="n">03</div>
+      <h4>A compliance gap closes</h4>
+      <p>Your report form collects name, email, phone, company and job title with no consent step, and no German
+      privacy policy behind it. Now: a consent checkbox on every form, and Datenschutz in both languages.</p>
+    </div>
+    <div class="ben">
+      <div class="n">04</div>
+      <h4>Your writing works as credibility</h4>
+      <p>Each article gets its own page, cover image and summary card. Individually shareable, individually
+      rankable, and readable on a phone, instead of buried in a 26,000-word wall.</p>
+    </div>
+    <div class="ben">
+      <div class="n">05</div>
+      <h4>The homepage makes a claim</h4>
+      <p>A single clear proposition in the first screen, then a deliberate path: the four expertise areas, the
+      protein-security case, reports, training, and who you are.</p>
+    </div>
+    <div class="ben">
+      <div class="n">06</div>
+      <h4>It works properly on a phone</h4>
+      <p>No sideways scrolling, no 10px text, tap targets sized for thumbs. This matters most where you already
+      share your work. LinkedIn traffic is overwhelmingly mobile.</p>
+    </div>
+    <div class="ben">
+      <div class="n">07</div>
+      <h4>Shares carry your brand</h4>
+      <p>Every link you post currently pulls a funder's logo as its picture. Now each page has its own branded
+      share image, title and description.</p>
+    </div>
+    <div class="ben">
+      <div class="n">08</div>
+      <h4>Nothing to maintain or patch</h4>
+      <p>No plugin stack, no WordPress updates, no security surface to keep an eye on. Nothing to break while you
+      are not looking.</p>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-top:5mm;">
+    <div class="ph"><span>What happens to the rankings you already have</span><span>Continuity</span></div>
+    <div class="pb">
+      <p style="font-size:8.7pt;color:#c6c6c2;margin:0;">
+        A rebuild normally costs you your search position: every address changes, and Google treats the new pages
+        as strangers. That does not happen here. <strong>Fifteen redirect rules</strong> map every old address to
+        its replacement, including the tag, category and author archives WordPress generated on your behalf.
+        Anyone arriving on an old link, whether from a search result or a citation in someone else's article,
+        lands on the right page rather than an error.
+      </p>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>Astro Designer · Proposal #97-P</span><span>Page 5 of 7</span></div>
+</section>
+
+<!-- ============ PAGE 6 | SCOPE ============ -->
+<section class="page">
+  <div class="phead">
+    <div class="t">Sinonin Biotech · Website Redesign Proposal</div>
+    <div class="t">05</div>
+  </div>
+
+  <div class="eyebrow leaf">What is delivered</div>
+  <h2 class="sechead" style="margin-top:3mm;">Scope: all of it already built.</h2>
+
+  <div class="scope" style="margin-top:6mm;">
+    <div class="panel">
+      <div class="ph"><span>Pages</span><span>~10 templates × 2 languages</span></div>
+      <div class="pb">
+        <ul class="slist">
+          <li><b>Home</b>: hero, supporter strip (BMWK, GIZ, EUIPO, BIC, BALPro), four expertise pillars, the
+            protein-security story, reports and training teasers, founder note, latest writing.</li>
+          <li><b>Expertise</b>: one page, four anchored sections: proteins, palatants, enzymes, insects.</li>
+          <li><b>Training</b>: its own page, pulled out of the homepage.</li>
+          <li><b>Market Reports</b>: working hub plus four report pages, each with a request form.</li>
+          <li><b>About</b>: founder story, the Nandi name origin, mission and vision, family of businesses.</li>
+          <li><b>Blog</b>: card index plus a page per article, all existing posts migrated.</li>
+          <li><b>Contact</b>: booking as the primary action, enquiry form as secondary.</li>
+          <li><b>Legal</b>: Impressum and Datenschutz, both languages.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="ph"><span>Included in the base package</span><span>Build</span></div>
+      <div class="pb">
+        <ul class="slist">
+          <li>Custom design on your own identity: forest green, navy, the gradient drawn from your logo.</li>
+          <li>Complete rebuild, statically served: 47 pre-built pages, sub-second delivery.</li>
+          <li>Site-wide search in the header, keyboard operable, covering every page and article.</li>
+          <li>Bilingual throughout (EN default, DE), <b>289 of 289 strings translated</b>, with no gaps and no machine stubs.</li>
+          <li>All copy rewritten for clarity and grammar, every fact preserved; German follows your approved English.</li>
+          <li>Report request and contact forms with a GDPR consent checkbox.</li>
+          <li>Full SEO: metadata, share images, sitemap, and a redirect map from every old address.</li>
+          <li>Mobile-responsive, accessibility-checked, restrained motion, no gimmicks.</li>
+          <li>Deployment to a European edge network (Frankfurt), HTTPS included.</li>
+          <li>One training session on running the site.</li>
+          <li><b>One year of technical support</b> at no charge.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="freebox">
+    <div class="eyebrow leaf">Added on acceptance, at no extra cost</div>
+    <div class="ttl" style="margin-top:2.5mm;">Two things you will want, included in the same price.</div>
+    <p style="font-size:8.6pt;color:#c6c6c2;margin-top:2mm;margin-bottom:3.5mm;">
+      You publish often, so you should not need me in order to post, and an enquiry form is worth nothing if the
+      mail never arrives. Both are shown at what they would normally cost.
+    </p>
+
+    <div class="freerow">
+      <div class="d"><strong>Content management system</strong>: publish and edit articles, swap images and update
+        report descriptions yourself, from the browser, in both languages. No developer, no plugins.</div>
+      <div class="v"><s>KSh 12,000</s> &nbsp; <em>Included</em></div>
+    </div>
+    <div class="freerow">
+      <div class="d"><strong>Contact and enquiry mail system</strong>: forms wired to a verified address, delivery
+        confirmed end to end, with your booking calendar connected as the primary call to action.</div>
+      <div class="v"><s>KSh 5,000</s> &nbsp; <em>Included</em></div>
+    </div>
+    <div class="freerow" style="border-top:1px solid rgba(34,197,94,0.3);margin-top:2mm;padding-top:3mm;">
+      <div class="d" style="font-weight:600;color:#fff;">Additional value at no charge</div>
+      <div class="v" style="font-size:9.5pt;"><em>KSh 17,000</em></div>
+    </div>
+  </div>
+
+  <p class="note" style="margin-top:3.5mm;">
+    Both delivered after acceptance. The booking link and mail address need one confirmation click from you.
+  </p>
+
+  <div class="pfoot"><span>Astro Designer · Proposal #97-P</span><span>Page 6 of 7</span></div>
+</section>
+
+<!-- ============ PAGE 7 | INVESTMENT ============ -->
+<section class="page">
+  <div class="phead">
+    <div class="t">Sinonin Biotech · Website Redesign Proposal</div>
+    <div class="t">06</div>
+  </div>
+
+  <div class="eyebrow leaf">Investment</div>
+  <h2 class="sechead" style="margin-top:3mm;">One figure, nothing withheld.</h2>
+
+  <table class="priced" style="margin-top:6mm;">
+    <thead>
+      <tr><th>Item</th><th>Amount</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Website UI/UX redesign &amp; bilingual development</strong>
+          <div class="desc">~10 templates × 2 languages · 47 pre-built pages · reports hub with lead capture ·
+            blog migration · full SEO and redirect map · deployment · 1 training session · 1 year support</div>
+        </td>
+        <td>KSh 40,000</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Content management system</strong>
+          <div class="desc">Self-service publishing for articles, images and report copy, both languages</div>
+        </td>
+        <td class="nil">Included</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Contact &amp; enquiry mail system</strong>
+          <div class="desc">Form delivery verified end to end, booking calendar connected</div>
+        </td>
+        <td class="nil">Included</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="total">
+    <div class="lbl">Grand total</div>
+    <div class="amt">KSh 40,000</div>
+  </div>
+
+  <div class="twocol" style="margin-top:7mm;">
+    <div>
+      <div class="eyebrow">Terms</div>
+      <ul class="terms" style="margin-top:3.5mm;">
+        <li>50% deposit upon approval of this proposal.</li>
+        <li>50% balance upon completion and handover.</li>
+        <li>Additional features billed separately upon request.</li>
+        <li>Payments are non-refundable once work has commenced.</li>
+        <li>Payable via M-Pesa or bank transfer.</li>
+        <li>Domain and hosting remain registered in your name; you hold the accounts.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="eyebrow">Next steps</div>
+      <ol class="steps" style="margin-top:3.5mm;">
+        <li><b>Review the live site</b>: on your phone, tablet or laptop, in both languages.</li>
+        <li><b>Send corrections.</b> Anything factual, scientific or in the German wording, I will change.</li>
+        <li><b>Approve</b>, and the deposit invoice follows.</li>
+        <li><b>Handover in one week</b>: CMS added, mail wired, DNS switched, training session held.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="twocol" style="margin-top:6mm;">
+    <div class="paybox">
+      <div class="k">Bank</div>
+      <div class="payrow"><span class="a">Bank</span><span class="b">NCBA Bank Kenya PLC</span></div>
+      <div class="payrow"><span class="a">Name</span><span class="b">Astro Designer</span></div>
+      <div class="payrow"><span class="a">Account no.</span><span class="b">1002051064</span></div>
+      <div class="payrow"><span class="a">Currency</span><span class="b">KES</span></div>
+    </div>
+    <div class="paybox">
+      <div class="k">M-Pesa</div>
+      <div class="payrow"><span class="a">Number</span><span class="b">+254 757 001 242</span></div>
+      <div class="payrow"><span class="a">Name</span><span class="b">Keith Ng'eny</span></div>
+      <div class="payrow"><span class="a">Email</span><span class="b">astrodesignerx@gmail.com</span></div>
+      <div class="payrow"><span class="a">Instagram</span><span class="b">astrodesignerx</span></div>
+    </div>
+  </div>
+
+  <div class="signrow">
+    <div class="sign">
+      <div class="line"></div>
+      <div class="cap">Accepted for Sinonin Biotech GmbH · Date</div>
+    </div>
+    <div class="sign">
+      <div class="line"></div>
+      <div class="cap">Keith Ng'eny · Astro Designer · Date</div>
+    </div>
+  </div>
+
+  <div class="pfoot"><span>Astro Designer · Proposal #97-P · 16 August 2026</span><span>Page 7 of 7</span></div>
+</section>
+
+</body>
+</html>

@@ -6,6 +6,7 @@ import { seoMetadata } from "@/lib/meta";
 import PageHeader from "@/components/ui/page-header";
 import CtaBand from "@/components/ui/cta-band";
 import Reveal from "@/components/ui/reveal";
+import GroupCompanies from "@/components/about/group-companies";
 
 export async function generateMetadata({
   params,
@@ -144,6 +145,10 @@ function AboutContent() {
             </div>
           </div>
         </section>
+
+        {/* Directly after the founder section, which is where the phrase
+            "part of the Sinonin Group of companies" first appears. */}
+        <GroupCompanies />
 
         <section className="border-t border-line py-14 sm:py-16">
           <div className="grid gap-5 md:grid-cols-2">
