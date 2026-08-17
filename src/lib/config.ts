@@ -1,13 +1,23 @@
+/*
+  FormSubmit's hashed alias for the inbox below. Posting to the hash rather than
+  the plain address keeps contact@ out of the page source, where scrapers would
+  otherwise find it.
+
+  This is tied to contact@sinoninbio.tech and was issued when that address was
+  activated with FormSubmit. Changing the destination address means activating
+  the new one and replacing this token; editing the address alone will not
+  redirect anything.
+*/
+const FORMSUBMIT_TOKEN = "b7d7d12b85598d9d7b420822bafd02bb";
+
 export const site = {
-  email: "info@sinoninbio.tech",
+  email: "contact@sinoninbio.tech",
   baseUrl: "https://www.sinoninbio.tech",
   // FormSubmit AJAX endpoint, delivers submissions to the address above.
-  // The first-ever submission triggers a one-time confirmation email to the
-  // owner; after confirming once, all submissions arrive directly.
-  formsEndpoint: "https://formsubmit.co/ajax/info@sinoninbio.tech",
+  formsEndpoint: `https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`,
   // TODO(client): replace with the real calendar booking URL (Calendly/Cal.com).
   bookingUrl:
-    "mailto:info@sinoninbio.tech?subject=Meeting%20request%20%E2%80%93%20Sinonin%20Biotech",
+    "mailto:contact@sinoninbio.tech?subject=Meeting%20request%20%E2%80%93%20Sinonin%20Biotech",
 } as const;
 
 /*

@@ -43,10 +43,13 @@ The current build needs **no** environment variables to render. Two are *recomme
 
 | Variable | Value | Purpose |
 |---|---|---|
-| `FORMSPREE_ID` (or update `src/lib/config.ts`) | your real form endpoint | When you replace the FormSubmit placeholder with a production form service |
 | `NEXT_PUBLIC_SITE_URL` (optional) | `https://www.sinoninbio.tech` | Already defaulted in `src/lib/config.ts`; override only if you serve from a different URL |
 
-`src/lib/config.ts` currently has `formsEndpoint: "https://formsubmit.co/ajax/contact@sinoninbio.tech"` and `bookingUrl: "mailto:..."`. The mailto is a placeholder — the client should set the real `bookingUrl` when a calendar tool (Calendly / Cal.com) is chosen.
+Forms post to FormSubmit, which needs no account and no env var.
+
+`FORMSUBMIT_TOKEN` in `src/lib/config.ts` is live and verified: it is FormSubmit's hashed alias for contact@sinoninbio.tech, so submissions arrive there without the address appearing in the page source. If the destination address ever changes, the new one has to be activated with FormSubmit and the token replaced. Editing the address alone redirects nothing.
+
+One placeholder remains: `bookingUrl` is a `mailto:` link. Set the real one when a calendar tool (Calendly / Cal.com) is chosen.
 
 To set env vars in Vercel: **Project → Settings → Environment Variables**. Apply to Production, Preview, and Development as needed.
 

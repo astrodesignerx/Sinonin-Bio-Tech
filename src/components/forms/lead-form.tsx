@@ -7,6 +7,7 @@ import {
   PaperPlaneTilt,
   WarningCircle,
 } from "@phosphor-icons/react";
+import { Link } from "@/i18n/navigation";
 import { site } from "@/lib/config";
 
 type Status = "idle" | "submitting" | "success" | "error";
@@ -168,7 +169,17 @@ export default function LeadForm({
           htmlFor={`consent-${variant}`}
           className="text-xs leading-relaxed text-ink-muted"
         >
-          {t("consent")} <span className="text-leaf">*</span>
+          {t.rich("consent", {
+            privacy: (chunks) => (
+              <Link
+                href="/privacy"
+                className="font-medium text-leaf underline underline-offset-2 transition-colors hover:text-forest"
+              >
+                {chunks}
+              </Link>
+            ),
+          })}{" "}
+          <span className="text-leaf">*</span>
         </label>
       </div>
 
