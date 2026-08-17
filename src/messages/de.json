@@ -436,7 +436,7 @@
     "successTitle": "Nachricht gesendet",
     "successBody": "Vielen Dank, wir melden uns so schnell wie möglich bei Ihnen.",
     "errorTitle": "Etwas ist schiefgelaufen",
-    "errorBody": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie direkt an contact@sinoninbio.tech.",
+    "errorBody": "Ihre Nachricht konnte nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie direkt an info@sinoninbio.tech.",
     "reportSubmit": "Bericht anfordern",
     "reportSuccessTitle": "Bericht angefordert",
     "reportSuccessBody": "Vielen Dank, wir senden den Bericht in Kürze an Ihre E-Mail-Adresse."
@@ -446,7 +446,7 @@
     "specialties": "Alternative Proteine | Enzyme | Palatants | Schulungen",
     "explore": "Entdecken",
     "contactTitle": "Kontakt",
-    "email": "contact@sinoninbio.tech",
+    "email": "info@sinoninbio.tech",
     "hoursTitle": "Geschäftszeiten",
     "hoursDays": "Montag – Freitag",
     "legalTitle": "Rechtliches",
