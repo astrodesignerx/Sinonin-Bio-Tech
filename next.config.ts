@@ -52,12 +52,74 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       /*
-        Old posts lived under /blog/<slug>, not at the root. Slugs that survived
-        the migration are handled by the catch-all below; the ones that were
-        renamed need naming here, and must come first because the first match
-        wins. Only one renamed slug is confirmed: the old site's own share
+        The three palatability posts below were migrated under shorter slugs.
+        They are the newest and most linked writing on the old site, so these
+        three matter more than anything else in this list.
+
+        The full old URL set was recovered after cutover by reading the old
+        WordPress sitemaps straight off the Bluehost origin (67.222.38.76) with
+        a Host header, since DNS had already moved. If the old hosting is ever
+        cancelled, that recovery route disappears with it.
+      */
+      {
+        source: "/petfood-palatability-why-replacing-meat-is-more-than-replacing-protein",
+        destination: "/en/blog/petfood-palatability-replacing-meat",
+        permanent: true,
+      },
+      {
+        source: "/petfood-palatability-and-the-fresh-kill-signal-cats-read-as-prey",
+        destination: "/en/blog/petfood-palatability-fresh-kill-signal",
+        permanent: true,
+      },
+      {
+        source: "/petfood-palatability-why-fat-is-the-signal-alternative-proteins-forget",
+        destination: "/en/blog/petfood-palatability-fat-is-the-signal",
+        permanent: true,
+      },
+
+      /*
+        The remaining old posts, recovered from the WordPress REST API on the
+        Bluehost origin after cutover and rewritten as MDX. Each now points at
+        its own migrated page rather than at the blog index.
+      */
+      {
+        source: "/global-protein-demand-pressure-from-a-healthy-and-wealthy-population-that-continues-to-grow",
+        destination: "/en/blog/global-protein-demand",
+        permanent: true,
+      },
+      {
+        source:
+          "/fermentation-or-pharmentation-a-proposal-to-disambiguate-carbohydrate-metabolism-vs-protein-production-using-precision-technology",
+        destination: "/en/blog/fermentation-or-pharmentation",
+        permanent: true,
+      },
+      {
+        source: "/why-are-insects-considered-sustainable-a-protein-production-inputs-resource-justification",
+        destination: "/en/blog/why-insects-are-sustainable",
+        permanent: true,
+      },
+      { source: "/insects-used-in-aquafeed", destination: "/en/blog/insects-in-aquafeed", permanent: true },
+      { source: "/approval-of-fourth-insect-as-a-novel-food-by-the-eu", destination: "/en/blog/eu-fourth-novel-food-insect", permanent: true },
+      {
+        source: "/our-ceo-interview-with-the-future-of-protein-summit-organiser-nick-bradley",
+        destination: "/en/blog/future-of-protein-summit-interview",
+        permanent: true,
+      },
+      { source: "/elementor-1646", destination: "/en/blog/widu-africa-visit", permanent: true },
+      { source: "/zestproject-executive-board-virtual-meeting", destination: "/en/blog/zest-executive-board-meeting", permanent: true },
+      { source: "/zestproject-official-launch", destination: "/en/blog/zest-project-launch", permanent: true },
+      { source: "/interview-10-questions-for-sinonin-biotech-by-zest", destination: "/en/blog/zest-interview-ten-questions", permanent: true },
+      {
+        source: "/honoured-at-the-inaugural-jamhuri-diaspora-awards-ceremony-2024",
+        destination: "/en/blog/jamhuri-diaspora-awards-2024",
+        permanent: true,
+      },
+
+      /*
+        The old site also answered on /blog/<slug> for some posts: its own share
         buttons pointed at .../blog/alternative-protein-industry-failures-2026.
-        If more turn up in Search Console as 404s, add them here.
+        Keep both shapes. The renamed one must precede the catch-all, because
+        the first matching rule wins.
       */
       {
         source: "/blog/alternative-protein-industry-failures-2026",
@@ -74,7 +136,7 @@ const nextConfig: NextConfig = {
       */
       { source: "/our-products-services", destination: "/en/expertise", permanent: true },
       { source: "/what-do-you-know-about-proteins", destination: "/en/expertise", permanent: true },
-      { source: "/insects-in-a-circular-economy", destination: "/en/expertise", permanent: true },
+      { source: "/insects-in-a-circular-economy", destination: "/en/blog/insects-in-a-circular-economy", permanent: true },
       { source: "/starch", destination: "/en/expertise", permanent: true },
       { source: "/request-meeting", destination: "/en/contact", permanent: true },
       { source: "/projects", destination: "/en/reports", permanent: true },
