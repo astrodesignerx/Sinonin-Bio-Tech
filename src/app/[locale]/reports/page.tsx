@@ -32,6 +32,12 @@ export default async function ReportsPage({
   return <ReportsContent reports={reports} />;
 }
 
+/*
+  Cards show the first few points only. The rest are on the report's own page,
+  so a long list cannot stretch one card past the one beside it.
+*/
+const CARD_POINT_LIMIT = 4;
+
 function ReportsContent({ reports }: { reports: ReportCopy[] }) {
   const t = useTranslations("reportsPage");
 
@@ -42,7 +48,7 @@ function ReportsContent({ reports }: { reports: ReportCopy[] }) {
       <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
         <div className="reveal-stagger grid gap-5 lg:grid-cols-2">
           {reports.map((report) => {
-            const points = report.points;
+            const points = report.points.slice(0, CARD_POINT_LIMIT);
             return (
               <Reveal key={report.key} className="h-full">
                 <Link
