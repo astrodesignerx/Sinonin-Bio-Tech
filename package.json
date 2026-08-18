@@ -6,15 +6,21 @@
     "dev": "next dev -p 3011",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "studio": "pnpm --filter sinonin-studio dev",
+    "studio:deploy": "pnpm --filter sinonin-studio deploy"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
+    "@portabletext/react": "^8.0.0",
+    "@sanity/client": "^8.0.0",
+    "@sanity/image-url": "^2.1.1",
+    "@sanity/webhook": "^4.0.4",
     "next": "16.2.12",
     "next-intl": "^4.13.4",
     "next-mdx-remote": "^6.0.0",
-    "react": "19.2.4",
-    "react-dom": "19.2.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
@@ -24,8 +30,10 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
+    "remark-parse": "^11.0.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "unified": "^11.0.5"
   }
 }

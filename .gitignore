@@ -1,7 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+# Not `/node_modules`: that is root-only, and the studio workspace has its own.
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -50,3 +51,11 @@ next-env.d.ts
 # repo (see Content/README.md) — the web-ready encodes in public/videos are
 # what the site actually ships, and they are a fiftieth of the size.
 /Content/*.mp4
+
+# sanity studio (generated)
+/studio/.sanity/
+/studio/dist/
+
+# migration scratch
+/migration-preview.json
+/copy-migration-preview.json
