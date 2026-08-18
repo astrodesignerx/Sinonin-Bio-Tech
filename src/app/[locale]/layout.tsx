@@ -81,14 +81,13 @@ export default async function LocaleLayout({
       .join(" | "),
   }));
 
-  /* Report covers live in Sanity, and the header is a client component, so
-     the mega panel's cells are assembled here and passed down. Titles stay on
-     the home namespace, which is the wording the menu has always used. */
+  /* Report covers and titles live in Sanity, and the header is a client
+     component that cannot fetch, so the mega panel's cells are assembled here
+     and passed down. */
   const reportCopy = await getReports(locale);
-  const reportTitlesT = await getTranslations({ locale, namespace: "home.reports" });
   const reportItems: MegaItem[] = reportCopy.map((r) => ({
     href: `/reports/${r.slug}`,
-    title: reportTitlesT(`${r.key}.title`),
+    title: r.title,
     image: r.cover,
   }));
 

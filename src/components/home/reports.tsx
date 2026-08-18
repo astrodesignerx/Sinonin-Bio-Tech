@@ -41,8 +41,14 @@ export default function Reports({ reports }: { reports: ReportCopy[] }) {
               </div>
               <div className="flex flex-1 flex-col p-5">
                 <h3 className="font-display text-xl font-semibold leading-snug tracking-tight">
-                  {t(`reports.${report.key}.title`)}
+                  {report.title}
                 </h3>
+                {/*
+                  The title comes from Sanity so an edit in the Studio reaches every
+                  place a report is named. This blurb deliberately does not: it is
+                  shorter copy written for a four-across card, not the summary that
+                  heads the report's own page.
+                */}
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-muted">
                   {t(`reports.${report.key}.body`)}
                 </p>

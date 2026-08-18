@@ -87,19 +87,15 @@
     "reportsIntro": "Zentrale Akteure, Produkte und Erkenntnisse, kondensiert in Berichten, die Ihnen Monate an Marktrecherche ersparen.",
     "reports": {
       "insect": {
-        "title": "Insektenproteine",
         "body": "Zentrale gezüchtete Insekten, Akteure und Produkte, und wie Insektenproteine im Vergleich zu Pflanzen- und Tierproteinen abschneiden."
       },
       "palatants": {
-        "title": "Vegane Palatants",
         "body": "Die Landschaft pflanzlicher Schmackhaftmacher für Katzen- und Hundefutter."
       },
       "petfood": {
-        "title": "Veganes Petfood",
         "body": "Produkte, Claims und Marktlücken im veganen Petfood-Markt."
       },
       "petcare": {
-        "title": "Petcare-Markt",
         "body": "Trends und Treiber, die die globale Petcare-Branche prägen."
       }
     },

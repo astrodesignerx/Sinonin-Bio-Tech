@@ -87,19 +87,15 @@
     "reportsIntro": "Key players, products and insights, condensed into reports that save you months of market research.",
     "reports": {
       "insect": {
-        "title": "Insect Proteins",
         "body": "Key farmed insects, players and products, and how insect materials rank against plant and animal proteins."
       },
       "palatants": {
-        "title": "Vegan Palatants",
         "body": "The landscape of plant-based palatability enhancers for cat and dog food."
       },
       "petfood": {
-        "title": "Vegan Petfood",
         "body": "Products, claims and white space in the vegan petfood market."
       },
       "petcare": {
-        "title": "Petcare Market",
         "body": "The trends and drivers shaping the global petcare industry."
       }
     },
