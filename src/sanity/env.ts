@@ -15,7 +15,9 @@ export const apiVersion = "2026-05-04";
 function required(value: string | undefined, name: string): string {
   if (!value) {
     throw new Error(
-      `Missing environment variable ${name}. Copy it from sanity.io/manage into .env.local.`,
+      `Missing environment variable ${name}. Locally it belongs in .env.local; ` +
+        `on Vercel, in Settings > Environment Variables, ticked for Production, ` +
+        `Preview and Development. The value is on the project page at sanity.io/manage.`,
     );
   }
   return value;
