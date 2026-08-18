@@ -11,6 +11,22 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      /*
+        The Studio is its own application on Sanity's hosting, but the client
+        only has to remember this domain. Temporary rather than permanent on
+        purpose: a 308 is cached by the browser indefinitely, and if the Studio
+        ever moves, every editor who followed it once would be stuck.
+      */
+      {
+        source: "/studio",
+        destination: "https://sinonin-biotech.sanity.studio",
+        permanent: false,
+      },
+      {
+        source: "/studio/:path*",
+        destination: "https://sinonin-biotech.sanity.studio/:path*",
+        permanent: false,
+      },
       // Legacy WordPress URLs → new structure (permanent, SEO-preserving)
       { source: "/about-us", destination: "/en/about", permanent: true },
       { source: "/contact-us", destination: "/en/contact", permanent: true },
