@@ -17,8 +17,6 @@ export const REPORT_SLUGS = [
   { key: "petcare", slug: "petcare-market" },
 ] as const;
 
-export type ReportSlug = (typeof REPORT_SLUGS)[number];
-
 export function findReport(slug: string) {
   return REPORT_SLUGS.find((r) => r.slug === slug);
 }

@@ -317,45 +317,7 @@
     "title": "Marktberichte",
     "intro": "Kostenlose Forschungsberichte aus unserer laufenden Marktbeobachtung, fordern Sie einen Bericht an und wir senden ihn in Ihr Postfach.",
     "insideLabel": "Der Inhalt",
-    "cta": "Bericht ansehen",
-    "items": {
-      "insect": {
-        "title": "Insektenproteine",
-        "body": "Die Insektenprotein-Landschaft für Petfood: Arten, Akteure, Produkte und Benchmarking.",
-        "points": [
-          "Zentrale gezüchtete Insektenarten und die Unternehmen dahinter",
-          "Wie Insektenproteine im Vergleich zu Pflanzen- und Tierproteinen abschneiden",
-          "Katalog der auf dem Markt erhältlichen Insektenprodukte"
-        ]
-      },
-      "palatants": {
-        "title": "Vegane Palatants",
-        "body": "Pflanzliche Schmackhaftmacher für Katzen- und Hundefutter, was existiert und was funktioniert.",
-        "points": [
-          "Die Landschaft pflanzlicher Schmackhaftmacher",
-          "Industrielle Optionen für Katzen- und Hundefutter-Anwendungen",
-          "Überlegungen zu Beschaffung und Tests"
-        ]
-      },
-      "petfood": {
-        "title": "Veganes Petfood",
-        "body": "Das vegane Petfood-Regal: Produkte, Claims und die Lücken, die sich zu füllen lohnen.",
-        "points": [
-          "Aktive Produkte und Marken im veganen Petfood",
-          "Claims, Positionierung und Preispunkte",
-          "Marktlücken und Chancen"
-        ]
-      },
-      "petcare": {
-        "title": "Petcare-Markt",
-        "body": "Die Kräfte, die die globale Petcare-Branche prägen, und was sie für Innovatoren bedeuten.",
-        "points": [
-          "Globale Petcare-Markttrends und -treiber",
-          "Die Verschiebung von Ernährungssicherheit zu Proteinsicherheit",
-          "Implikationen für Zulieferer und Innovatoren"
-        ]
-      }
-    }
+    "cta": "Bericht ansehen"
   },
   "reportPage": {
     "back": "Alle Berichte",

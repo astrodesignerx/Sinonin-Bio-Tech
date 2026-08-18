@@ -317,45 +317,7 @@
     "title": "Market Reports",
     "intro": "Free research reports from our ongoing market intelligence, request any report and we will send it to your inbox.",
     "insideLabel": "What's inside",
-    "cta": "View Report",
-    "items": {
-      "insect": {
-        "title": "Insect Proteins",
-        "body": "The insect protein landscape for petfood: species, players, products and benchmarking.",
-        "points": [
-          "Key farmed insect species and the companies farming them",
-          "How insect materials rank against plant and animal proteins",
-          "Catalogue of insect products available on the market"
-        ]
-      },
-      "palatants": {
-        "title": "Vegan Palatants",
-        "body": "Plant-based palatability enhancers for cat and dog food, what exists and what works.",
-        "points": [
-          "The landscape of plant-based palatability enhancers",
-          "Industrial options for cat and dog food applications",
-          "Sourcing and testing considerations"
-        ]
-      },
-      "petfood": {
-        "title": "Vegan Petfood",
-        "body": "The vegan petfood shelf: products, claims and the gaps worth filling.",
-        "points": [
-          "Products and brands active in vegan petfood",
-          "Claims, positioning and price points",
-          "White space and opportunities"
-        ]
-      },
-      "petcare": {
-        "title": "Petcare Market",
-        "body": "The forces shaping the global petcare industry, and what they mean for innovators.",
-        "points": [
-          "Global petcare market trends and drivers",
-          "The shift from food security to protein security",
-          "Implications for suppliers and innovators"
-        ]
-      }
-    }
+    "cta": "View Report"
   },
   "reportPage": {
     "back": "All reports",

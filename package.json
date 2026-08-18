@@ -14,14 +14,11 @@
     "@phosphor-icons/react": "^2.1.10",
     "@portabletext/react": "^8.0.0",
     "@sanity/client": "^8.0.0",
-    "@sanity/image-url": "^2.1.1",
     "@sanity/webhook": "^4.0.4",
     "next": "16.2.12",
     "next-intl": "^4.13.4",
-    "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8",
-    "remark-gfm": "^4.0.1"
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -30,6 +27,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.12",
+    "remark-gfm": "^4.0.1",
     "remark-parse": "^11.0.0",
     "sharp": "^0.35.3",
     "tailwindcss": "^4",

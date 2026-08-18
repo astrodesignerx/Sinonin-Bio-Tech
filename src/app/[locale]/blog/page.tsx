@@ -10,36 +10,16 @@ import { CARD_INTERACTIVE } from "@/components/ui/card";
 import Reveal from "@/components/ui/reveal";
 import { getAllPosts, type PostMeta } from "@/lib/blog";
 
-const POST_COVERS: Record<string, { src: string; alt: string }> = {
-  "fifa-world-cup-lessons-alt-prot": {
-    src: "/images/blog/fifa-world-cup-lessons.webp",
-    alt: "Football match under floodlights at Priestfield Stadium, players in blue and red kits on the pitch, a stand full of spectators in the background.",
-  },
-  "alternative-protein-industry-failures": {
-    src: "/images/blog/alternative-protein-failures.webp",
-    alt: "A scientist in a white coat working at the controls of a JEOL scanning electron microscope, with a monitor displaying a micrograph at the right.",
-  },
-  "republica-2025-diaspora-remittances": {
-    src: "/images/blog/republica-2025-diaspora.webp",
-    alt: "A speaker in a brown blazer at a microphone, addressing an audience with a blue presentation screen behind.",
-  },
-};
+/*
+  Three posts have no cover image. They get the mark rather than a stand-in
+  photograph: a wrong picture is worse than an honest blank, and the client can
+  add a real cover in the Studio whenever they like.
 
-function FallbackCover({ slug, label }: { slug: string; label: string }) {
-  const cover = POST_COVERS[slug];
-  if (cover) {
-    return (
-      <div className="relative h-full w-full">
-        <Image
-          src={cover.src}
-          alt={cover.alt}
-          fill
-          sizes="(max-width: 768px) 100vw, 420px"
-          className="object-cover"
-        />
-      </div>
-    );
-  }
+  An earlier version kept hardcoded fallback covers here, keyed by slug. Every
+  one of those posts has a real cover in Sanity now, so the lookup could never
+  match and the code was unreachable.
+*/
+function FallbackCover({ label }: { label: string }) {
   return (
     <div
       className="flex h-full w-full items-center justify-center bg-mist"
@@ -127,7 +107,7 @@ function BlogContent({
                       className="img-reveal object-cover"
                     />
                   ) : (
-                    <FallbackCover slug={post.slug} label={post.title} />
+                    <FallbackCover label={post.title} />
                   )}
                 </div>
                 <div className="flex flex-1 flex-col p-5 sm:p-6">

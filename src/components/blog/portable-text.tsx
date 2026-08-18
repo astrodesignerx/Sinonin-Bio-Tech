@@ -30,7 +30,7 @@ type DividerValue = { style?: "line" | "ornament" };
 
 type TableValue = { rows?: { cells?: string[] }[] };
 
-export const portableTextComponents: PortableTextComponents = {
+const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
       <p className="mt-5 leading-relaxed text-ink/85">{children}</p>
