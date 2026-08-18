@@ -15,9 +15,10 @@ export const site = {
   baseUrl: "https://www.sinoninbio.tech",
   // FormSubmit AJAX endpoint, delivers submissions to the address above.
   formsEndpoint: `https://formsubmit.co/ajax/${FORMSUBMIT_TOKEN}`,
-  // TODO(client): replace with the real calendar booking URL (Calendly/Cal.com).
-  bookingUrl:
-    "mailto:contact@sinoninbio.tech?subject=Meeting%20request%20%E2%80%93%20Sinonin%20Biotech",
+  // HubSpot Meetings, running on the client's own CRM. Picked over a standalone
+  // scheduler so bookings attach to existing CRM contacts and no extra vendor
+  // handles visitor data.
+  bookingUrl: "https://meetings-eu1.hubspot.com/sinonin",
 } as const;
 
 /*
