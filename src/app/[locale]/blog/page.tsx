@@ -71,18 +71,27 @@ export default async function BlogPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const posts = await getAllPosts();
+  const posts = await getAllPosts(locale);
   const format = await getFormatter({ locale });
 
-  return <BlogContent posts={posts} format={format} />;
+  /* The note explaining that articles are in English is only true while some
+     of them still are. Once every post on the page has a translation it stops
+     showing by itself. */
+  const hasUntranslated = locale !== "en" && posts.some((p) => p.language === "en");
+
+  return (
+    <BlogContent posts={posts} format={format} showEnglishNote={hasUntranslated} />
+  );
 }
 
 function BlogContent({
   posts,
   format,
+  showEnglishNote,
 }: {
   posts: PostMeta[];
   format: Awaited<ReturnType<typeof getFormatter>>;
+  showEnglishNote: boolean;
 }) {
   const t = useTranslations("blogPage");
 
@@ -92,7 +101,7 @@ function BlogContent({
   return (
     <>
       <PageHeader title={t("title")} intro={t("intro")} />
-      {t("englishNote") && (
+      {showEnglishNote && t("englishNote") && (
         <div className="mx-auto -mt-6 max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
           <p className="text-sm italic text-ink-muted">{t("englishNote")}</p>
         </div>

@@ -69,7 +69,7 @@ export default async function LocaleLayout({
     month: "short",
     year: "numeric",
   });
-  const latestPosts: MegaItem[] = (await getAllPosts()).slice(0, 4).map((p) => ({
+  const latestPosts: MegaItem[] = (await getAllPosts(locale)).slice(0, 4).map((p) => ({
     href: `/blog/${p.slug}`,
     title: p.title,
     image: p.cover,
@@ -113,7 +113,7 @@ export default async function LocaleLayout({
       title: r.title,
       kind: nav("reports"),
     })),
-    ...(await getAllPosts()).map((p) => ({
+    ...(await getAllPosts(locale)).map((p) => ({
       href: `/blog/${p.slug}`,
       title: p.title,
       kind: nav("blog"),

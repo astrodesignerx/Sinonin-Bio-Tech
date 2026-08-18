@@ -13,6 +13,7 @@
 
 const POST_META = /* groq */ `
   "slug": slug.current,
+  language,
   title,
   date,
   category,
@@ -25,14 +26,21 @@ const POST_META = /* groq */ `
   "coverLqip": cover.asset->metadata.lqip
 `;
 
+/*
+  Every post in every language, newest first. The caller picks one document per
+  slug, preferring the visitor's language. Twenty short records is one small
+  request, and doing the choosing in JavaScript keeps the fallback rule in one
+  readable place instead of spread across three queries.
+*/
 export const allPostsQuery = `
-  *[_type == "post" && language == $language] | order(date desc) {
+  *[_type == "post"] | order(date desc) {
     ${POST_META}
   }
 `;
 
+/* Unique, because a translated post shares its slug with the original. */
 export const postSlugsQuery = `
-  *[_type == "post" && language == $language].slug.current
+  array::unique(*[_type == "post"].slug.current)
 `;
 
 /*
@@ -42,7 +50,7 @@ export const postSlugsQuery = `
   asset fields.
 */
 export const postBySlugQuery = `
-  *[_type == "post" && language == $language && slug.current == $slug][0] {
+  *[_type == "post" && slug.current == $slug] {
     ${POST_META},
     body[] {
       ...,

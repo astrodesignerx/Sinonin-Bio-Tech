@@ -9,21 +9,28 @@ import {
 /*
   Posts come from Sanity rather than src/content/blog.
 
-  The exported shape is deliberately unchanged from the MDX version, so the
-  blog index, the post page and the header's search index all keep working. The
-  one difference is that `getPost` returns the body as data instead of rendered
+  The exported shape is otherwise unchanged from the MDX version, so the blog
+  index, the post page and the header's search index keep working. The one
+  difference is that `getPost` returns the body as data instead of rendered
   markup: Portable Text is rendered by components/blog/portable-text.tsx, which
   a .ts module cannot construct.
 
-  `cover` is now an absolute cdn.sanity.io URL instead of a path under /public.
+  `cover` is an absolute cdn.sanity.io URL rather than a path under /public.
   next.config.ts allows that host for next/image.
+
+  Translations are paired by slug. A German post is a separate document with
+  the same slug as its English counterpart, which is the rule the client has to
+  follow when writing one; nothing enforces it, so it belongs in the training
+  notes. Where no translation exists the English post is served, which is why
+  every returned post carries the `language` it was actually written in.
 */
 
-/** Only English posts exist so far; German is a document field, not a fork. */
-const DEFAULT_LANGUAGE = "en";
+const FALLBACK_LANGUAGE = "en";
 
 export type PostMeta = {
   slug: string;
+  /** The language this document was written in, not the one requested. */
+  language: string;
   title: string;
   date: string;
   category: string;
@@ -38,23 +45,49 @@ export type PostMeta = {
 
 export type Post = PostMeta & { body: PortableTextBlock[] };
 
-export async function getPostSlugs(): Promise<string[]> {
-  return client.fetch<string[]>(postSlugsQuery, { language: DEFAULT_LANGUAGE });
+/**
+ * Of the documents sharing one slug, the one in the requested language, or the
+ * English original when there is no translation.
+ */
+function preferred<T extends { language: string }>(
+  candidates: T[],
+  language: string,
+): T | undefined {
+  return (
+    candidates.find((c) => c.language === language) ??
+    candidates.find((c) => c.language === FALLBACK_LANGUAGE) ??
+    candidates[0]
+  );
 }
 
-export async function getAllPosts(): Promise<PostMeta[]> {
-  return client.fetch<PostMeta[]>(allPostsQuery, {
-    language: DEFAULT_LANGUAGE,
-  });
+export async function getPostSlugs(): Promise<string[]> {
+  return client.fetch<string[]>(postSlugsQuery);
+}
+
+export async function getAllPosts(language: string): Promise<PostMeta[]> {
+  const all = await client.fetch<PostMeta[]>(allPostsQuery);
+
+  const bySlug = new Map<string, PostMeta[]>();
+  for (const post of all) {
+    const group = bySlug.get(post.slug);
+    if (group) group.push(post);
+    else bySlug.set(post.slug, [post]);
+  }
+
+  return [...bySlug.values()]
+    .map((group) => preferred(group, language))
+    .filter((post): post is PostMeta => Boolean(post))
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
 /**
  * Returns null rather than throwing when nothing matches, so callers can hand
  * an unknown slug to notFound() without a try/catch around every read.
  */
-export async function getPost(slug: string): Promise<Post | null> {
-  return client.fetch<Post | null>(postBySlugQuery, {
-    slug,
-    language: DEFAULT_LANGUAGE,
-  });
+export async function getPost(
+  slug: string,
+  language: string,
+): Promise<Post | null> {
+  const candidates = await client.fetch<Post[]>(postBySlugQuery, { slug });
+  return preferred(candidates, language) ?? null;
 }
