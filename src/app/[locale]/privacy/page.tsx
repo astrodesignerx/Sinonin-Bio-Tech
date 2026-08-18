@@ -4,6 +4,8 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { seoMetadata } from "@/lib/meta";
 import PageHeader from "@/components/ui/page-header";
 import { getLegalDoc } from "@/lib/legal";
+import PostBody from "@/components/blog/portable-text";
+import type { PortableTextBlock } from "@portabletext/react";
 
 export async function generateMetadata({
   params,
@@ -27,14 +29,14 @@ export default async function PrivacyPage({
   return <LegalContent content={content} />;
 }
 
-function LegalContent({ content }: { content: React.ReactNode }) {
+function LegalContent({ content }: { content: PortableTextBlock[] | null }) {
   const t = useTranslations("footer");
 
   return (
     <>
       <PageHeader title={t("privacy")} />
       <div className="mx-auto max-w-3xl px-4 pb-20 sm:px-6 sm:pb-24">
-        {content}
+        {content && <PostBody value={content} />}
       </div>
     </>
   );

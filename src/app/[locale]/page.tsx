@@ -9,6 +9,7 @@ import InsectStories from "@/components/home/insect-stories";
 import Founder from "@/components/home/founder";
 import LatestBlog from "@/components/home/latest-blog";
 import CtaBand from "@/components/ui/cta-band";
+import { getReports } from "@/lib/reports";
 
 export default async function HomePage({
   params,
@@ -18,13 +19,14 @@ export default async function HomePage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "home" });
+  const reports = await getReports(locale);
 
   return (
     <>
       <Hero />
       <Pillars />
       <ProteinSecurity />
-      <Reports />
+      <Reports reports={reports} />
       <Training />
       <Founder />
       <Supporters />

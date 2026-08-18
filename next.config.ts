@@ -4,6 +4,11 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  images: {
+    // Post covers and in-body figures are served by Sanity's image CDN now,
+    // so next/image has to be told the host is allowed.
+    remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
+  },
   async redirects() {
     return [
       // Legacy WordPress URLs → new structure (permanent, SEO-preserving)

@@ -12,7 +12,7 @@ import { CARD } from "@/components/ui/card";
 import Magnetic from "@/components/ui/magnetic";
 import LeadForm from "@/components/forms/lead-form";
 import Reveal from "@/components/ui/reveal";
-import { site } from "@/lib/config";
+import { getSiteSettings, type SiteSettings } from "@/lib/site-settings";
 
 export async function generateMetadata({
   params,
@@ -31,11 +31,12 @@ export default async function ContactPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const settings = await getSiteSettings();
 
-  return <ContactContent />;
+  return <ContactContent settings={settings} />;
 }
 
-function ContactContent() {
+function ContactContent({ settings }: { settings: SiteSettings }) {
   const t = useTranslations("contactPage");
 
   return (
@@ -58,7 +59,7 @@ function ContactContent() {
                 </p>
                 <Magnetic className="mt-6">
                   <a
-                    href={site.bookingUrl}
+                    href={settings.bookingUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 rounded-full bg-leaf px-6 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
@@ -76,11 +77,11 @@ function ContactContent() {
                   {t("detailsTitle")}
                 </h2>
                 <a
-                  href={`mailto:${site.email}`}
+                  href={`mailto:${settings.email}`}
                   className="mt-4 flex items-center gap-3 text-sm text-ink transition motion-press hover:text-leaf"
                 >
                   <EnvelopeSimple size={18} className="shrink-0 text-leaf" />
-                  {site.email}
+                  {settings.email}
                 </a>
                 <div className="mt-4 flex items-center gap-3 text-sm text-ink">
                   <Clock size={18} className="shrink-0 text-leaf" />

@@ -1,3 +1,15 @@
+import { client } from "@/sanity/lib/client";
+import { allReportsQuery } from "@/sanity/lib/queries";
+
+/*
+  The four market reports.
+
+  Slugs stay here rather than in Sanity: they are the URLs, the redirect map in
+  next.config.ts points at them, and the per-report brand showcase in
+  lib/brands.ts is keyed to them. Adding or removing a report is a developer's
+  job. Everything the client was promised control of, the wording and the cover
+  image, comes from Sanity.
+*/
 export const REPORT_SLUGS = [
   { key: "insect", slug: "insect-proteins" },
   { key: "palatants", slug: "vegan-palatants" },
@@ -11,26 +23,42 @@ export function findReport(slug: string) {
   return REPORT_SLUGS.find((r) => r.slug === slug);
 }
 
-export const REPORT_COVERS: Record<string, { src: string; alt: string; credit: string }> = {
-  "insect-proteins": {
-    src: "/images/reports/insect-proteins.webp",
-    alt: "A close-up of black soldier fly larvae and pupae on a processing tray, the insect protein source for petfood.",
-    credit: "Photograph: Sinonin Biotech.",
-  },
-  "vegan-palatants": {
-    src: "/images/reports/vegan-palatants.webp",
-    alt: "Vegan petfood ingredients flat-lay: dried chickpeas, peas, oats and herbs on a light surface.",
-    credit: "Photograph: Sinonin Biotech.",
-  },
-  "vegan-petfood": {
-    src: "/images/reports/vegan-petfood.webp",
-    alt: "A healthy golden retriever eating kibble from a stainless steel bowl on a light kitchen floor.",
-    credit: "Photograph: Sinonin Biotech.",
-  },
-  "petcare-market": {
-    src: "/images/reports/petcare-market.webp",
-    alt: "A dog owner in a bright pet store aisle looking at pet food packaging, with a shopping basket.",
-    credit: "Photograph: Sinonin Biotech.",
-  },
+export type ReportCopy = {
+  key: string;
+  slug: string;
+  language: string;
+  title: string;
+  body: string;
+  points: string[];
+  cover?: string;
+  coverAlt?: string;
+  coverCredit?: string;
+  coverLqip?: string;
 };
 
+type ReportDoc = Omit<ReportCopy, "slug">;
+
+/**
+ * Every report in the requested language, in the order REPORT_SLUGS declares.
+ *
+ * Falls back to the English document when a translation is missing, so a half
+ * translated dataset renders a complete page rather than gaps.
+ */
+export async function getReports(language: string): Promise<ReportCopy[]> {
+  const docs = await client.fetch<ReportDoc[]>(allReportsQuery);
+
+  return REPORT_SLUGS.flatMap(({ key, slug }) => {
+    const doc =
+      docs.find((d) => d.key === key && d.language === language) ??
+      docs.find((d) => d.key === key && d.language === "en");
+    return doc ? [{ ...doc, slug }] : [];
+  });
+}
+
+export async function getReport(
+  slug: string,
+  language: string,
+): Promise<ReportCopy | null> {
+  const reports = await getReports(language);
+  return reports.find((r) => r.slug === slug) ?? null;
+}

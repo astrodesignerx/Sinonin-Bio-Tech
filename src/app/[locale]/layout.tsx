@@ -8,7 +8,7 @@ import { seoMetadata } from "@/lib/meta";
 import { site } from "@/lib/config";
 import SiteHeader, { type MegaItem } from "@/components/layout/site-header";
 import { type SearchDoc } from "@/components/layout/site-search";
-import { REPORT_SLUGS } from "@/lib/reports";
+import { getReports } from "@/lib/reports";
 import SiteFooter from "@/components/layout/site-footer";
 import RevealFallback from "@/components/ui/reveal-fallback";
 import { getAllPosts } from "@/lib/blog";
@@ -81,10 +81,20 @@ export default async function LocaleLayout({
       .join(" | "),
   }));
 
+  /* Report covers live in Sanity, and the header is a client component, so
+     the mega panel's cells are assembled here and passed down. Titles stay on
+     the home namespace, which is the wording the menu has always used. */
+  const reportCopy = await getReports(locale);
+  const reportTitlesT = await getTranslations({ locale, namespace: "home.reports" });
+  const reportItems: MegaItem[] = reportCopy.map((r) => ({
+    href: `/reports/${r.slug}`,
+    title: reportTitlesT(`${r.key}.title`),
+    image: r.cover,
+  }));
+
   // Search corpus: every destination on the site, built on the server so the
   // header ships it as static data rather than fetching an index at runtime.
   const nav = await getTranslations({ locale, namespace: "nav" });
-  const reportTitles = await getTranslations({ locale, namespace: "home.reports" });
   const fields = await getTranslations({ locale, namespace: "expertisePage.sections" });
 
   const searchDocs: SearchDoc[] = [
@@ -98,9 +108,9 @@ export default async function LocaleLayout({
       title: fields(`${k}.title`),
       kind: nav("expertise"),
     })),
-    ...REPORT_SLUGS.map((r) => ({
+    ...reportCopy.map((r) => ({
       href: `/reports/${r.slug}`,
-      title: reportTitles(`${r.key}.title`),
+      title: r.title,
       kind: nav("reports"),
     })),
     ...(await getAllPosts()).map((p) => ({
@@ -123,7 +133,11 @@ export default async function LocaleLayout({
             one observer serves the whole page rather than one per section.
           */}
           <RevealFallback />
-          <SiteHeader posts={latestPosts} searchDocs={searchDocs} />
+          <SiteHeader
+            posts={latestPosts}
+            reportItems={reportItems}
+            searchDocs={searchDocs}
+          />
           <main id="main" className="flex-1">
             {children}
           </main>

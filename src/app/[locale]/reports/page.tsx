@@ -5,11 +5,10 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { seoMetadata } from "@/lib/meta";
 import { ArrowRight, CheckCircle } from "@phosphor-icons/react/ssr";
 import { Link } from "@/i18n/navigation";
-import { REPORT_COVERS, REPORT_SLUGS } from "@/lib/reports";
+import { getReports, type ReportCopy } from "@/lib/reports";
 import PageHeader from "@/components/ui/page-header";
 import { CARD_INTERACTIVE } from "@/components/ui/card";
 import Reveal from "@/components/ui/reveal";
-import { BLUR } from "@/lib/blur-data";
 
 export async function generateMetadata({
   params,
@@ -28,11 +27,12 @@ export default async function ReportsPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const reports = await getReports(locale);
 
-  return <ReportsContent />;
+  return <ReportsContent reports={reports} />;
 }
 
-function ReportsContent() {
+function ReportsContent({ reports }: { reports: ReportCopy[] }) {
   const t = useTranslations("reportsPage");
 
   return (
@@ -41,9 +41,8 @@ function ReportsContent() {
 
       <div className="mx-auto max-w-7xl px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
         <div className="reveal-stagger grid gap-5 lg:grid-cols-2">
-          {REPORT_SLUGS.map((report) => {
-            const points = t.raw(`items.${report.key}.points`) as string[];
-            const cover = REPORT_COVERS[report.slug];
+          {reports.map((report) => {
+            const points = report.points;
             return (
               <Reveal key={report.key} className="h-full">
                 <Link
@@ -52,10 +51,10 @@ function ReportsContent() {
                 >
                   <div className="relative min-h-48 sm:w-2/5 sm:min-h-0">
                     <Image
-                      src={cover.src}
-                  placeholder={BLUR[cover.src] ? "blur" : "empty"}
-                  blurDataURL={BLUR[cover.src]}
-                      alt={cover.alt}
+                      src={report.cover ?? ""}
+                      placeholder={report.coverLqip ? "blur" : "empty"}
+                      blurDataURL={report.coverLqip}
+                      alt={report.coverAlt ?? report.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 40vw"
                       className="img-reveal object-cover"
@@ -66,10 +65,10 @@ function ReportsContent() {
                   </div>
                   <div className="flex flex-1 flex-col p-6">
                     <h2 className="font-display text-2xl font-semibold leading-snug tracking-tight">
-                      {t(`items.${report.key}.title`)}
+                      {report.title}
                     </h2>
                     <p className="mt-3 text-sm leading-relaxed text-ink-muted">
-                      {t(`items.${report.key}.body`)}
+                      {report.body}
                     </p>
                     <ul className="mt-4 space-y-2.5">
                       {points.map((point) => (

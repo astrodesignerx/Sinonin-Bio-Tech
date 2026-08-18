@@ -4,7 +4,10 @@ import { site } from "@/lib/config";
 import { getPostSlugs } from "@/lib/blog";
 import { REPORT_SLUGS } from "@/lib/reports";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Slugs come from Sanity now, so the list has to be awaited before use.
+  const slugs = await getPostSlugs();
+
   const paths = [
     "",
     "/expertise",
@@ -13,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...REPORT_SLUGS.map((r) => `/reports/${r.slug}`),
     "/about",
     "/blog",
-    ...getPostSlugs().map((s) => `/blog/${s}`),
+    ...slugs.map((s) => `/blog/${s}`),
     "/contact",
     "/impressum",
     "/privacy",

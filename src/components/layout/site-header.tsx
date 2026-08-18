@@ -12,7 +12,6 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { Link, usePathname } from "@/i18n/navigation";
-import { REPORT_COVERS, REPORT_SLUGS } from "@/lib/reports";
 import LocaleSwitcher from "./locale-switcher";
 import SiteSearch, { type SearchDoc } from "./site-search";
 
@@ -50,25 +49,22 @@ type MegaKey = "expertise" | "reports" | "blog" | null;
 
 export default function SiteHeader({
   posts = [],
+  reportItems = [],
   searchDocs = [],
 }: {
   posts?: MegaItem[];
+  /* Built on the server: the cover images come from Sanity, which a client
+     component cannot fetch. */
+  reportItems?: MegaItem[];
   searchDocs?: SearchDoc[];
 }) {
   const t = useTranslations("nav");
-  const reports = useTranslations("home.reports");
   const fields = useTranslations("expertisePage.sections");
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mega, setMega] = useState<MegaKey>(null);
   const [searching, setSearching] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
-
-  const reportItems: MegaItem[] = REPORT_SLUGS.map((r) => ({
-    href: `/reports/${r.slug}`,
-    title: reports(`${r.key}.title`),
-    image: REPORT_COVERS[r.slug]?.src,
-  }));
 
   const expertiseItems: MegaItem[] = EXPERTISE_FIELDS.map((f) => ({
     href: `/expertise#${f.key}`,

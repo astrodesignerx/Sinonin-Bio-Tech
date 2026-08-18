@@ -1,10 +1,26 @@
-import fs from "node:fs";
-import path from "node:path";
-import { compileMDX } from "next-mdx-remote/rsc";
-import remarkGfm from "remark-gfm";
-import { mdxComponents } from "@/components/blog/mdx-components";
+import type { PortableTextBlock } from "@portabletext/react";
+import { client } from "@/sanity/lib/client";
+import {
+  allPostsQuery,
+  postBySlugQuery,
+  postSlugsQuery,
+} from "@/sanity/lib/queries";
 
-const BLOG_DIR = path.join(process.cwd(), "src/content/blog");
+/*
+  Posts come from Sanity rather than src/content/blog.
+
+  The exported shape is deliberately unchanged from the MDX version, so the
+  blog index, the post page and the header's search index all keep working. The
+  one difference is that `getPost` returns the body as data instead of rendered
+  markup: Portable Text is rendered by components/blog/portable-text.tsx, which
+  a .ts module cannot construct.
+
+  `cover` is now an absolute cdn.sanity.io URL instead of a path under /public.
+  next.config.ts allows that host for next/image.
+*/
+
+/** Only English posts exist so far; German is a document field, not a fork. */
+const DEFAULT_LANGUAGE = "en";
 
 export type PostMeta = {
   slug: string;
@@ -15,40 +31,30 @@ export type PostMeta = {
   cover?: string;
   coverAlt?: string;
   coverCredit?: string;
+  coverLqip?: string;
   author?: string;
   readingMinutes?: number;
 };
 
-export function getPostSlugs(): string[] {
-  return fs
-    .readdirSync(BLOG_DIR)
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""));
-}
+export type Post = PostMeta & { body: PortableTextBlock[] };
 
-export async function getPostMeta(slug: string): Promise<PostMeta> {
-  const source = fs.readFileSync(path.join(BLOG_DIR, `${slug}.mdx`), "utf8");
-  const { frontmatter } = await compileMDX<PostMeta>({
-    source,
-    options: { parseFrontmatter: true },
-  });
-  return { ...frontmatter, slug };
+export async function getPostSlugs(): Promise<string[]> {
+  return client.fetch<string[]>(postSlugsQuery, { language: DEFAULT_LANGUAGE });
 }
 
 export async function getAllPosts(): Promise<PostMeta[]> {
-  const posts = await Promise.all(getPostSlugs().map(getPostMeta));
-  return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+  return client.fetch<PostMeta[]>(allPostsQuery, {
+    language: DEFAULT_LANGUAGE,
+  });
 }
 
-export async function getPost(slug: string) {
-  const source = fs.readFileSync(path.join(BLOG_DIR, `${slug}.mdx`), "utf8");
-  const { content, frontmatter } = await compileMDX<PostMeta>({
-    source,
-    components: mdxComponents,
-    options: {
-      parseFrontmatter: true,
-      mdxOptions: { remarkPlugins: [remarkGfm] },
-    },
+/**
+ * Returns null rather than throwing when nothing matches, so callers can hand
+ * an unknown slug to notFound() without a try/catch around every read.
+ */
+export async function getPost(slug: string): Promise<Post | null> {
+  return client.fetch<Post | null>(postBySlugQuery, {
+    slug,
+    language: DEFAULT_LANGUAGE,
   });
-  return { content, meta: { ...frontmatter, slug } };
 }
