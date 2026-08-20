@@ -25,7 +25,6 @@ export async function generateMetadata({
   const post = await getPost(slug, locale);
   if (!post) return {};
   return seoMetadata({
-    locale,
     path: `/blog/${slug}`,
     title: `${post.title} | Sinonin Biotech`,
     description: post.excerpt,

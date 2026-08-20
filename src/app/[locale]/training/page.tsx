@@ -18,7 +18,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pageMeta.training" });
-  return seoMetadata({ locale, path: "/training", title: t("title"), description: t("description") });
+  return seoMetadata({ path: "/training", title: t("title"), description: t("description") });
 }
 
 export default async function TrainingPage({

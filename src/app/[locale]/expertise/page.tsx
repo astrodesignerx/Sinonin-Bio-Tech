@@ -23,7 +23,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pageMeta.expertise" });
-  return seoMetadata({ locale, path: "/expertise", title: t("title"), description: t("description") });
+  return seoMetadata({ path: "/expertise", title: t("title"), description: t("description") });
 }
 
 export default async function ExpertisePage({

@@ -14,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pageMeta.privacy" });
-  return seoMetadata({ locale, path: "/privacy", title: t("title"), description: t("description") });
+  return seoMetadata({ path: "/privacy", title: t("title"), description: t("description") });
 }
 
 export default async function PrivacyPage({

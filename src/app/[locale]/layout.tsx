@@ -42,7 +42,6 @@ export async function generateMetadata({
   return {
     metadataBase: new URL(site.baseUrl),
     ...seoMetadata({
-      locale,
       path: "",
       title: t("title"),
       description: t("description"),

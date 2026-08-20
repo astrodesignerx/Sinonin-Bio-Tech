@@ -38,7 +38,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "pageMeta.blog" });
-  return seoMetadata({ locale, path: "/blog", title: t("title"), description: t("description") });
+  return seoMetadata({ path: "/blog", title: t("title"), description: t("description") });
 }
 function PostDate({ date }: { date: string }) {
   return <>{date}</>;

@@ -12,7 +12,6 @@ import {
   X,
 } from "@phosphor-icons/react";
 import { Link, usePathname } from "@/i18n/navigation";
-import LocaleSwitcher from "./locale-switcher";
 import SiteSearch, { type SearchDoc } from "./site-search";
 
 const NAV_ITEMS = [
@@ -205,7 +204,6 @@ export default function SiteHeader({
           >
             <MagnifyingGlass size={18} weight="bold" />
           </button>
-          <LocaleSwitcher />
           <Link
             href="/contact"
             className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
@@ -358,8 +356,7 @@ export default function SiteHeader({
                 </div>
               );
             })}
-            <div className="mt-3 flex items-center justify-between gap-4 border-t border-line pt-4">
-              <LocaleSwitcher />
+            <div className="mt-3 border-t border-line pt-4">
               <Link
                 href="/contact"
                 onClick={() => setOpen(false)}

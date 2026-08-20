@@ -23,15 +23,15 @@ export default async function RootSlugPage({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = await params;
+  const { slug } = await params;
 
   if (findReport(slug)) {
-    permanentRedirect(`/${locale}/reports/${slug}`);
+    permanentRedirect(`/reports/${slug}`);
   }
 
   const postSlugs = await getPostSlugs();
   if (postSlugs.includes(slug)) {
-    permanentRedirect(`/${locale}/blog/${slug}`);
+    permanentRedirect(`/blog/${slug}`);
   }
 
   notFound();

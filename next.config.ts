@@ -28,8 +28,8 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       // Legacy WordPress URLs → new structure (permanent, SEO-preserving)
-      { source: "/about-us", destination: "/en/about", permanent: true },
-      { source: "/contact-us", destination: "/en/contact", permanent: true },
+      { source: "/about-us", destination: "/about", permanent: true },
+      { source: "/contact-us", destination: "/contact", permanent: true },
       /*
         The report pages were served from the site root, not from /projects/.
         Verified against the live WordPress site before cutover: /market-reports
@@ -37,39 +37,39 @@ const nextConfig: NextConfig = {
         below are kept in case those paths were ever live earlier; an
         unmatched redirect costs nothing, a missing one costs the ranking.
       */
-      { source: "/market-reports", destination: "/en/reports", permanent: true },
-      { source: "/insect-proteins", destination: "/en/reports/insect-proteins", permanent: true },
-      { source: "/vegan-palatants", destination: "/en/reports/vegan-palatants", permanent: true },
-      { source: "/vegan-petfood", destination: "/en/reports/vegan-petfood", permanent: true },
-      { source: "/petcare-market", destination: "/en/reports/petcare-market", permanent: true },
-      { source: "/projects/market-reports", destination: "/en/reports", permanent: true },
+      { source: "/market-reports", destination: "/reports", permanent: true },
+      { source: "/insect-proteins", destination: "/reports/insect-proteins", permanent: true },
+      { source: "/vegan-palatants", destination: "/reports/vegan-palatants", permanent: true },
+      { source: "/vegan-petfood", destination: "/reports/vegan-petfood", permanent: true },
+      { source: "/petcare-market", destination: "/reports/petcare-market", permanent: true },
+      { source: "/projects/market-reports", destination: "/reports", permanent: true },
       {
         source: "/projects/insect-proteins-market-report",
-        destination: "/en/reports/insect-proteins",
+        destination: "/reports/insect-proteins",
         permanent: true,
       },
-      { source: "/projects/vegan-palatants", destination: "/en/reports/vegan-palatants", permanent: true },
-      { source: "/projects/vegan-petfood", destination: "/en/reports/vegan-petfood", permanent: true },
-      { source: "/projects/petcare-market", destination: "/en/reports/petcare-market", permanent: true },
+      { source: "/projects/vegan-palatants", destination: "/reports/vegan-palatants", permanent: true },
+      { source: "/projects/vegan-petfood", destination: "/reports/vegan-petfood", permanent: true },
+      { source: "/projects/petcare-market", destination: "/reports/petcare-market", permanent: true },
       {
         source: "/petfood-palatability-in-the-age-of-alternative-proteins",
-        destination: "/en/blog/petfood-palatability-alternative-proteins",
+        destination: "/blog/petfood-palatability-alternative-proteins",
         permanent: true,
       },
       {
         source: "/the-curtains-have-fallen-on-the-fifa-world-cup-lessons-for-alt-prot",
-        destination: "/en/blog/fifa-world-cup-lessons-alt-prot",
+        destination: "/blog/fifa-world-cup-lessons-alt-prot",
         permanent: true,
       },
-      { source: "/elementor-1739", destination: "/en/blog/interzoo-2026-learnings", permanent: true },
+      { source: "/elementor-1739", destination: "/blog/interzoo-2026-learnings", permanent: true },
       {
         source: "/alternative-protein-industry-failures",
-        destination: "/en/blog/alternative-protein-industry-failures",
+        destination: "/blog/alternative-protein-industry-failures",
         permanent: true,
       },
       {
         source: "/presentation-at-republica-2025-in-berlin-on-diaspora-remittances",
-        destination: "/en/blog/republica-2025-diaspora-remittances",
+        destination: "/blog/republica-2025-diaspora-remittances",
         permanent: true,
       },
       /*
@@ -84,17 +84,17 @@ const nextConfig: NextConfig = {
       */
       {
         source: "/petfood-palatability-why-replacing-meat-is-more-than-replacing-protein",
-        destination: "/en/blog/petfood-palatability-replacing-meat",
+        destination: "/blog/petfood-palatability-replacing-meat",
         permanent: true,
       },
       {
         source: "/petfood-palatability-and-the-fresh-kill-signal-cats-read-as-prey",
-        destination: "/en/blog/petfood-palatability-fresh-kill-signal",
+        destination: "/blog/petfood-palatability-fresh-kill-signal",
         permanent: true,
       },
       {
         source: "/petfood-palatability-why-fat-is-the-signal-alternative-proteins-forget",
-        destination: "/en/blog/petfood-palatability-fat-is-the-signal",
+        destination: "/blog/petfood-palatability-fat-is-the-signal",
         permanent: true,
       },
 
@@ -105,69 +105,81 @@ const nextConfig: NextConfig = {
       */
       {
         source: "/global-protein-demand-pressure-from-a-healthy-and-wealthy-population-that-continues-to-grow",
-        destination: "/en/blog/global-protein-demand",
+        destination: "/blog/global-protein-demand",
         permanent: true,
       },
       {
         source:
           "/fermentation-or-pharmentation-a-proposal-to-disambiguate-carbohydrate-metabolism-vs-protein-production-using-precision-technology",
-        destination: "/en/blog/fermentation-or-pharmentation",
+        destination: "/blog/fermentation-or-pharmentation",
         permanent: true,
       },
       {
         source: "/why-are-insects-considered-sustainable-a-protein-production-inputs-resource-justification",
-        destination: "/en/blog/why-insects-are-sustainable",
+        destination: "/blog/why-insects-are-sustainable",
         permanent: true,
       },
-      { source: "/insects-used-in-aquafeed", destination: "/en/blog/insects-in-aquafeed", permanent: true },
-      { source: "/approval-of-fourth-insect-as-a-novel-food-by-the-eu", destination: "/en/blog/eu-fourth-novel-food-insect", permanent: true },
+      { source: "/insects-used-in-aquafeed", destination: "/blog/insects-in-aquafeed", permanent: true },
+      { source: "/approval-of-fourth-insect-as-a-novel-food-by-the-eu", destination: "/blog/eu-fourth-novel-food-insect", permanent: true },
       {
         source: "/our-ceo-interview-with-the-future-of-protein-summit-organiser-nick-bradley",
-        destination: "/en/blog/future-of-protein-summit-interview",
+        destination: "/blog/future-of-protein-summit-interview",
         permanent: true,
       },
-      { source: "/elementor-1646", destination: "/en/blog/widu-africa-visit", permanent: true },
-      { source: "/zestproject-executive-board-virtual-meeting", destination: "/en/blog/zest-executive-board-meeting", permanent: true },
-      { source: "/zestproject-official-launch", destination: "/en/blog/zest-project-launch", permanent: true },
-      { source: "/interview-10-questions-for-sinonin-biotech-by-zest", destination: "/en/blog/zest-interview-ten-questions", permanent: true },
+      { source: "/elementor-1646", destination: "/blog/widu-africa-visit", permanent: true },
+      { source: "/zestproject-executive-board-virtual-meeting", destination: "/blog/zest-executive-board-meeting", permanent: true },
+      { source: "/zestproject-official-launch", destination: "/blog/zest-project-launch", permanent: true },
+      { source: "/interview-10-questions-for-sinonin-biotech-by-zest", destination: "/blog/zest-interview-ten-questions", permanent: true },
       {
         source: "/honoured-at-the-inaugural-jamhuri-diaspora-awards-ceremony-2024",
-        destination: "/en/blog/jamhuri-diaspora-awards-2024",
+        destination: "/blog/jamhuri-diaspora-awards-2024",
         permanent: true,
       },
 
       /*
         The old site also answered on /blog/<slug> for some posts: its own share
         buttons pointed at .../blog/alternative-protein-industry-failures-2026.
-        Keep both shapes. The renamed one must precede the catch-all, because
-        the first matching rule wins.
+        That one post was renamed, so it still needs a redirect. Every other
+        /blog/<slug> is now a real served route (the site lives unprefixed), so
+        there is no catch-all here any more.
       */
       {
         source: "/blog/alternative-protein-industry-failures-2026",
-        destination: "/en/blog/alternative-protein-industry-failures",
+        destination: "/blog/alternative-protein-industry-failures",
         permanent: true,
       },
-      { source: "/blog/page/:num*", destination: "/en/blog", permanent: true },
-      { source: "/blog/:slug", destination: "/en/blog/:slug", permanent: true },
+      { source: "/blog/page/:num*", destination: "/blog", permanent: true },
 
       /*
         Pages from the earlier version of the site, recovered from the Internet
         Archive's copy of the old sitemap. Each goes to the nearest equivalent
         rather than the homepage, so an old link still lands somewhere useful.
       */
-      { source: "/our-products-services", destination: "/en/expertise", permanent: true },
-      { source: "/what-do-you-know-about-proteins", destination: "/en/expertise", permanent: true },
-      { source: "/insects-in-a-circular-economy", destination: "/en/blog/insects-in-a-circular-economy", permanent: true },
-      { source: "/starch", destination: "/en/expertise", permanent: true },
-      { source: "/request-meeting", destination: "/en/contact", permanent: true },
-      { source: "/projects", destination: "/en/reports", permanent: true },
+      { source: "/our-products-services", destination: "/expertise", permanent: true },
+      { source: "/what-do-you-know-about-proteins", destination: "/expertise", permanent: true },
+      { source: "/insects-in-a-circular-economy", destination: "/blog/insects-in-a-circular-economy", permanent: true },
+      { source: "/starch", destination: "/expertise", permanent: true },
+      { source: "/request-meeting", destination: "/contact", permanent: true },
+      { source: "/projects", destination: "/reports", permanent: true },
 
       // Legacy WordPress taxonomies and feeds → blog
-      { source: "/tag/:path*", destination: "/en/blog", permanent: true },
-      { source: "/category/:path*", destination: "/en/blog", permanent: true },
-      { source: "/author/:path*", destination: "/en/blog", permanent: true },
-      { source: "/feed", destination: "/en/blog", permanent: true },
-      { source: "/comments/feed", destination: "/en/blog", permanent: true },
+      { source: "/tag/:path*", destination: "/blog", permanent: true },
+      { source: "/category/:path*", destination: "/blog", permanent: true },
+      { source: "/author/:path*", destination: "/blog", permanent: true },
+      { source: "/feed", destination: "/blog", permanent: true },
+      { source: "/comments/feed", destination: "/blog", permanent: true },
+
+      /*
+        The site used to serve every page under /en/ and /de/. German is gone
+        and the locale prefix was dropped, so both shapes are folded back onto
+        the unprefixed path. next-intl also strips a stray /en/ on its own, but
+        keeping these makes the behaviour explicit and covers /de/, which it
+        does not handle.
+      */
+      { source: "/en", destination: "/", permanent: true },
+      { source: "/en/:path*", destination: "/:path*", permanent: true },
+      { source: "/de", destination: "/", permanent: true },
+      { source: "/de/:path*", destination: "/:path*", permanent: true },
     ];
   },
 };

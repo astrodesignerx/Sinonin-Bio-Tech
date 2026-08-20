@@ -23,9 +23,6 @@
     "searchPage": "Page",
     "searchResults": "{count, plural, =0 {No results} one {# result} other {# results}}"
   },
-  "locale": {
-    "label": "Language"
-  },
   "home": {
     "eyebrow": "Alternative Proteins | Enzymes | Palatants | Training",
     "title": "Alternative proteins & palatants, advanced by applied science.",

@@ -38,7 +38,6 @@ export async function generateMetadata({
   const report = await getReport(slug, locale);
   if (!report) return {};
   return seoMetadata({
-    locale,
     path: `/reports/${slug}`,
     title: `${report.title} | Sinonin Biotech`,
     description: report.body,
