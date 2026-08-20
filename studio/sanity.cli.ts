@@ -7,4 +7,7 @@ import { dataset, projectId } from "./env";
 */
 export default defineCliConfig({
   api: { projectId, dataset },
+  /* The hostname `sanity deploy` publishes to; /studio on the site points here. */
+  studioHost: "sinonin-biotech",
+  deployment: { appId: "p57x2lptjcmvxwy2h3om9xoy" },
 });
