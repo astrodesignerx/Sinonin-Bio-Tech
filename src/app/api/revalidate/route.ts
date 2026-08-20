@@ -49,6 +49,13 @@ export async function POST(request: Request) {
 
   revalidatePath("/", "layout");
 
+  /*
+    The sitemap sits outside the [locale] layout, so the sweep above never
+    reaches it. Without this it keeps the post list it was built with, and a
+    newly published article stays missing from it until the next deploy.
+  */
+  revalidatePath("/sitemap.xml");
+
   return Response.json({
     revalidated: true,
     type: body._type ?? "unknown",
