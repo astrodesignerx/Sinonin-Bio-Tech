@@ -17,6 +17,7 @@ const POST_META = /* groq */ `
   title,
   date,
   category,
+  tags,
   excerpt,
   author,
   readingMinutes,

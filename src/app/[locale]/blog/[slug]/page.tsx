@@ -113,6 +113,19 @@ function PostContent({
       <div className="mt-10">
         <PostBody value={post.body} />
       </div>
+
+      {post.tags && post.tags.length > 0 && (
+        <ul className="mt-12 flex flex-wrap gap-2 border-t border-line pt-6">
+          {post.tags.map((tag) => (
+            <li
+              key={tag}
+              className="rounded-full border border-line px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-ink-muted"
+            >
+              {tag}
+            </li>
+          ))}
+        </ul>
+      )}
     </article>
   );
 }

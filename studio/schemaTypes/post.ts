@@ -69,6 +69,15 @@ export const post = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      of: [{ type: "string" }],
+      options: { layout: "tags" },
+      description:
+        "Free-form keywords, shown at the end of the post. Optional.",
+    }),
+    defineField({
       name: "excerpt",
       title: "Excerpt",
       type: "text",

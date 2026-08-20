@@ -34,6 +34,7 @@ export type PostMeta = {
   title: string;
   date: string;
   category: string;
+  tags?: string[];
   excerpt: string;
   cover?: string;
   coverAlt?: string;
