@@ -111,3 +111,28 @@ The production server is the closest preview of what Vercel will run.
 - Image optimization is handled by Vercel's built-in `next/image` integration; no extra config required.
 - No API routes, no edge functions, no server actions. The forms post to a third-party endpoint (FormSubmit) from the browser.
 - Deployment region: **Frankfurt (`fra1`)** is set in `vercel.json` for the German audience. Change to `iad1` if most traffic is North American.
+
+## WordPress fallback sync
+
+The legacy WordPress install is still alive on the old Bluehost origin
+(`67.222.38.76`; the domain's DNS points at Vercel, so it is only reachable by
+IP with a pinned Host header). It serves as the client's fallback publisher:
+if Sanity misbehaves, a post published on WordPress is copied into Sanity by
+`scripts/wp-sync.mjs`, which `.github/workflows/wp-sync.yml` runs twice an
+hour. Sanity's own publish webhook then revalidates the site.
+
+Sanity remains the source of truth. The sync never touches a post it did not
+create (it recognises its own by the hidden `wpId` field), and it ignores
+everything published before the 2026-08-18 cutover.
+
+Setup, once: create an **Editor** API token in
+[sanity.io/manage](https://www.sanity.io/manage) and add it to the GitHub repo
+as the `SANITY_API_WRITE_TOKEN` Actions secret (**Settings → Secrets and
+variables → Actions**). Put the same value in `.env.local` to run the script
+locally. Until the secret exists, every scheduled run fails with a message
+saying exactly this; that is intentional.
+
+To test without writing: `node scripts/wp-sync.mjs --dry`.
+
+If Bluehost is ever cancelled, the fallback dies with it: disable the workflow
+at that point rather than letting it fail on schedule forever.

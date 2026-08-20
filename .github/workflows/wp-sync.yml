@@ -1,0 +1,38 @@
+# The WordPress fallback: if a post is published on the legacy WordPress
+# (still alive on the old Bluehost origin), scripts/wp-sync.mjs copies it into
+# Sanity, and Sanity's publish webhook then revalidates the site. Sanity stays
+# the source of truth; see the rules at the top of the script.
+#
+# Needs one repository secret: SANITY_API_WRITE_TOKEN, an Editor token from
+# sanity.io/manage. Without it every run fails loudly on purpose, because a
+# fallback that fails silently is worse than none.
+name: WordPress fallback sync
+
+on:
+  schedule:
+    # Twice an hour. Scheduled workflows drift by a few minutes under load,
+    # which is fine here.
+    - cron: "13,43 * * * *"
+  workflow_dispatch:
+
+concurrency: wp-sync
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/wp-sync.mjs
+        env:
+          NEXT_PUBLIC_SANITY_PROJECT_ID: 8kpnyqu2
+          NEXT_PUBLIC_SANITY_DATASET: production
+          SANITY_API_WRITE_TOKEN: ${{ secrets.SANITY_API_WRITE_TOKEN }}

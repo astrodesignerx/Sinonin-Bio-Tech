@@ -34,10 +34,7 @@ export const post = defineType({
       title: "Language",
       type: "string",
       options: {
-        list: [
-          { title: "English", value: "en" },
-          { title: "German", value: "de" },
-        ],
+        list: [{ title: "English", value: "en" }],
         layout: "radio",
       },
       initialValue: "en",
@@ -125,6 +122,28 @@ export const post = defineType({
       name: "body",
       title: "Body",
       type: "blockContent",
+    }),
+    /*
+      Set by scripts/wp-sync.mjs on documents it creates from the legacy
+      WordPress fallback. Their presence is what marks a post as synced: the
+      sync only ever overwrites documents carrying them, so a hand-authored
+      post is never touched. Hidden because editors have no reason to see
+      them; a synced post is edited on WordPress, or adopted into Sanity by
+      clearing these two fields via the API.
+    */
+    defineField({
+      name: "wpId",
+      title: "WordPress post id",
+      type: "number",
+      hidden: true,
+      readOnly: true,
+    }),
+    defineField({
+      name: "wpModified",
+      title: "WordPress last modified",
+      type: "string",
+      hidden: true,
+      readOnly: true,
     }),
   ],
   preview: {
