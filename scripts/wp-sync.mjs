@@ -22,12 +22,11 @@
  *      Studio edit to a synced post survives only until the WordPress copy is
  *      edited again; once a post is in Sanity, edit it there.
  *
- * The old origin is reached by IP with the Host header pinned, because the
- * domain's DNS now points at Vercel. If Bluehost is ever cancelled, this
- * script loses its source and every run will fail loudly.
+ * WordPress lives at wp.sinoninbio.tech, a subdomain kept pointing at the
+ * old Bluehost server after the main domain moved to Vercel. If Bluehost is
+ * ever cancelled, this script loses its source and every run will fail loudly.
  */
 import fs from "node:fs";
-import https from "node:https";
 import { createClient } from "@sanity/client";
 import {
   makeKeyer,
@@ -37,8 +36,18 @@ import {
 } from "./lib/markdown-to-portable-text.mjs";
 import { decodeEntities, essayToMarkdown } from "./lib/wp-essay-html.mjs";
 
-const ORIGIN_IP = "67.222.38.76";
-const WP_HOST = "sinoninbio.tech";
+const WP_BASE = "https://wp.sinoninbio.tech";
+/* Hostnames that mean "the WordPress server" in content the client writes
+   there: the old pre-Vercel address, the wp subdomain itself, and Bluehost's
+   temporary URL for the account. Images under any of them are fetched from
+   WP_BASE; links to them are rewritten to the live site. */
+const WP_HOSTS = [
+  "sinoninbio.tech",
+  "www.sinoninbio.tech",
+  "wp.sinoninbio.tech",
+  "tde.qtb.mybluehost.me",
+];
+const SITE_BASE = "https://www.sinoninbio.tech";
 const CUTOVER = "2026-08-18";
 const AUTHOR = "Dr. Seronei Chelulei Cheison";
 const CATEGORIES = [
@@ -67,55 +76,41 @@ if (!DRY && !process.env.SANITY_API_WRITE_TOKEN) {
   process.exit(1);
 }
 
-/** GET from the legacy origin, or any absolute URL on the same host. */
-function originGet(pathname, binary = false, redirects = 3) {
-  return new Promise((resolve, reject) => {
-    https
-      .request(
-        {
-          host: ORIGIN_IP,
-          servername: WP_HOST,
-          path: pathname,
-          headers: { host: WP_HOST, "user-agent": "sinonin-wp-sync/1.0" },
-        },
-        (res) => {
-          if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location && redirects > 0) {
-            res.resume();
-            const next = new URL(res.headers.location, `https://${WP_HOST}`);
-            return resolve(originGet(next.pathname + next.search, binary, redirects - 1));
-          }
-          if (res.statusCode !== 200) {
-            res.resume();
-            return reject(new Error(`${res.statusCode} ${pathname}`));
-          }
-          const chunks = [];
-          res.on("data", (c) => chunks.push(c));
-          res.on("end", () =>
-            resolve(binary ? Buffer.concat(chunks) : Buffer.concat(chunks).toString("utf8")),
-          );
-        },
-      )
-      .on("error", reject)
-      .end();
+async function wpGet(path) {
+  const res = await fetch(`${WP_BASE}${path}`, {
+    headers: { "user-agent": "sinonin-wp-sync/1.0" },
   });
+  if (!res.ok) throw new Error(`${res.status} ${path}`);
+  return res;
 }
 
-/** Fetch an image wherever it lives; the site's own domain resolves to Vercel now, so those go via the origin IP. */
+/** Fetch an image wherever it lives. Uploads under any name the WordPress
+    server has answered to are fetched from WP_BASE: the old domain now points
+    at Vercel, which no longer serves them. */
 async function fetchImage(src) {
   const url = new URL(src);
-  if (url.hostname === WP_HOST || url.hostname === `www.${WP_HOST}`) {
-    return originGet(url.pathname + url.search, true);
+  if (WP_HOSTS.includes(url.hostname)) {
+    return Buffer.from(await (await wpGet(url.pathname + url.search)).arrayBuffer());
   }
   const res = await fetch(src);
   if (!res.ok) throw new Error(`${res.status} ${src}`);
   return Buffer.from(await res.arrayBuffer());
 }
 
+/* Links the client writes on WordPress point at wherever he was working:
+   the wp subdomain or Bluehost's temporary URL. On the live site those must
+   land on the live site, so rewrite them; www links already do. */
+const rewriteLinks = (markdown) =>
+  markdown.replace(
+    /https?:\/\/(?:wp\.sinoninbio\.tech|tde\.qtb\.mybluehost\.me)/g,
+    SITE_BASE,
+  );
+
 const plain = (html) => decodeEntities(html.replace(/<[^>]+>/g, "")).replace(/\s+/g, " ").trim();
 
-const wpPosts = JSON.parse(
-  await originGet("/wp-json/wp/v2/posts?per_page=50&_embed=wp:term,wp:featuredmedia"),
-);
+const wpPosts = await (
+  await wpGet("/wp-json/wp/v2/posts?per_page=50&_embed=wp:term,wp:featuredmedia")
+).json();
 
 const candidates = wpPosts.filter((p) => p.status === "publish" && p.date >= CUTOVER);
 console.log(`${wpPosts.length} WordPress posts, ${candidates.length} after the cutover`);
@@ -149,7 +144,7 @@ for (const wp of candidates) {
 
   const { markdown, deck, heroSrc, heroAlt } = essayToMarkdown(wp.content.rendered);
   const key = makeKeyer();
-  const body = await toPortableText(processor.parse(markdown), key, async () => null);
+  const body = await toPortableText(processor.parse(rewriteLinks(markdown)), key, async () => null);
 
   // Cover: the essay's first image, else the featured image if one is set.
   const featured = wp._embedded?.["wp:featuredmedia"]?.[0];

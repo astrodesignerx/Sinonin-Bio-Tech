@@ -114,9 +114,10 @@ The production server is the closest preview of what Vercel will run.
 
 ## WordPress fallback sync
 
-The legacy WordPress install is still alive on the old Bluehost origin
-(`67.222.38.76`; the domain's DNS points at Vercel, so it is only reachable by
-IP with a pinned Host header). It serves as the client's fallback publisher:
+The legacy WordPress install is still alive on the old Bluehost server,
+reachable at `https://wp.sinoninbio.tech` (a subdomain whose A record points at
+the old server; the main domain points at Vercel). The client logs in at
+`wp.sinoninbio.tech/wp-admin`. It serves as the client's fallback publisher:
 if Sanity misbehaves, a post published on WordPress is copied into Sanity by
 `scripts/wp-sync.mjs`, which `.github/workflows/wp-sync.yml` runs twice an
 hour. Sanity's own publish webhook then revalidates the site.
