@@ -77,8 +77,17 @@ if (!DRY && !process.env.SANITY_API_WRITE_TOKEN) {
 }
 
 async function wpGet(path) {
+  /* A browser user-agent, not an honest bot one: Bluehost's bot protection
+     403s unfamiliar agents from datacenter IPs (GitHub runners included),
+     and this is our own server telling us about our own content. The legacy
+     port script needed the same disguise. */
   const res = await fetch(`${WP_BASE}${path}`, {
-    headers: { "user-agent": "sinonin-wp-sync/1.0" },
+    headers: {
+      "user-agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
+      accept: "application/json,text/html,*/*",
+      "accept-language": "en-US,en;q=0.9",
+    },
   });
   if (!res.ok) throw new Error(`${res.status} ${path}`);
   return res;
