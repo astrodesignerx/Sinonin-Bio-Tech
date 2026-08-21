@@ -27,6 +27,7 @@
  * ever cancelled, this script loses its source and every run will fail loudly.
  */
 import fs from "node:fs";
+import https from "node:https";
 import { createClient } from "@sanity/client";
 import {
   makeKeyer,
@@ -76,30 +77,71 @@ if (!DRY && !process.env.SANITY_API_WRITE_TOKEN) {
   process.exit(1);
 }
 
-async function wpGet(path) {
-  /* A browser user-agent, not an honest bot one: Bluehost's bot protection
-     403s unfamiliar agents from datacenter IPs (GitHub runners included),
-     and this is our own server telling us about our own content. The legacy
-     port script needed the same disguise. */
-  const res = await fetch(`${WP_BASE}${path}`, {
-    headers: {
-      "user-agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
-      accept: "application/json,text/html,*/*",
-      "accept-language": "en-US,en;q=0.9",
-    },
+/* A browser user-agent, not an honest bot one: Bluehost's bot protection
+   403s unfamiliar agents from datacenter IPs (GitHub runners included), and
+   this is our own server telling us about our own content. The legacy port
+   script needed the same disguise. */
+const BROWSER_HEADERS = {
+  "user-agent":
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
+  accept: "application/json,text/html,*/*",
+  "accept-language": "en-US,en;q=0.9",
+};
+
+/* The server's raw address, for the fallback route below. */
+const ORIGIN_IP = "67.222.38.76";
+const ORIGIN_HOST = "sinoninbio.tech";
+
+/** The proven-from-CI route: straight to the server IP, presenting the main
+    domain, whose vhost Bluehost's protection leaves alone. */
+function originGet(path, binary = false) {
+  return new Promise((resolve, reject) => {
+    https
+      .request(
+        {
+          host: ORIGIN_IP,
+          servername: ORIGIN_HOST,
+          path,
+          headers: { ...BROWSER_HEADERS, host: ORIGIN_HOST },
+        },
+        (res) => {
+          if (res.statusCode !== 200) {
+            res.resume();
+            return reject(new Error(`${res.statusCode} ${path} (origin route)`));
+          }
+          const chunks = [];
+          res.on("data", (c) => chunks.push(c));
+          res.on("end", () =>
+            resolve(binary ? Buffer.concat(chunks) : Buffer.concat(chunks).toString("utf8")),
+          );
+        },
+      )
+      .on("error", reject)
+      .end();
   });
-  if (!res.ok) throw new Error(`${res.status} ${path}`);
-  return res;
+}
+
+/** GET a path from WordPress: the wp subdomain first, and on a 403 or a
+    network failure the IP route, which GitHub's runners are not blocked on. */
+async function wpGet(path, binary = false) {
+  try {
+    const res = await fetch(`${WP_BASE}${path}`, { headers: BROWSER_HEADERS });
+    if (res.ok) return binary ? Buffer.from(await res.arrayBuffer()) : res.text();
+    if (res.status !== 403) throw new Error(`${res.status} ${path}`);
+    console.log(`  (403 from ${WP_BASE}, retrying via origin IP)`);
+  } catch (e) {
+    if (!String(e.message).includes("403")) console.log(`  (${e.message}, retrying via origin IP)`);
+  }
+  return originGet(path, binary);
 }
 
 /** Fetch an image wherever it lives. Uploads under any name the WordPress
-    server has answered to are fetched from WP_BASE: the old domain now points
-    at Vercel, which no longer serves them. */
+    server has answered to are fetched from WordPress: the old domain now
+    points at Vercel, which no longer serves them. */
 async function fetchImage(src) {
   const url = new URL(src);
   if (WP_HOSTS.includes(url.hostname)) {
-    return Buffer.from(await (await wpGet(url.pathname + url.search)).arrayBuffer());
+    return wpGet(url.pathname + url.search, true);
   }
   const res = await fetch(src);
   if (!res.ok) throw new Error(`${res.status} ${src}`);
@@ -117,9 +159,9 @@ const rewriteLinks = (markdown) =>
 
 const plain = (html) => decodeEntities(html.replace(/<[^>]+>/g, "")).replace(/\s+/g, " ").trim();
 
-const wpPosts = await (
-  await wpGet("/wp-json/wp/v2/posts?per_page=50&_embed=wp:term,wp:featuredmedia")
-).json();
+const wpPosts = JSON.parse(
+  await wpGet("/wp-json/wp/v2/posts?per_page=50&_embed=wp:term,wp:featuredmedia"),
+);
 
 const candidates = wpPosts.filter((p) => p.status === "publish" && p.date >= CUTOVER);
 console.log(`${wpPosts.length} WordPress posts, ${candidates.length} after the cutover`);
