@@ -343,6 +343,44 @@
 }
 
 /*
+  A fold: a block that collapses to nothing and unfolds to whatever height its
+  contents need. Used by the mobile menu and by each of its sections.
+
+  Height is animated through `grid-template-rows` going 0fr -> 1fr, which is
+  the one way to transition to an unknown height without measuring it in
+  JavaScript. That is a layout property, so it is reserved for a panel opening
+  on a tap. Everything else on this site animates transform and opacity.
+
+  `visibility` flips on a zero-length transition delayed by the fold duration,
+  so links inside a closed fold leave the tab order rather than sitting
+  focusable inside a zero-height box.
+*/
+.collapse-fold {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--duration-panel) var(--ease-out-soft),
+    opacity var(--duration-quick) var(--ease-out-soft),
+    visibility 0s linear var(--duration-panel);
+}
+
+.collapse-fold[data-open="true"] {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s, 0s, 0s;
+}
+
+/* A grid item's default `min-height: auto` would hold the row open at content
+   height and defeat the fold. */
+.collapse-fold > * {
+  min-height: 0;
+}
+
+/*
   Mega-panel choreography. The container "unrolls" from the header edge via
   clip-path while its backdrop blur ramps up, then the cards follow. Container
   settles first, contents follow, one focal point: the reveal edge travelling

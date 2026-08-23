@@ -62,6 +62,9 @@ export default function SiteHeader({
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [mega, setMega] = useState<MegaKey>(null);
+  /* Which mobile section is folded open. One at a time, so the menu stays
+     short enough to scan without scrolling. */
+  const [section, setSection] = useState<MegaKey>(null);
   const [searching, setSearching] = useState(false);
   const megaRef = useRef<HTMLDivElement>(null);
 
@@ -85,12 +88,14 @@ export default function SiteHeader({
         e.preventDefault();
         setOpen(false);
         setMega(null);
+        setSection(null);
         setSearching(true);
         return;
       }
       if (e.key === "Escape") {
         setOpen(false);
         setMega(null);
+        setSection(null);
         setSearching(false);
       }
     };
@@ -109,6 +114,7 @@ export default function SiteHeader({
   const closeMenus = () => {
     setOpen(false);
     setMega(null);
+    setSection(null);
   };
 
   const isActive = (href: string) =>
@@ -216,7 +222,12 @@ export default function SiteHeader({
         <button
           type="button"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full p-2 text-ink xl:hidden"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => {
+            // Closing also folds the sections away, so the menu always reopens
+            // in its compact state.
+            if (open) closeMenus();
+            else setOpen(true);
+          }}
           aria-expanded={open}
           aria-label={t("toggleMenu")}
         >
@@ -297,10 +308,26 @@ export default function SiteHeader({
         </div>
       </div>
 
-      {open && (
-        <div className="border-t border-line bg-paper xl:hidden">
+      {/*
+        Mobile menu. Kept mounted and folded with a grid-row transition rather
+        than conditionally rendered, so opening and closing both animate. It
+        opens compact: every section is closed, and tapping a caret expands one
+        at a time.
+
+        Absolutely positioned under the header, like the desktop mega panel, so
+        it overlays the page instead of pushing it down. `top-full` pins it to
+        the header's bottom edge; the header is `sticky`, which makes it the
+        containing block.
+      */}
+      <div
+        data-open={open ? "true" : "false"}
+        className="collapse-fold absolute inset-x-0 top-full xl:hidden"
+      >
+        <div className="border-b border-line bg-paper">
+          {/* Tall sections can outrun a short phone, so the panel scrolls
+              inside the viewport rather than running off the bottom. */}
           <nav
-            className="mx-auto flex max-w-7xl flex-col gap-1 px-4 py-4 sm:px-6"
+            className="mx-auto flex max-h-[calc(100dvh-var(--header-h))] max-w-7xl flex-col gap-1 overflow-y-auto px-4 py-4 sm:px-6"
             aria-label={t("ariaLabel")}
           >
             {/* Search leads the mobile menu: a hover mega-panel has no touch
@@ -308,7 +335,7 @@ export default function SiteHeader({
             <button
               type="button"
               onClick={() => {
-                setOpen(false);
+                closeMenus();
                 setSearching(true);
               }}
               className="mb-2 flex items-center gap-3 rounded-lg border border-line px-3 py-3 text-base text-ink-muted transition motion-press hover:border-ink/30 hover:text-ink"
@@ -322,36 +349,69 @@ export default function SiteHeader({
                 item.key === "expertise" || item.key === "reports" || item.key === "blog"
                   ? MENUS[item.key]
                   : [];
+              const expanded = section === item.key;
               return (
                 <div key={item.key}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    aria-current={isActive(item.href) ? "page" : undefined}
-                    className={`block ${
-                      isActive(item.href)
-                        ? "rounded-lg bg-mist px-3 py-3 text-base font-semibold text-ink"
-                        : "rounded-lg px-3 py-3 text-base text-ink-muted transition hover:bg-mist hover:text-ink"
-                    }`}
-                  >
-                    {t(item.key)}
-                  </Link>
+                  {/* The link itself still navigates to the index page; the
+                      caret beside it is a separate control that only folds the
+                      section open, so neither gesture steals the other. */}
+                  <div className="flex items-center gap-1">
+                    <Link
+                      href={item.href}
+                      onClick={closeMenus}
+                      aria-current={isActive(item.href) ? "page" : undefined}
+                      className={`flex-1 ${
+                        isActive(item.href)
+                          ? "rounded-lg bg-mist px-3 py-3 text-base font-semibold text-ink"
+                          : "rounded-lg px-3 py-3 text-base text-ink-muted transition hover:bg-mist hover:text-ink"
+                      }`}
+                    >
+                      {t(item.key)}
+                    </Link>
+                    {sub.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSection(expanded ? null : (item.key as MegaKey))
+                        }
+                        aria-expanded={expanded}
+                        aria-controls={`mobile-sub-${item.key}`}
+                        aria-label={t("toggleSection", { section: t(item.key) })}
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-ink-muted transition motion-press hover:bg-mist hover:text-ink"
+                      >
+                        <CaretDown
+                          size={14}
+                          weight="bold"
+                          aria-hidden="true"
+                          className={`transition-transform motion-quick ${
+                            expanded ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    )}
+                  </div>
                   {/* Same destinations as the desktop panel, as a plain
                       indented list: a hover mega menu has no touch equivalent. */}
                   {sub.length > 0 && (
-                    <ul className="mb-1 ml-3 border-l border-line pl-3">
-                      {sub.map((entry) => (
-                        <li key={entry.href}>
-                          <Link
-                            href={entry.href}
-                            onClick={() => setOpen(false)}
-                            className="block py-2 text-sm text-ink-muted transition motion-press hover:text-ink"
-                          >
-                            {entry.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <div
+                      id={`mobile-sub-${item.key}`}
+                      data-open={expanded ? "true" : "false"}
+                      className="collapse-fold"
+                    >
+                      <ul className="ml-3 mb-0 pb-1 border-l border-line pl-3">
+                        {sub.map((entry) => (
+                          <li key={entry.href}>
+                            <Link
+                              href={entry.href}
+                              onClick={closeMenus}
+                              className="block py-2 text-sm text-ink-muted transition motion-press hover:text-ink"
+                            >
+                              {entry.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
               );
@@ -359,7 +419,7 @@ export default function SiteHeader({
             <div className="mt-3 border-t border-line pt-4">
               <Link
                 href="/contact"
-                onClick={() => setOpen(false)}
+                onClick={closeMenus}
                 className="inline-flex items-center gap-2 rounded-full bg-leaf px-5 py-3 text-sm font-semibold text-white transition motion-press hover:bg-forest active:translate-y-px"
               >
                 <CalendarCheck size={15} weight="bold" />
@@ -368,22 +428,25 @@ export default function SiteHeader({
             </div>
           </nav>
         </div>
-      )}
+      </div>
     </header>
 
     {/*
       Sibling of <header>, not a child, so `fixed` resolves against the viewport.
       Starts below the 4rem header so the bar itself stays sharp. Click or hover
       dismisses, which also covers touch devices that fire a hover first.
+
+      Shared by the desktop mega panel and the mobile menu: both now float over
+      the page, so both want the page behind them pushed back. It stays mounted
+      at every width rather than being hidden below xl, because toggling
+      `display` mid-transition would skip the fade.
     */}
     <div
       aria-hidden="true"
-      data-open={mega || searching ? "true" : "false"}
+      data-open={mega || searching || open ? "true" : "false"}
       onMouseEnter={() => setMega(null)}
-      onClick={() => setMega(null)}
-      className={`mega-backdrop fixed inset-x-0 bottom-0 top-[var(--header-h)] z-30 ${
-        searching ? "block" : "hidden xl:block"
-      }`}
+      onClick={closeMenus}
+      className="mega-backdrop fixed inset-x-0 bottom-0 top-[var(--header-h)] z-30"
     />
     </>
   );

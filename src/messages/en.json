@@ -14,6 +14,7 @@
     "cta": "Request a Meeting",
     "ariaLabel": "Main navigation",
     "toggleMenu": "Toggle navigation menu",
+    "toggleSection": "Show {section} links",
     "skip": "Skip to content",
     "search": "Search",
     "searchPlaceholder": "Search sinoninbio.tech",
