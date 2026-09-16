@@ -39,17 +39,29 @@ Vercel account: `astrodesignerx@gmail.com`
 
 ## Environment variables
 
-The current build needs **no** environment variables to render. Two are *recommended* before production:
+The site reads its content from Sanity at build time, so the two
+`NEXT_PUBLIC_SANITY_*` variables are **required**. Without them the build fails
+with an error naming the missing variable.
 
-| Variable | Value | Purpose |
-|---|---|---|
-| `NEXT_PUBLIC_SITE_URL` (optional) | `https://www.sinoninbio.tech` | Already defaulted in `src/lib/config.ts`; override only if you serve from a different URL |
+| Variable | Value | Required | Purpose |
+|---|---|---|---|
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | `8kpnyqu2` | yes | Sanity project the site reads from |
+| `NEXT_PUBLIC_SANITY_DATASET` | `production` | yes | Sanity dataset |
+| `SANITY_REVALIDATE_SECRET` | secret | yes, at runtime | Verifies the Sanity publish webhook at `/api/revalidate`. The build succeeds without it, but publishing stops revalidating the site |
+| `NEXT_PUBLIC_SITE_URL` | `https://www.sinoninbio.tech` | no | Already defaulted in `src/lib/config.ts`; override only if you serve from a different URL |
+
+Neither `NEXT_PUBLIC_SANITY_*` value is a secret: both ship in the client bundle.
+`SANITY_REVALIDATE_SECRET` is a real secret and must match the value configured
+on the webhook in sanity.io/manage.
+
+`SANITY_API_WRITE_TOKEN` is **not** used by the site. It belongs to the WordPress
+fallback sync and lives in GitHub Actions secrets. See the section at the end.
 
 Forms post to FormSubmit, which needs no account and no env var.
 
 `FORMSUBMIT_TOKEN` in `src/lib/config.ts` is live and verified: it is FormSubmit's hashed alias for contact@sinoninbio.tech, so submissions arrive there without the address appearing in the page source. If the destination address ever changes, the new one has to be activated with FormSubmit and the token replaced. Editing the address alone redirects nothing.
 
-One placeholder remains: `bookingUrl` is a `mailto:` link. Set the real one when a calendar tool (Calendly / Cal.com) is chosen.
+`bookingUrl` in `src/lib/config.ts` points at HubSpot Meetings. No placeholders remain.
 
 To set env vars in Vercel: **Project → Settings → Environment Variables**. Apply to Production, Preview, and Development as needed.
 
@@ -88,10 +100,10 @@ pnpm dlx vercel deploy --prod --yes --token "$VERCEL_TOKEN"
 After the first production deploy, confirm:
 
 1. `https://sinoninbio.tech` and `https://www.sinoninbio.tech` both serve the site and auto-redirect `http://` → `https://` and `www.` → apex.
-2. The locale proxy redirects `/` → `/en` and `/about-us` → `/en/about` (the legacy redirects from `next.config.ts`).
+2. The legacy redirects from `next.config.ts` work: `/about-us` → `/about`, and the old locale prefixes `/en/blog` and `/de/blog` both land on `/blog`.
 3. `https://sinoninbio.tech/sitemap.xml` returns a populated XML.
 4. `https://sinoninbio.tech/robots.txt` is reachable.
-5. All five blog posts render with their real cover images.
+5. `/blog` lists the posts from Sanity and each one renders with its cover image.
 6. The Impressum and Datenschutz pages are reachable from the footer.
 7. Lighthouse (run in incognito at https://pagespeed.web.dev/) — target: Performance ≥ 90, Accessibility ≥ 95, SEO = 100 on the home page.
 
