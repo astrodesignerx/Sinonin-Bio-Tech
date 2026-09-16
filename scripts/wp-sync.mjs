@@ -22,9 +22,10 @@
  *      Studio edit to a synced post survives only until the WordPress copy is
  *      edited again; once a post is in Sanity, edit it there.
  *
- * WordPress lives at wp.sinoninbio.tech, a subdomain kept pointing at the
- * old Bluehost server after the main domain moved to Vercel. If Bluehost is
- * ever cancelled, this script loses its source and every run will fail loudly.
+ * WordPress lives on the old Bluehost server, kept alive after the main domain
+ * moved to Vercel. It is reachable two ways, and wpGet below explains which one
+ * this script leads with and why. If Bluehost is ever cancelled, this script
+ * loses its source and every run will fail loudly.
  */
 import fs from "node:fs";
 import https from "node:https";
@@ -77,10 +78,9 @@ if (!DRY && !process.env.SANITY_API_WRITE_TOKEN) {
   process.exit(1);
 }
 
-/* A browser user-agent, not an honest bot one: Bluehost's bot protection
-   403s unfamiliar agents from datacenter IPs (GitHub runners included), and
-   this is our own server telling us about our own content. The legacy port
-   script needed the same disguise. */
+/* A browser user-agent, not an honest bot one: the host 403s unfamiliar agents
+   from datacenter IPs (GitHub runners included), and this is our own server
+   telling us about our own content. The legacy port script needed the same. */
 const BROWSER_HEADERS = {
   "user-agent":
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36",
@@ -88,51 +88,86 @@ const BROWSER_HEADERS = {
   "accept-language": "en-US,en;q=0.9",
 };
 
-/* The server's raw address, for the fallback route below. */
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* Both routes fail intermittently rather than cleanly, so every request gets a
+   few goes with a widening gap before it counts as a failure. */
+const ATTEMPTS = 4;
+
+/* The server's raw address. Bluehost still serves WordPress here directly. */
 const ORIGIN_IP = "67.222.38.76";
 const ORIGIN_HOST = "sinoninbio.tech";
 
-/** The proven-from-CI route: straight to the server IP, presenting the main
-    domain, whose vhost Bluehost's protection leaves alone. */
+/** Straight to the server IP, presenting the main domain, whose vhost the
+    host's protection leaves alone. One attempt; the retry loop is in wpGet. */
 function originGet(path, binary = false) {
   return new Promise((resolve, reject) => {
-    https
-      .request(
-        {
-          host: ORIGIN_IP,
-          servername: ORIGIN_HOST,
-          path,
-          headers: { ...BROWSER_HEADERS, host: ORIGIN_HOST },
-        },
-        (res) => {
-          if (res.statusCode !== 200) {
-            res.resume();
-            return reject(new Error(`${res.statusCode} ${path} (origin route)`));
-          }
-          const chunks = [];
-          res.on("data", (c) => chunks.push(c));
-          res.on("end", () =>
-            resolve(binary ? Buffer.concat(chunks) : Buffer.concat(chunks).toString("utf8")),
-          );
-        },
-      )
-      .on("error", reject)
-      .end();
+    const req = https.request(
+      {
+        host: ORIGIN_IP,
+        servername: ORIGIN_HOST,
+        path,
+        headers: { ...BROWSER_HEADERS, host: ORIGIN_HOST },
+        timeout: 30_000,
+      },
+      (res) => {
+        if (res.statusCode !== 200) {
+          res.resume();
+          return reject(new Error(`${res.statusCode} ${path} (origin route)`));
+        }
+        const chunks = [];
+        res.on("data", (c) => chunks.push(c));
+        res.on("error", reject);
+        res.on("end", () =>
+          resolve(binary ? Buffer.concat(chunks) : Buffer.concat(chunks).toString("utf8")),
+        );
+      },
+    );
+    req.on("timeout", () => req.destroy(new Error(`timeout ${path} (origin route)`)));
+    req.on("error", reject);
+    req.end();
   });
 }
 
-/** GET a path from WordPress: the wp subdomain first, and on a 403 or a
-    network failure the IP route, which GitHub's runners are not blocked on. */
-async function wpGet(path, binary = false) {
-  try {
-    const res = await fetch(`${WP_BASE}${path}`, { headers: BROWSER_HEADERS });
-    if (res.ok) return binary ? Buffer.from(await res.arrayBuffer()) : res.text();
-    if (res.status !== 403) throw new Error(`${res.status} ${path}`);
-    console.log(`  (403 from ${WP_BASE}, retrying via origin IP)`);
-  } catch (e) {
-    if (!String(e.message).includes("403")) console.log(`  (${e.message}, retrying via origin IP)`);
+/** The wp subdomain, through whatever the CDN in front of it decides. */
+async function subdomainGet(path, binary = false) {
+  const res = await fetch(`${WP_BASE}${path}`, { headers: BROWSER_HEADERS });
+  if (!res.ok) {
+    await res.body?.cancel();
+    throw new Error(`${res.status} ${path} (${WP_BASE})`);
   }
-  return originGet(path, binary);
+  return binary ? Buffer.from(await res.arrayBuffer()) : res.text();
+}
+
+/** GET a path from WordPress, origin IP first.
+ *
+ *  The wp subdomain used to be the primary route, but the host has since put a
+ *  CDN bot challenge in front of it that answers Node's fetch with a 403 no
+ *  matter the headers or cookies it carries. The origin IP answers the same
+ *  request with a 200, so that is the route we lead with; the subdomain stays
+ *  as the last resort, because DNS is the only way to find the server again if
+ *  the account is ever moved to a new IP.
+ *
+ *  Both routes drop connections now and then (ECONNRESET on large images,
+ *  ECONNREFUSED from some datacenter IPs), so each gets several attempts before
+ *  we give up on it. */
+async function wpGet(path, binary = false) {
+  const failures = [];
+  for (const [label, route] of [
+    ["origin IP", originGet],
+    [WP_BASE, subdomainGet],
+  ]) {
+    for (let attempt = 1; attempt <= ATTEMPTS; attempt++) {
+      try {
+        return await route(path, binary);
+      } catch (e) {
+        if (attempt === ATTEMPTS) failures.push(`${label}: ${e.message}`);
+        else await sleep(attempt * 500);
+      }
+    }
+    console.log(`  (${label} failed for ${path}, trying the other route)`);
+  }
+  throw new Error(`could not fetch ${path}\n    ${failures.join("\n    ")}`);
 }
 
 /** Fetch an image wherever it lives. Uploads under any name the WordPress
