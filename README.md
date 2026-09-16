@@ -1,11 +1,11 @@
-# Sinonin Biotech — Website Redesign
+# Sinonin Biotech Website Redesign
 
 Modern rebuild of [sinoninbio.tech](https://www.sinoninbio.tech) (previously WordPress/Elementor).
 
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) + React 19
-- **Tailwind CSS v4** — design tokens in `src/app/globals.css`
+- **Tailwind CSS v4** with design tokens in `src/app/globals.css`
 - **next-intl** for routing. Single language: English, with no locale prefix in the URL
 - **Sanity** as the CMS. Standalone Studio in `studio/`
 - **Motion** (`motion/react`) for animation, **@phosphor-icons/react** for icons
@@ -29,12 +29,12 @@ links are redirected in `next.config.ts`.
 - **Icons in Server Components:** import from `@phosphor-icons/react/ssr` (the main entry uses React context and crashes RSC).
 - **Colors:** `paper` (bg), `ink` / `ink-muted` (text), `navy`, `forest` (dark surfaces), `leaf` (accent), `line` (hairlines). One accent only: leaf green.
 - **Shapes:** buttons are full-pill, cards `rounded-2xl`, inputs `rounded-lg`.
-- **Fonts:** Space Grotesk (`font-display`), Geist (`font-sans`), Geist Mono (`font-mono` — eyebrows/labels/data).
+- **Fonts:** Space Grotesk (`font-display`), Geist (`font-sans`), Geist Mono (`font-mono`, for eyebrows, labels and data).
 - Static rendering: every page/layout under `[locale]` calls `setRequestLocale(locale)`.
 
 ## Site config (`src/lib/config.ts`)
 
-- **Forms** post to a FormSubmit AJAX endpoint delivering to `contact@sinoninbio.tech`. Note: the **first-ever submission triggers a one-time confirmation email** to that address — the owner must click confirm once, then all submissions arrive directly.
+- **Forms** post to a FormSubmit AJAX endpoint delivering to `contact@sinoninbio.tech`. Note: the **first-ever submission triggers a one-time confirmation email** to that address. The owner must click confirm once, then all submissions arrive directly.
 - **Booking URL** points at HubSpot Meetings (`bookingUrl`).
 
 ## Pages

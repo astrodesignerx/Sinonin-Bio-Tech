@@ -6,7 +6,7 @@ Vercel account: `astrodesignerx@gmail.com`
 
 - Vercel account (sign in with `astrodesignerx@gmail.com`)
 - Access to the DNS registrar for `sinoninbio.tech`
-- Node 20.x (locally — Vercel pins via `.nvmrc`)
+- Node 20.x locally (Vercel pins the version via `.nvmrc`)
 - This repo pushed to a Git provider that Vercel can read (GitHub / GitLab / Bitbucket). If the project lives only on this machine, import it via the Vercel dashboard by dragging the folder.
 
 ## One-time setup
@@ -105,7 +105,7 @@ After the first production deploy, confirm:
 4. `https://sinoninbio.tech/robots.txt` is reachable.
 5. `/blog` lists the posts from Sanity and each one renders with its cover image.
 6. The Impressum and Datenschutz pages are reachable from the footer.
-7. Lighthouse (run in incognito at https://pagespeed.web.dev/) — target: Performance ≥ 90, Accessibility ≥ 95, SEO = 100 on the home page.
+7. Lighthouse (run in incognito at https://pagespeed.web.dev/). Target: Performance ≥ 90, Accessibility ≥ 95, SEO = 100 on the home page.
 
 ## Local verification before deploy
 
