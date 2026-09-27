@@ -39,19 +39,44 @@ Vercel account: `astrodesignerx@gmail.com`
 
 ## Environment variables
 
-The current build needs **no** environment variables to render. Two are *recommended* before production:
+Three environment variables are required. The build **fails** without the first two: `src/sanity/env.ts` throws at build time if either is missing. The third is not needed to build, but without it published content edits never reach the live site (see the webhook section below).
 
 | Variable | Value | Purpose |
 |---|---|---|
-| `NEXT_PUBLIC_SITE_URL` (optional) | `https://www.sinoninbio.tech` | Already defaulted in `src/lib/config.ts`; override only if you serve from a different URL |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | On the project page at https://sanity.io/manage | The Sanity project the site reads its content from |
+| `NEXT_PUBLIC_SANITY_DATASET` | `production` (same page) | The dataset within that project |
+| `SANITY_REVALIDATE_SECRET` | A random string you generate | Shared secret that signs the Sanity publish webhook hitting `/api/revalidate` |
+
+To set them in Vercel: **Project → Settings → Environment Variables**, ticked for Production, Preview, and Development. Locally they belong in `.env.local`.
+
+The site URL is hardcoded as `baseUrl` in `src/lib/config.ts`; no `NEXT_PUBLIC_SITE_URL` variable is read anywhere.
 
 Forms post to FormSubmit, which needs no account and no env var.
 
 `FORMSUBMIT_TOKEN` in `src/lib/config.ts` is live and verified: it is FormSubmit's hashed alias for contact@sinoninbio.tech, so submissions arrive there without the address appearing in the page source. If the destination address ever changes, the new one has to be activated with FormSubmit and the token replaced. Editing the address alone redirects nothing.
 
-One placeholder remains: `bookingUrl` is a `mailto:` link. Set the real one when a calendar tool (Calendly / Cal.com) is chosen.
+`bookingUrl` in `src/lib/config.ts` is the client's live HubSpot Meetings link; no placeholder remains.
 
-To set env vars in Vercel: **Project → Settings → Environment Variables**. Apply to Production, Preview, and Development as needed.
+## Sanity CMS and Studio
+
+Content (blog posts, market reports, legal pages) lives in Sanity, not in the repo. The Studio (Sanity's editing UI) is its own workspace in `studio/`, deployed separately from the website:
+
+```bash
+pnpm studio           # run the Studio locally (Vite dev server)
+pnpm studio:deploy    # publish it to its sanity.studio subdomain
+```
+
+The website redirects `/studio` to that subdomain, so editors only need to remember the site's own domain.
+
+### Publish webhook
+
+So that publishing in the Studio updates the live site in seconds instead of waiting for a redeploy, create a webhook at https://sanity.io/manage (project → **API → Webhooks**):
+
+- URL: `https://www.sinoninbio.tech/api/revalidate`
+- Trigger on: create, update, delete
+- Secret: the same value as `SANITY_REVALIDATE_SECRET` in Vercel
+
+The route (`src/app/api/revalidate/route.ts`) verifies the webhook signature against that secret, then revalidates every page. If the secrets do not match, the request is rejected with a 401 and published edits will not appear until the next deploy.
 
 ## Continuous deployment
 
@@ -91,7 +116,7 @@ After the first production deploy, confirm:
 2. The locale proxy redirects `/` → `/en` and `/about-us` → `/en/about` (the legacy redirects from `next.config.ts`).
 3. `https://sinoninbio.tech/sitemap.xml` returns a populated XML.
 4. `https://sinoninbio.tech/robots.txt` is reachable.
-5. All five blog posts render with their real cover images.
+5. The blog index lists the posts from Sanity, and individual posts render with their cover images.
 6. The Impressum and Datenschutz pages are reachable from the footer.
 7. Lighthouse (run in incognito at https://pagespeed.web.dev/) — target: Performance ≥ 90, Accessibility ≥ 95, SEO = 100 on the home page.
 
@@ -99,8 +124,8 @@ After the first production deploy, confirm:
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm build
-pnpm start            # serves the production build on :3011 (per package.json)
+pnpm build            # needs the two NEXT_PUBLIC_SANITY_* vars in .env.local
+pnpm start            # serves the production build on :3000 (only `pnpm dev` uses :3011)
 ```
 
 The production server is the closest preview of what Vercel will run.
@@ -109,5 +134,5 @@ The production server is the closest preview of what Vercel will run.
 
 - The site uses the `proxy.ts` (formerly `middleware.ts`) convention for next-intl locale routing. Vercel supports this natively.
 - Image optimization is handled by Vercel's built-in `next/image` integration; no extra config required.
-- No API routes, no edge functions, no server actions. The forms post to a third-party endpoint (FormSubmit) from the browser.
+- One API route exists: `POST /api/revalidate`, the Sanity publish webhook described above. No edge functions, no server actions. The forms post to a third-party endpoint (FormSubmit) from the browser.
 - Deployment region: **Frankfurt (`fra1`)** is set in `vercel.json` for the German audience. Change to `iad1` if most traffic is North American.
