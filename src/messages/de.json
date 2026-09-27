@@ -125,20 +125,6 @@
     "closeCtaTitle": "Bauen wir Ihr nächstes Protein-Produkt",
     "closeCtaBody": "Sagen Sie uns, wo Ihre Herausforderung liegt. Wir bringen die Wissenschaft mit.",
     "closeCta": "Termin vereinbaren",
-    "blogPosts": {
-      "palatability": {
-        "category": "Palatabilität",
-        "title": "Petfood Palatability in the Age of Alternative Proteins"
-      },
-      "fifa": {
-        "category": "Alternative Proteine",
-        "title": "The curtains have fallen on the FIFA World Cup: Lessons for Alt-Prot"
-      },
-      "interzoo": {
-        "category": "Veranstaltungen",
-        "title": "Alternative proteins commercialisation in petfood: Learnings from Interzoo 2026"
-      }
-    },
     "storiesEyebrow": "Aus der Praxis",
     "storiesTitle": "Geschichten aus der Insektenzucht in Kenia",
     "storiesIntro": "Die Zucht der Schwarzen Soldatenfliege ist für Kleinbauern in Kenia bereits ein funktionierendes Geschäft. Hier berichten sie selbst.",
@@ -404,7 +390,6 @@
     "specialties": "Alternative Proteine | Enzyme | Palatants | Schulungen",
     "explore": "Entdecken",
     "contactTitle": "Kontakt",
-    "email": "contact@sinoninbio.tech",
     "hoursTitle": "Geschäftszeiten",
     "hoursDays": "Montag – Freitag",
     "legalTitle": "Rechtliches",

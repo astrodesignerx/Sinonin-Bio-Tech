@@ -125,20 +125,6 @@
     "closeCtaTitle": "Let's build your next protein product",
     "closeCtaBody": "Tell us where your challenge lies. We bring the applied science.",
     "closeCta": "Request a Meeting",
-    "blogPosts": {
-      "palatability": {
-        "category": "Palatability",
-        "title": "Petfood Palatability in the Age of Alternative Proteins"
-      },
-      "fifa": {
-        "category": "Alternative Proteins",
-        "title": "The curtains have fallen on the FIFA World Cup: Lessons for Alt-Prot"
-      },
-      "interzoo": {
-        "category": "Events",
-        "title": "Alternative proteins commercialisation in petfood: Learnings from Interzoo 2026"
-      }
-    },
     "storiesEyebrow": "From the field",
     "storiesTitle": "Insect farming stories from Kenya",
     "storiesIntro": "Black soldier fly farming is already a working business for smallholders in Kenya. These are their own accounts.",
@@ -404,7 +390,6 @@
     "specialties": "Alternative Proteins | Enzymes | Palatants | Training",
     "explore": "Explore",
     "contactTitle": "Contact",
-    "email": "contact@sinoninbio.tech",
     "hoursTitle": "Business Hours",
     "hoursDays": "Monday – Friday",
     "legalTitle": "Legal",

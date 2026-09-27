@@ -10,6 +10,7 @@ import Founder from "@/components/home/founder";
 import LatestBlog from "@/components/home/latest-blog";
 import CtaBand from "@/components/ui/cta-band";
 import { getReports } from "@/lib/reports";
+import { getAllPosts } from "@/lib/blog";
 
 export default async function HomePage({
   params,
@@ -20,6 +21,8 @@ export default async function HomePage({
   setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "home" });
   const reports = await getReports(locale);
+  // Newest three, same source as the blog index, so the cards stay current.
+  const posts = (await getAllPosts(locale)).slice(0, 3);
 
   return (
     <>
@@ -31,7 +34,7 @@ export default async function HomePage({
       <Founder />
       <Supporters />
       <InsectStories />
-      <LatestBlog />
+      <LatestBlog posts={posts} />
       <CtaBand title={t("closeCtaTitle")} body={t("closeCtaBody")} />
     </>
   );

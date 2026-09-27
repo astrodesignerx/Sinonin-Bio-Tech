@@ -12,6 +12,7 @@ import { Link } from "@/i18n/navigation";
 import CellsCanvas from "@/components/home/cells-canvas";
 import FooterWordmark from "./footer-wordmark";
 import FooterNav from "./footer-nav";
+import { getSiteSettings } from "@/lib/site-settings";
 
 const EXPLORE_ITEMS = [
   { key: "expertise", href: "/expertise" },
@@ -50,7 +51,18 @@ const SOCIALS = [
   },
 ] as const;
 
-export default function SiteFooter() {
+/*
+  The address comes from Sanity siteSettings, same as the contact page, so an
+  edit in the Studio changes both at once. It used to be a message-file string
+  the Studio could not touch.
+*/
+export default async function SiteFooter() {
+  const { email } = await getSiteSettings();
+
+  return <FooterContent email={email} />;
+}
+
+function FooterContent({ email }: { email: string }) {
   const t = useTranslations("footer");
   const nav = useTranslations("nav");
 
@@ -140,11 +152,11 @@ export default function SiteFooter() {
               {t("contactTitle")}
             </h2>
             <a
-              href={`mailto:${t("email")}`}
+              href={`mailto:${email}`}
               className="mt-4 inline-flex items-center gap-2 text-sm text-paper/75 transition motion-press hover:text-leaf-on-dark"
             >
               <EnvelopeSimple size={15} />
-              {t("email")}
+              {email}
             </a>
               <span className="mt-5 text-xs font-semibold uppercase tracking-wide text-paper/60">
                 {t("hoursTitle")}
