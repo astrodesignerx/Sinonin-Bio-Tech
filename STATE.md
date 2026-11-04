@@ -21,10 +21,13 @@ Constraints that shape everything else:
 
 Site is live and deployed from `main` on every push. The WordPress fallback sync
 failed from 2026-11-03 (origin certificate renewed without the main domain);
-fixed locally on 2026-11-04 by presenting Bluehost's temporary hostname.
+fixed and pushed on 2026-11-04 (`21eefc4`) by presenting Bluehost's temporary
+hostname.
 
 Stack: Next.js 16 (App Router) with React 19, Tailwind CSS v4, next-intl, pnpm.
-Deployed on Vercel in the `fra1` region. Dev server runs on port 3011.
+Deployed on Vercel in the `fra1` region. `next.config.ts` pins
+`turbopack.root` because a stray `pnpm-workspace.yaml` in the dev machine's
+home folder otherwise becomes the build root. Dev server runs on port 3011.
 
 ## Decisions and what they superseded
 
@@ -76,6 +79,11 @@ GitHub Actions secrets for deployed and scheduled use):
   `sinoninbio.tech` (2026-11-04): the main domain points at Vercel, so the
   server's auto-renewed certificate dropped it and the TLS name check failed. `https://wp.sinoninbio.tech` is the last resort, kept
   only because DNS is the one way to find the server again if the account moves.
+- Images (2026-11-04, superseding "first image only"): the first image with a
+  real URL becomes the cover; every later image becomes a body figure with its
+  figcaption as caption. Images whose src is not a URL (unfilled placeholders)
+  are dropped. Both that and a post with no cover raise a `::warning::`
+  annotation on the GitHub run instead of passing silently.
 - Dry run, writes nothing: `node scripts/wp-sync.mjs --dry`
 - Workflow actions are on the current majors: `actions/checkout@v7`,
   `actions/setup-node@v7` and `pnpm/action-setup@v6`. Anything on v4 runs on the
@@ -88,6 +96,11 @@ the new address with FormSubmit and replacing the token; editing the address
 alone redirects nothing.
 
 ## Open questions
+
+- **Client action:** the post `why-is-africa-still-importing-the-protein-it-could-make`
+  has two unfilled image placeholders on WordPress (`SWOT_IMAGE_URL`,
+  `PESTEL_IMAGE_URL`) and no featured image, so it has no cover. Fixing them in
+  WordPress is enough; the sync picks the change up.
 
 - **Blocking nothing today, but the clearest single point of failure:** the
   origin IP `67.222.38.76` is hardcoded in `scripts/wp-sync.mjs`. It works now.

@@ -36,7 +36,7 @@ import {
   reportSkips,
   toPortableText,
 } from "./lib/markdown-to-portable-text.mjs";
-import { decodeEntities, essayToMarkdown } from "./lib/wp-essay-html.mjs";
+import { decodeEntities, essayToMarkdown, isImageUrl } from "./lib/wp-essay-html.mjs";
 
 const WP_BASE = "https://wp.sinoninbio.tech";
 /* Hostnames that mean "the WordPress server" in content the client writes
@@ -220,6 +220,39 @@ const existing = await client.fetch(
 );
 const bySlug = new Map(existing.map((d) => [d.slug, d]));
 
+/* Problems that do not stop the run but leave a post incomplete. On GitHub
+   they become warning annotations, which show on the run's summary page
+   instead of hiding in the log of a green run. */
+function warn(message) {
+  console.log(process.env.GITHUB_ACTIONS ? `::warning::${message}` : `  !! ${message}`);
+}
+
+/* Upload an image to Sanity once per address and return its asset id, or
+   null (with a warning) when it cannot be fetched. Dry runs fetch nothing. */
+const assetIds = new Map();
+async function uploadImage(src, slug) {
+  if (!isImageUrl(src)) {
+    warn(`${slug}: image left out, its address is not a URL: ${src}`);
+    return null;
+  }
+  const abs = new URL(src, WP_BASE).href;
+  if (assetIds.has(abs)) return assetIds.get(abs);
+  const filename = new URL(abs).pathname.split("/").pop();
+  let id = null;
+  if (DRY) {
+    id = `image-DRY-${filename}`;
+  } else {
+    try {
+      const asset = await client.assets.upload("image", await fetchImage(abs), { filename });
+      id = asset._id;
+    } catch (e) {
+      warn(`${slug}: image ${abs} could not be fetched: ${e.message}`);
+    }
+  }
+  assetIds.set(abs, id);
+  return id;
+}
+
 const docs = [];
 for (const wp of candidates) {
   const prior = bySlug.get(wp.slug);
@@ -232,29 +265,24 @@ for (const wp of candidates) {
     continue;
   }
 
-  const { markdown, deck, heroSrc, heroAlt } = essayToMarkdown(wp.content.rendered);
+  const { markdown, deck, heroSrc, heroAlt, badImages } = essayToMarkdown(wp.content.rendered);
+  for (const src of badImages) {
+    warn(`${wp.slug}: image left out, its address is not a URL: ${src}`);
+  }
   const key = makeKeyer();
-  const body = await toPortableText(processor.parse(rewriteLinks(markdown)), key, async () => null);
+  const body = await toPortableText(
+    processor.parse(rewriteLinks(markdown)),
+    key,
+    (src) => uploadImage(src, wp.slug),
+  );
 
   // Cover: the essay's first image, else the featured image if one is set.
   const featured = wp._embedded?.["wp:featuredmedia"]?.[0];
   const coverSrc = heroSrc ?? featured?.source_url ?? null;
   const coverAlt = heroAlt || featured?.alt_text || "";
-  let coverAssetId = null;
-  if (coverSrc) {
-    if (DRY) {
-      coverAssetId = `image-DRY-${coverSrc.split("/").pop()}`;
-    } else {
-      try {
-        const buf = await fetchImage(coverSrc);
-        const asset = await client.assets.upload("image", buf, {
-          filename: coverSrc.split("/").pop(),
-        });
-        coverAssetId = asset._id;
-      } catch (e) {
-        console.log(`  !! cover failed for ${wp.slug}: ${e.message}`);
-      }
-    }
+  const coverAssetId = coverSrc ? await uploadImage(coverSrc, wp.slug) : null;
+  if (!coverAssetId) {
+    warn(`${wp.slug}: no cover image, so its share preview uses the generic site image`);
   }
 
   const terms = (wp._embedded?.["wp:term"] ?? []).flat();

@@ -129,13 +129,43 @@ export function essayToMarkdown(contentHtml) {
     return "";
   });
 
+  /* Images. The first one with a real address becomes the cover; every later
+     one stays in the body as a figure, with its figcaption as the caption.
+     An image whose address is not a URL (an unfilled placeholder such as
+     "SWOT_IMAGE_URL") is dropped and reported, so the run can flag it. */
   let heroSrc = null;
   let heroAlt = null;
-  html = html.replace(/<img\b[^>]*>/i, (tag) => {
-    heroSrc = tag.match(/src="([^"]+)"/i)?.[1] ?? null;
-    heroAlt = decode(tag.match(/alt="([^"]*)"/i)?.[1] ?? "");
-    return "";
-  });
+  const badImages = [];
+  const imgAttr = (tag, name) => tag.match(new RegExp(`\\b${name}="([^"]*)"`, "i"))?.[1] ?? "";
+  const asFigure = (imgTag, captionHtml = "") => {
+    const src = imgAttr(imgTag, "src");
+    const alt = decode(imgAttr(imgTag, "alt"));
+    if (!isImageUrl(src)) {
+      badImages.push(src || "(empty src)");
+      return "";
+    }
+    if (heroSrc === null) {
+      heroSrc = src;
+      heroAlt = alt;
+      // The cover's caption stays as the first body paragraph, as before.
+      return captionHtml ? `<figcaption>${captionHtml}</figcaption>` : "";
+    }
+    const caption = inline(captionHtml).replace(/["\\]/g, "\\$&");
+    const safeAlt = alt.replace(/[[\]\\]/g, "\\$&");
+    const safeSrc = src.replace(/ /g, "%20").replace(/\(/g, "%28").replace(/\)/g, "%29");
+    // Its own paragraph, so the markdown converter sees a lone image: a figure.
+    return `<p>![${safeAlt}](${safeSrc}${caption ? ` "${caption}"` : ""})</p>`;
+  };
+  html = html.replace(
+    /<figure\b[^>]*>([\s\S]*?)<\/figure>/gi,
+    (whole, inner) => {
+      const img = inner.match(/<img\b[^>]*>/i)?.[0];
+      if (!img) return whole;
+      const caption = inner.match(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/i)?.[1] ?? "";
+      return asFigure(img, caption);
+    },
+  );
+  html = html.replace(/<img\b[^>]*>/gi, (tag) => asFigure(tag));
 
   html = html.replace(/<hr\b[^>]*class="[^"]*sbt-rule[^"]*"[^>]*\/?>/gi, "<p>❦</p>");
 
@@ -152,5 +182,16 @@ export function essayToMarkdown(contentHtml) {
 
   html = html.replace(byClass("p", "sbt-pull"), (_, t) => `<blockquote>${t}</blockquote>`);
 
-  return { markdown: blocksToMarkdown(html), deck, heroSrc, heroAlt };
+  return { markdown: blocksToMarkdown(html), deck, heroSrc, heroAlt, badImages };
+}
+
+/** True for an address the sync can actually fetch: http(s) or site-relative. */
+export function isImageUrl(src) {
+  if (!src) return false;
+  if (src.startsWith("/") && !src.startsWith("//")) return true;
+  try {
+    return ["http:", "https:"].includes(new URL(src).protocol);
+  } catch {
+    return false;
+  }
 }

@@ -4,6 +4,12 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
+  /*
+    Pinned because another pnpm-workspace.yaml sits higher up on the dev
+    machine (the home folder), and without this Next takes that folder as the
+    project root. Vercel builds were never affected.
+  */
+  turbopack: { root: __dirname },
   images: {
     // Post covers and in-body figures are served by Sanity's image CDN now,
     // so next/image has to be told the host is allowed.
