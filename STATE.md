@@ -1,6 +1,6 @@
 # Sinonin Biotech website: project state
 
-Last updated 2026-09-16. This file records the present state, not the history.
+Last updated 2026-11-04. This file records the present state, not the history.
 
 ## Goal and hard constraints
 
@@ -20,7 +20,8 @@ Constraints that shape everything else:
 ## Current status
 
 Site is live and deployed from `main` on every push. The WordPress fallback sync
-is green as of 2026-09-16, after the fix described below.
+failed from 2026-11-03 (origin certificate renewed without the main domain);
+fixed locally on 2026-11-04 by presenting Bluehost's temporary hostname.
 
 Stack: Next.js 16 (App Router) with React 19, Tailwind CSS v4, next-intl, pnpm.
 Deployed on Vercel in the `fra1` region. Dev server runs on port 3011.
@@ -70,8 +71,10 @@ GitHub Actions secrets for deployed and scheduled use):
   were migrated by hand under new slugs.
 - The sync recognises its own documents by a hidden `wpId` field and skips any
   post it did not create, so hand-authored Sanity content always wins.
-- Routing: origin IP `67.222.38.76`, presenting SNI and Host `sinoninbio.tech`,
-  is the primary route. `https://wp.sinoninbio.tech` is the last resort, kept
+- Routing: origin IP `67.222.38.76`, presenting SNI and Host
+  `tde.qtb.mybluehost.me`, is the primary route. This superseded presenting
+  `sinoninbio.tech` (2026-11-04): the main domain points at Vercel, so the
+  server's auto-renewed certificate dropped it and the TLS name check failed. `https://wp.sinoninbio.tech` is the last resort, kept
   only because DNS is the one way to find the server again if the account moves.
 - Dry run, writes nothing: `node scripts/wp-sync.mjs --dry`
 - Workflow actions are on the current majors: `actions/checkout@v7`,

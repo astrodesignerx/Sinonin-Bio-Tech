@@ -94,12 +94,16 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
    few goes with a widening gap before it counts as a failure. */
 const ATTEMPTS = 4;
 
-/* The server's raw address. Bluehost still serves WordPress here directly. */
+/* The server's raw address. Bluehost still serves WordPress here directly.
+   We present Bluehost's own temporary hostname, not sinoninbio.tech: the main
+   domain points at Vercel, so the server's auto-renewed certificate stopped
+   listing it (Nov 2026) while the temporary hostname stays on it. */
 const ORIGIN_IP = "67.222.38.76";
-const ORIGIN_HOST = "sinoninbio.tech";
+const ORIGIN_HOST = "tde.qtb.mybluehost.me";
 
-/** Straight to the server IP, presenting the main domain, whose vhost the
-    host's protection leaves alone. One attempt; the retry loop is in wpGet. */
+/** Straight to the server IP, presenting the account's temporary hostname,
+    whose vhost the host's protection leaves alone. One attempt; the retry
+    loop is in wpGet. */
 function originGet(path, binary = false) {
   return new Promise((resolve, reject) => {
     const req = https.request(
