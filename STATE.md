@@ -47,6 +47,16 @@ home folder otherwise becomes the build root. Dev server runs on port 3011.
   the origin IP answers the same request with a 200. Both routes now get four
   attempts with a widening gap before failing, because both drop connections
   intermittently. A single refused connection used to crash the whole run.
+- **Tables in post bodies are edited with the `@sanity/table` plugin**
+  (2026-11-07), superseding the hand-built `table` object in
+  `studio/schemaTypes/block-content.ts`, whose editor was nested arrays of
+  strings. The plugin is registered as `table({ rowType: "row" })` in
+  `studio/sanity.config.ts` so the stored shape is unchanged: the live tables,
+  `src/components/blog/portable-text.tsx` and
+  `scripts/lib/markdown-to-portable-text.mjs` all still use
+  `{ rows: [{ _type: "row", cells: [string] }] }`. Cells stay plain text, and
+  the site renders the first row as the header. Takes effect for the client
+  only after `pnpm studio:deploy`.
 - **`bookingUrl` points at HubSpot Meetings**, superseding the `mailto:`
   placeholder.
 

@@ -1,6 +1,7 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { visionTool } from "@sanity/vision";
+import { table } from "@sanity/table";
 import { apiVersion, dataset, projectId } from "./env";
 import { schemaTypes } from "./schemaTypes";
 
@@ -28,5 +29,10 @@ export default defineConfig({
     // Query playground. It reads with the signed-in user's own permissions,
     // so leaving it enabled grants nothing they did not already have.
     visionTool({ defaultApiVersion: apiVersion }),
+    // Spreadsheet-style table editor for the `table` block in post bodies.
+    // rowType "row" keeps the shape the migrated tables and the site's
+    // renderer already use ({ rows: [{ _type: "row", cells: [string] }] }),
+    // so no stored content has to change.
+    table({ rowType: "row" }),
   ],
 });

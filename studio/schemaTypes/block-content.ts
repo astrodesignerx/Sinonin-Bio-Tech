@@ -74,46 +74,10 @@ export const blockContent = defineType({
       ],
       preview: { select: { title: "style" } },
     }),
-    defineArrayMember({
-      name: "table",
-      title: "Table",
-      type: "object",
-      description:
-        "Portable Text has no table of its own, so this is a custom block: the first row is the header.",
-      fields: [
-        defineField({
-          name: "rows",
-          title: "Rows",
-          type: "array",
-          of: [
-            defineArrayMember({
-              name: "row",
-              type: "object",
-              fields: [
-                defineField({
-                  name: "cells",
-                  title: "Cells",
-                  type: "array",
-                  of: [{ type: "string" }],
-                }),
-              ],
-              preview: {
-                select: { cells: "cells" },
-                prepare: ({ cells }: { cells?: string[] }) => ({
-                  title: (cells ?? []).join(" | "),
-                }),
-              },
-            }),
-          ],
-        }),
-      ],
-      preview: {
-        select: { rows: "rows" },
-        prepare: ({ rows }: { rows?: unknown[] }) => ({
-          title: `Table, ${(rows ?? []).length} rows`,
-        }),
-      },
-    }),
+    // Registered by the @sanity/table plugin in sanity.config.ts, which gives
+    // the editor a grid with add/remove row and column buttons. The site
+    // treats the first row as the header.
+    defineArrayMember({ type: "table", title: "Table" }),
     defineArrayMember({
       name: "figure",
       title: "Image",
