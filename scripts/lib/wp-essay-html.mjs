@@ -15,6 +15,7 @@
  *     first body paragraph
  *   - a kicker merges into the heading after it ("Movement I · The Heading")
  *   - pull quotes become blockquotes
+ *   - tables become markdown tables, first row as the header
  *   - `sbt-rule` breaks become the ornament divider the body schema has
  *   - the inner h1, the byline and the eyebrow are dropped: the post's own
  *     title and author fields carry them
@@ -57,14 +58,45 @@ function inline(html) {
     .trim();
 }
 
-function blocksToMarkdown(section) {
+/*
+  An HTML table -> a markdown (GFM) table, which the converter turns into the
+  body schema's `table` block. The first row becomes the header, as the site
+  renders it, whether WordPress marked it up as <th> or <td>. Rows are padded
+  to the widest row, because a markdown table needs the same number of cells
+  on every line. Cells are plain text in Sanity, so bold and links reduce to
+  their words. Returns null when there is nothing to keep, so the caller can
+  report the table instead of dropping it silently.
+*/
+function tableToMarkdown(raw) {
+  if (/<table\b/i.test(raw)) return null; // a table inside a table: no safe reading
+  const rows = [...raw.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)].map((tr) =>
+    [...tr[1].matchAll(/<t[hd]\b[^>]*>([\s\S]*?)<\/t[hd]>/gi)].map((cell) =>
+      inline(cell[1].replace(/<\/(p|div|li)>/gi, " ")).replace(/\|/g, "\\|"),
+    ),
+  );
+  const width = Math.max(0, ...rows.map((r) => r.length));
+  if (width === 0 || rows.every((r) => r.every((c) => !c))) return null;
+  const line = (cells) =>
+    `| ${[...cells, ...Array(width - cells.length).fill("")].join(" | ")} |`;
+  const [head, ...body] = rows;
+  return [line(head), line(Array(width).fill("---")), ...body.map(line)].join("\n");
+}
+
+function blocksToMarkdown(section, badTables) {
   const out = [];
   const blockRe =
-    /<(h2|h3|h4|p|blockquote|ul|ol|figcaption)\b[^>]*>([\s\S]*?)<\/\1>/gi;
+    /<(table|h2|h3|h4|p|blockquote|ul|ol|figcaption)\b[^>]*>([\s\S]*?)<\/\1>/gi;
   let m;
   while ((m = blockRe.exec(section))) {
     const tag = m[1].toLowerCase();
     const raw = m[2];
+
+    if (tag === "table") {
+      const table = tableToMarkdown(raw);
+      if (table) out.push(table);
+      else badTables.push(inline(raw).slice(0, 60) || "(empty table)");
+      continue;
+    }
 
     if (tag === "ul" || tag === "ol") {
       const items = [...raw.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)]
@@ -182,7 +214,9 @@ export function essayToMarkdown(contentHtml) {
 
   html = html.replace(byClass("p", "sbt-pull"), (_, t) => `<blockquote>${t}</blockquote>`);
 
-  return { markdown: blocksToMarkdown(html), deck, heroSrc, heroAlt, badImages };
+  const badTables = [];
+  const markdown = blocksToMarkdown(html, badTables);
+  return { markdown, deck, heroSrc, heroAlt, badImages, badTables };
 }
 
 /** True for an address the sync can actually fetch: http(s) or site-relative. */

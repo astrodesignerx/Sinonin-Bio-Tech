@@ -74,7 +74,7 @@ GitHub Actions secrets for deployed and scheduled use):
 |---|---|
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | site build, sync script |
 | `NEXT_PUBLIC_SANITY_DATASET` | site build, sync script |
-| `SANITY_API_WRITE_TOKEN` | sync script (Editor token) |
+| `SANITY_API_WRITE_TOKEN` | sync script (Editor token: `local-dev` in `.env.local`, `wp-fallback-sync` in GitHub) |
 | `SANITY_REVALIDATE_SECRET` | `src/app/api/revalidate` webhook |
 
 **WordPress fallback sync.** `scripts/wp-sync.mjs`, run by
@@ -94,6 +94,11 @@ GitHub Actions secrets for deployed and scheduled use):
   figcaption as caption. Images whose src is not a URL (unfilled placeholders)
   are dropped. Both that and a post with no cover raise a `::warning::`
   annotation on the GitHub run instead of passing silently.
+- Tables (2026-11-07, superseding "tables silently dropped"): an HTML table
+  becomes the body schema's `table` block, first row as the header, cells as
+  plain text. A table that cannot be read (empty, or nested inside another)
+  raises a `::warning::` instead of vanishing. Converter:
+  `scripts/lib/wp-essay-html.mjs`.
 - Dry run, writes nothing: `node scripts/wp-sync.mjs --dry`
 - Workflow actions are on the current majors: `actions/checkout@v7`,
   `actions/setup-node@v7` and `pnpm/action-setup@v6`. Anything on v4 runs on the

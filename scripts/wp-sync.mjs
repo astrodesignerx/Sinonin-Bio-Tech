@@ -265,9 +265,13 @@ for (const wp of candidates) {
     continue;
   }
 
-  const { markdown, deck, heroSrc, heroAlt, badImages } = essayToMarkdown(wp.content.rendered);
+  const { markdown, deck, heroSrc, heroAlt, badImages, badTables } =
+    essayToMarkdown(wp.content.rendered);
   for (const src of badImages) {
     warn(`${wp.slug}: image left out, its address is not a URL: ${src}`);
+  }
+  for (const start of badTables) {
+    warn(`${wp.slug}: table left out, it could not be read: ${start}`);
   }
   const key = makeKeyer();
   const body = await toPortableText(
@@ -290,7 +294,8 @@ for (const wp of candidates) {
   const tags = terms.filter((t) => t.taxonomy === "post_tag").map((t) => t.name);
 
   const excerpt = (deck ?? plain(wp.excerpt.rendered)).slice(0, 320);
-  const words = (markdown.match(/\S+/g) || []).length;
+  // Table pipes and header rules are markup, not words for the reading time.
+  const words = (markdown.replace(/\|\s*-{3}\s*(?=\|)/g, "").replace(/\|/g, " ").match(/\S+/g) || []).length;
 
   docs.push({
     _id: prior?._id ?? `post-wp-${wp.id}`,
