@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import "./globals.css";
+import "@/styles/sbt-table.css";
 
 // Locale-aware shell lives in app/[locale]/layout.tsx; this root layout is a
 // pass-through so global styles also apply to non-locale routes (e.g. 404).

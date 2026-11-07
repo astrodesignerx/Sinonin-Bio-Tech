@@ -4,6 +4,7 @@ import {
   type PortableTextComponents,
   type PortableTextBlock,
 } from "@portabletext/react";
+import { PortableTable } from "@/components/PortableTable";
 import { CARD } from "@/components/ui/card";
 
 /*
@@ -27,8 +28,6 @@ type FigureValue = {
 };
 
 type DividerValue = { style?: "line" | "ornament" };
-
-type TableValue = { rows?: { cells?: string[] }[] };
 
 const portableTextComponents: PortableTextComponents = {
   block: {
@@ -127,61 +126,7 @@ const portableTextComponents: PortableTextComponents = {
         <hr className="my-12 border-line" />
       ),
 
-    /*
-      Portable Text has no table of its own, so this mirrors the schema's
-      custom block: first row is the header, the rest are body rows.
-
-      Cells are plain strings, which means the bold the source markdown used on
-      the first column of every table cannot survive as a mark. Both migrated
-      tables use that column as the row's label, so it is emphasised here as a
-      rule of the table rather than as formatting the editor has to remember.
-
-      A header row of empty cells is dropped. One migrated table has one, and
-      an empty grey band reads as a rendering fault rather than a choice.
-    */
-    table: ({ value }: { value: TableValue }) => {
-      const rows = value.rows ?? [];
-      if (rows.length === 0) return null;
-      const [head, ...body] = rows;
-      /* Row zero is always the header row, per the schema. It is rendered as
-         one only when it carries text, but it is never demoted into the body:
-         markdown requires the row to exist even when it is blank. */
-      const hasHeader = (head.cells ?? []).some((cell) => cell.trim() !== "");
-
-      return (
-        <div className="my-8 overflow-x-auto rounded-xl border border-line">
-          <table className="w-full border-collapse text-sm">
-            {hasHeader && (
-              <thead className="bg-mist text-left text-ink">
-                <tr>
-                  {(head.cells ?? []).map((cell, i) => (
-                    <th key={i} className="px-4 py-3 font-semibold">
-                      {cell}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-            )}
-            <tbody>
-              {body.map((row, r) => (
-                <tr key={r}>
-                  {(row.cells ?? []).map((cell, c) => (
-                    <td
-                      key={c}
-                      className={`border-t border-line px-4 py-3 align-top ${
-                        c === 0 ? "font-semibold text-ink" : "text-ink/85"
-                      }`}
-                    >
-                      {cell}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      );
-    },
+    table: PortableTable,
   },
 };
 
